@@ -1,2 +1,2 @@
 # anteater
-Anteater is an animal who eat ants
+Anteater is an animal who eat ants.
