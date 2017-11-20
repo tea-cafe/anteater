@@ -2,7 +2,8 @@
 web
 
 # files
-.swp
+*.DS_Store
+*.swp
 tags
 ui/config/database.php
 ui/config/redis.php
