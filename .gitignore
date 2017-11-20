@@ -1,0 +1,9 @@
+# folders
+web
+
+# files
+.swp
+tags
+ui/config/database.php
+ui/config/redis.php
+ui/config/memcached.php
