@@ -443,7 +443,6 @@ if ( ! is_php('5.4'))
 			}
 		}
 	}
-
 	if ($e404)
 	{
 		if ( ! empty($RTR->routes['404_override']))
@@ -494,7 +493,6 @@ if ( ! is_php('5.4'))
 			show_404($RTR->directory.$class.'/'.$method);
 		}
 	}
-
 	if ($method !== '_remap')
 	{
 		$params = array_slice($URI->rsegments, 2);
@@ -529,7 +527,11 @@ if ( ! is_php('5.4'))
  *  Call the requested method
  * ------------------------------------------------------
  */
-	call_user_func_array(array(&$CI, $method), $params);
+    try {
+	    call_user_func_array(array(&$CI, $method), $params);
+    } catch (Exception $e) {
+        echo 'Caught exception ' . $e->getMessage() . "\n"; 
+    }
 
 	// Mark a benchmark end point
 	$BM->mark('controller_execution_time_( '.$class.' / '.$method.' )_end');

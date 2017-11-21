@@ -17,8 +17,8 @@ class MY_Controller extends CI_Controller {
      * @param $array
      * @bool $bolJsonpSwitch
      */
-    protected function outJson($arrData, $bolJsonpSwitch = false) {
-        // err code
+    protected function outJson($arrData, $intErrCode, $strErrMsg=null,$bolJsonpSwitch = false) {
+        $arrData = ErrCode::format($arrData, $intErrCode, $strErrMsg);
         echo json_encode($arrData); 
     } 
 

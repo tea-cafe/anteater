@@ -26,5 +26,4 @@ class RedisUtil extends Redis {
         }
         return self::$instance;
     }
-
 }
