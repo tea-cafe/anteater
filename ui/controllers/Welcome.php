@@ -15,41 +15,38 @@ class Welcome extends MY_Controller {
         if (isset($_GET['login'])) {
             return $this->login();
         }
-        $this->$method;
-
+        $this->index();
     }
 
 	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see https://codeigniter.com/user_guide/general/urls.html
+     *
 	 */
 	public function index()
 	{
         $arrData = [];
         $arrData['login'] = $this->User->checkLogin();
         if ($arrData['login']) {
+            var_dump($arrData['login'], '已登录');exit;
             head("Location:  /", 302, true); // 跳转到媒体数据页
         }
+        echo '这是未登录 默认介绍页';
         // index 提示页
 	}
 
+	/**
+     *
+	 */
     public function login() {
+        echo '这是login 页面';
         // 显示登录表单
     }
 
+	/**
+     *
+	 */
     public function logout() {
-        $this->user->clearLoginInfo();
-        header("Location: /", 302, true);
+        $this->User->clearLoginInfo();
+        $this->index();
+        return;
     }
 }

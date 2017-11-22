@@ -80,8 +80,11 @@ class DbUtil {
             }
             $this->CI->db->$act($sqlPart);
         }
-        $objRes = $this->CI->db->get($strTabName);
-        return $objRes->result_array();
+        $arrRes = $this->CI->db->get($strTabName)->result_array();
+        if (!empty($arrRes[0])) {
+            return $arrRes;
+        }
+        return $arrRes;
     }
 
 
@@ -93,7 +96,22 @@ class DbUtil {
     private function set($strTabName, $arrParams) {
         $arrParams['create_time'] = time();
         $arrParams['update_time'] = time();
-        $objRes = $this->CI->db->insert($strTabName, $arrParams);
-        return $objRes;
+        $this->CI->db->insert($strTabName, $arrParams);
+        $arrRes = $this->CI->db->error();
+        $arrRes['message'] = $this->formatErrMessage($arrRes);
+        return $arrRes;
+    }
+
+    /**
+     *
+     */
+    private function formatErrMessage($arrRes) {
+        $strPattern = '#\'(.*)\'#';
+        switch ($arrRes['code']) {
+            case 1062:
+                preg_match($strPattern, $arrRes['message'], $arrOut);
+                return $arrOut[1];
+            default:
+        }
     }
 }

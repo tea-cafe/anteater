@@ -37,10 +37,13 @@ class AccountRegister extends MY_Controller {
         // 转移到model层
 
         $this->load->library('DbUtil');
-        $bolRes = $this->dbutil->setAccount($arrPostParams);
-        if ($bolRes) {
+        $arrRes = $this->dbutil->setAccount($arrPostParams);
+        if ($arrRes['code'] === 0) {
             return $this->outJson('', ErrCode::OK, '注册成功');
         }
-        return $this->outJson('', ErrCode::ERR_SYSTEM);
+        if ($arrRes['code'] === 1062) {
+            return $this->outJson('', ErrCode::ERR_DUPLICATE_ACCOUNT, $arrRes['message'] . '已经被注册');
+        }
+        return $this->outJson('', ErrCode::ERR_SYSTEM, '注册失败');
     }
 }

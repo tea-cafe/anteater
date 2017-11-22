@@ -14,6 +14,7 @@ class ErrCode {
     const ERR_SYSTEM     = 1;
     const ERR_INVALID_PARAMS = 2;
     const ERR_LOGIN_FAILED = 3;
+    const ERR_DUPLICATE_ACCOUNT = 4;
 
     /**
      * @param array  $arrResponse
@@ -48,6 +49,8 @@ class ErrCode {
                 return '参数错误.';
             case self::ERR_LOGIN_FAILED:
                 return '用户名或密码错误.';
+            case self::ERR_DUPLICATE_ACCOUNT:
+                return '用户已存在';
             default:
                 return 'Unknown error type.';
         }
