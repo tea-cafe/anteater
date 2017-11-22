@@ -13,6 +13,7 @@ class ErrCode {
 
     const ERR_SYSTEM     = 1;
     const ERR_INVALID_PARAMS = 2;
+    const ERR_LOGIN_FAILED = 3;
 
     /**
      * @param array  $arrResponse
@@ -42,12 +43,13 @@ class ErrCode {
             case self::OK:
                 return '';
             case self::ERR_SYSTEM:
-                return 'System error.';
+                return '系统错误.';
             case self::ERR_INVALID_PARAMS:
-                return 'Params error.';
+                return '参数错误.';
+            case self::ERR_LOGIN_FAILED:
+                return '用户名或密码错误.';
             default:
                 return 'Unknown error type.';
         }
     }
-
 }

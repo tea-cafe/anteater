@@ -1,4 +1,20 @@
 <?php
+/**
+ * getXXX($arrParams)
+ * $arrParams = [
+ *     'select' => 'username,passwd',
+ *     'where' => 'create_time>0 AND update_time>0',
+ *     'order_by' => 'passwd DESC',
+ *     'limit' => '0,1',
+ * ];
+ *
+ * setXXX($arrParams)
+ * $arrParams = [
+ *     'username' => 'aaa',
+ *     'phone' => 'bbb',
+ *     ... ... 
+ * ];
+ */
 class DbUtil {
 
     const TAB_ACCOUNT               = 'account_info';
@@ -52,14 +68,22 @@ class DbUtil {
      * @param array $arrParams
      * @return array
      */
-    private function get($strTabName, $arrParams, $strat = 0, $offset = 10) {
-        if (empty($arrParams)) {
-            $objRes = $this->CI->db->query->get($strTabName);
-        } else {
-            $objRes = $this->CI->db->query('show tables');
+    private function get($strTabName, $arrParams) {
+        if (empty($arrParams['limit'])) {
+            $arrParams['limit'] = '0,1';
         }
-        var_dump($objRes->result_array());exit;
+        foreach ($arrParams as $act => $sqlPart) {
+            if ($act === 'limit') {
+                $arrLimit = explode(',', $sqlPart);
+                // ci limit 参数和 sql 相反
+                $this->CI->db->limit($arrLimit[1], $arrLimit[0]);
+            }
+            $this->CI->db->$act($sqlPart);
+        }
+        $objRes = $this->CI->db->get($strTabName);
+        return $objRes->result_array();
     }
+
 
     /**
      * @param string $strTabName
