@@ -1,6 +1,6 @@
 <?php
 /**
- * 用户注册
+ * 用户注册接口
  * szishuo
  */
 class AccountRegister extends MY_Controller {
@@ -32,9 +32,11 @@ class AccountRegister extends MY_Controller {
             }
             $val = $this->security->xss_clean($val);
         }
+        $arrPostParams['passwd'] = md5($arrPostParams['passwd']);
+
+        // 转移到model层
 
         $this->load->library('DbUtil');
-        //$this->dbutil->getMedia($arrPostParams);
         $bolRes = $this->dbutil->setAccount($arrPostParams);
         if ($bolRes) {
             return $this->outJson('', ErrCode::OK, '注册成功');

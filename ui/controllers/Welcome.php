@@ -5,6 +5,18 @@ class Welcome extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->load->model('User');
+    }
+
+    public function _remap($method, $params = []) {
+        if (isset($_GET['logout'])) {
+            return $this->logout();
+        }
+        if (isset($_GET['login'])) {
+            return $this->login();
+        }
+        $this->$method;
+
     }
 
 	/**
@@ -24,6 +36,20 @@ class Welcome extends MY_Controller {
 	 */
 	public function index()
 	{
-        echo 'Welcome !!!';
+        $arrData = [];
+        $arrData['login'] = $this->User->checkLogin();
+        if ($arrData['login']) {
+            head("Location:  /", 302, true); // 跳转到媒体数据页
+        }
+        // index 提示页
 	}
+
+    public function login() {
+        // 显示登录表单
+    }
+
+    public function logout() {
+        $this->user->clearLoginInfo();
+        header("Location: /", 302, true);
+    }
 }
