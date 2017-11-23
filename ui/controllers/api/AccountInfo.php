@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 /**
- * 用户信息
+ * 接口 用户信息
  */
 
 class AccountInfo extends CI_Controller {
@@ -20,6 +20,6 @@ class AccountInfo extends CI_Controller {
 	{
         $this->load->model('Account');
         $arrAccountInfo = $this->account->getInfo();
-        echo json_encode($arrAccountInfo);
+        $this->outJson($arrAccountInfo, ErrCode::OK);
 	}
 }
