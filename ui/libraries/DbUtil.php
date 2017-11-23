@@ -44,7 +44,7 @@ class DbUtil {
      * @return array
      */
     public function __call($strFuncName, $arrParams = []) {
-        $strTabName = preg_match('#(get|set)([A-Z].*)#', $strFuncName, $arrAcT);
+        $strTabName = preg_match('#(get|set|udp)([A-Z].*)#', $strFuncName, $arrAcT);
         if (empty($arrAcT[1])
             || empty($arrAcT[2])
             || (!in_array(strtolower($arrAcT[2]), array_keys(self::TAB_MAP)))) {
@@ -80,7 +80,11 @@ class DbUtil {
             }
             $this->CI->db->$act($sqlPart);
         }
-        $arrRes = $this->CI->db->get($strTabName)->result_array();
+        $objRes = $this->CI->db->get($strTabName);
+        if (empty($objRes)) {
+            return [];
+        }
+        $arrRes = $objRes->result_array();
         if (!empty($arrRes[0])) {
             return $arrRes;
         }
@@ -105,6 +109,24 @@ class DbUtil {
     /**
      *
      */
+    private function udp($strTabName, $arrParams) {
+        $arrParams['update_time'] = time();
+        foreach ($arrParams as $key => $val) {
+            if ($key === 'id') {
+                continue;  
+            }  
+            $this->CI->db->set($key, $val);
+        }
+        $this->CI->db->where('id', $arrParams['id']);
+        $this->CI->db->update($strTabName);
+        $arrRes = $this->CI->db->error();
+        return $arrRes;
+    }
+
+    /**
+     * @param array $arrRes
+     * @return string
+     */
     private function formatErrMessage($arrRes) {
         $strPattern = '#\'(.*)\'#';
         switch ($arrRes['code']) {
@@ -112,6 +134,7 @@ class DbUtil {
                 preg_match($strPattern, $arrRes['message'], $arrOut);
                 return $arrOut[1];
             default:
+                return '';
         }
     }
 }
