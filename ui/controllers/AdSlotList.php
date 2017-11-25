@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * 广告位列表
  */
 
-class AdsenseList extends MY_Controller {
+class AdSlotList extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -14,8 +14,8 @@ class AdsenseList extends MY_Controller {
 	 */
 	public function index()
 	{
-        $this->load->model('Ads');
-        $arrData = $this->Ads->getAdsenseLists();
+        $this->load->model('AdSlot');
+        $arrData = $this->AdSlot->getAdsenseLists();
         $this->outJson($arrData);
 	}
 }

@@ -50,7 +50,7 @@ class DbUtil {
             || (!in_array(strtolower($arrAcT[2]), array_keys(self::TAB_MAP)))) {
             throw new Exception('DbUtil has no [method|table] : [' . $arrAcT[1] . ']|[' . $arrAcT[2] . ']');
         }
-        return $this->$arrAcT[1](self::TAB_MAP[strtolower($arrAcT[2])], $arrParams[0]);
+        return $this->{$arrAcT[1]}(self::TAB_MAP[strtolower($arrAcT[2])], $arrParams[0]);
     }
 
     /**
