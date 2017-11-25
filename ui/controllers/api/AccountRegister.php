@@ -100,7 +100,7 @@ class AccountRegister extends MY_Controller {
             $val = $this->security->xss_clean($val);
         }
 
-        $arrPostParams['id'] = $arrUser['pk'];
+        $arrPostParams['email'] = $arrUser['email'];
 
         $this->load->model('Account');
         $arrRes = $this->Account->updateAccountFinanceInfo($arrPostParams);

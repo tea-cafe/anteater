@@ -16,6 +16,7 @@ class ErrCode {
     const ERR_LOGIN_FAILED = 3;
     const ERR_NOT_LOGIN = 4;
     const ERR_DUPLICATE_ACCOUNT = 5;
+    const ERR_UPLOAD = 6;
 
     /**
      * @param array  $arrResponse
@@ -54,6 +55,8 @@ class ErrCode {
                 return '用户未登录.';
             case self::ERR_DUPLICATE_ACCOUNT:
                 return '用户已存在';
+            case self::ERR_UPLOAD:
+                return '图片上传失败';
             default:
                 return 'Unknown error type.';
         }

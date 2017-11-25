@@ -112,12 +112,15 @@ class DbUtil {
     private function udp($strTabName, $arrParams) {
         $arrParams['update_time'] = time();
         foreach ($arrParams as $key => $val) {
-            if ($key === 'id') {
-                continue;  
-            }  
             $this->CI->db->set($key, $val);
         }
-        $this->CI->db->where('id', $arrParams['id']);
+        switch($strTabName) {
+            case self::TAB_ACCOUNT:
+            case self::TAB_MEDIA:
+                $this->CI->db->where('email', $arrParams['email']);
+                break;
+            default:
+        }
         $this->CI->db->update($strTabName);
         $arrRes = $this->CI->db->error();
         return $arrRes;
@@ -136,5 +139,14 @@ class DbUtil {
             default:
                 return '';
         }
+    }
+
+    /**
+     *
+     */
+    public function query($strSql) {
+        $objRes = $this->CI->db->query($strSql);
+        $arrRes = $objRes->result_array();
+        return $arrRes;
     }
 }
