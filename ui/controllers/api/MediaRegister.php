@@ -41,16 +41,11 @@ class MediaRegister extends MY_Controller {
             $val = $this->security->xss_clean($val);
         }
         $arrPostParams['email'] = $this->arrUser['email'];
-        $arrPostParams['app_id'] = mysql_insert_id() + 1000;
-        echo json_encode($arrPostParams);exit;
         $this->load->model('Media');
-        $arrRes = $this->Media->insertMediaInfo($arrPostParams);
+        $bolRes = $this->Media->insertMediaInfo($arrPostParams);
 
-        if ($arrRes['code'] === 0) {
+        if ($bolRes['code'] === 0) {
             return $this->outJson('', ErrCode::OK, '媒体注册成功');
-        }
-        if ($arrRes['code'] === 1062) {
-            return $this->outJson('', ErrCode::ERR_DUPLICATE_ACCOUNT);
         }
         return $this->outJson('', ErrCode::ERR_SYSTEM);
     }//}}}//

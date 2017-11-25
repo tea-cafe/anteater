@@ -142,11 +142,27 @@ class DbUtil {
     }
 
     /**
-     *
+     * @param string $strSql
+     * @return array
      */
     public function query($strSql) {
         $objRes = $this->CI->db->query($strSql);
         $arrRes = $objRes->result_array();
         return $arrRes;
+    }
+
+    /**
+     * @param string $strTabKey
+     * @return string
+     */
+    public function getAutoincrementId($strTabKey) {
+        $strTabName = self::TAB_MAP[$strTabKey];
+        $strSql = "SELECT AUTO_INCREMENT FROM information_schema.tables where table_name='$strTabName'";
+        $objRes = $this->CI->db->query($strSql);
+        $arrRes = $objRes->result_array();
+        if (empty($arrRes)) {
+            return 0;
+        }
+        return intval($arrRes[0]['AUTO_INCREMENT']);
     }
 }
