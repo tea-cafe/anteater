@@ -11,6 +11,8 @@ class AdSlotRegister extends MY_Controller {
         'app_id',
         'media_name',
         'slot_type',
+        'slot_style',
+        'slot_style_id',
     ];
 
     public function __construct() {
@@ -42,12 +44,9 @@ class AdSlotRegister extends MY_Controller {
         $arrPostParams['email'] = $this->arrUser['email'];
 
         $this->load->model('AdSlot');
-        $this->AdSlot->insertAdSlotInfo($arrPostParams);
+        $arrRes = $this->AdSlot->insertAdSlotInfo($arrPostParams);
         if ($arrRes['code'] === 0) {
-            return $this->outJson('', ErrCode::OK, '注册成功');
-        }
-        if ($arrRes['code'] === 1062) {
-            return $this->outJson('', ErrCode::ERR_DUPLICATE_ACCOUNT);
+            return $this->outJson('', ErrCode::OK, '广告位注册成功');
         }
         return $this->outJson('', ErrCode::ERR_SYSTEM);
 	}

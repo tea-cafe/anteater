@@ -76,7 +76,7 @@ class DbUtil {
             if ($act === 'limit') {
                 $arrLimit = explode(',', $sqlPart);
                 // ci limit 参数和 sql 相反
-                $this->CI->db->limit($arrLimit[1], $arrLimit[0]);
+                isset($arrLimit[1]) ? $this->CI->db->limit($arrLimit[1], $arrLimit[0]) : $this->CI->db->limit($arrLimit[0]);
             }
             $this->CI->db->$act($sqlPart);
         }
