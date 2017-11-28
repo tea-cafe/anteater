@@ -12,7 +12,7 @@ class AdSlotRegister extends MY_Controller {
         'media_name',
         'slot_type',
         'slot_style',
-        'slot_style_id',
+        'size',
     ];
 
     public function __construct() {
