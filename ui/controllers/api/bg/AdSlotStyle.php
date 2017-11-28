@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class AdSlotStyle extends MY_Controller {
 
     const VALID_SLOT_TYPE = [
-        'jdk', 'api', 'h5', 'public_sign',
+        'sdk', 'api', 'h5', 'public_sign',
     ];
 
     const VALID_ADSLOT_KEY = [
@@ -32,7 +32,7 @@ class AdSlotStyle extends MY_Controller {
 
         $sql = 'insert into adslot_style_info(slot_type,slot_style,size,img) values';
         foreach(self::VALID_SLOT_TYPE as $v) {
-            $sql .= "('" . $v . "'," . "'cp','300*250','http://asdfasdfasdfasdf.jpg'),"; 
+            $sql .= "('" . $v . "'," . "'banner','300*250','http://asdfasdfasdfasdf.jpg'),"; 
         }
         
         $sql = substr($sql, 0, -1);

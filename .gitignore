@@ -10,3 +10,4 @@ ui/config/redis.php
 ui/config/memcached.php
 ui/views/upload_form.php
 ui/views/upload_success.php
+ui/testPreSlotid.php

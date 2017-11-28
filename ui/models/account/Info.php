@@ -3,7 +3,7 @@
  * getInfo 账户信息
  *
  */
-class Info extends Model {
+class Info extends CI_Model {
     
 
     public function __construct() {
@@ -16,8 +16,41 @@ class Info extends Model {
      *
      * @return array
      */
-    public function getInfo() {
-        $strJsonTest = '{"code":"0","desc":"成功","data":{"mediaId":23409,"email":"gongwei@ayang.com","companyName":"北京云保网络科技有限公司","linkman":"龚唯","financeCompanyName":"北京云保网络科技有限公司","businessLicenseId":"91110105MA001TCC6M","businessLicenseName":null,"businessLicenseUrl":"//yun.duiba.com.cn/tuia-media/img/u13r2h7wwj.jpg","linkPhone":"15510797564","idCard":null,"cardNumber":"8110701012101135292","bankName":"中信银行望京支行","province":"北京市","city":"110105","branchName":"中信银行望京支行","roleType":0,"personalName":null,"idCardFrontUrl":null,"idCardBackUrl":null,"checkMsg":null,"checkStatus":2,"companyAddr":"北京市朝阳区融科望京中心A座801","linkmanAddr":"北京市朝阳区融科望京中心A座801","accountOpenman":"北京云保网络科技有限公司","accountOpenbookUrl":"//yun.duiba.com.cn/tuia-media/img/d6use5yqqm.jpg","noteInformationUrl":null,"resubmitReason":null,"isFirstSubmit":0,"unlockStatus":0,"accessDataStatus":0,"edited":true}}';
-        return json_decode($strJsonTest, true);
+    public function getInfo($intAccountId) {
+        $this->load->library('DbUtil');
+        $arrFields = [
+            'select' => '
+                company,
+                contact_person,
+                financial_object,
+                collection_company,
+                bussiness_license_num,
+                bussiness_license_pic,
+                phone,
+                bank_account,
+                bank,
+                province,
+                city,
+                bank_branch,
+                role_type,
+                personal_name,
+                bank_card_front_pic,
+                bank_card_back_pic,
+                company_address,
+                contact_address,
+                identity_card_num,
+                identity_card_front,
+                identity_card_back,
+                account_open_permission,
+                account_holder,
+                remark
+            ',
+            'where' => 'account_id=' . $intAccountId, 
+        ];
+        $arrRes = $this->dbutil->getAccount($arrFields);
+        if ($arrRes) {
+            return $arrRes[0];
+        }
+        return $arrRes; 
     } 
 }

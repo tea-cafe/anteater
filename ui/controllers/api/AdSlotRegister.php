@@ -12,7 +12,8 @@ class AdSlotRegister extends MY_Controller {
         'media_name',
         'slot_type',
         'slot_style',
-        'size',
+        'slot_size',
+        'slot_style_id',
     ];
 
     public function __construct() {
@@ -41,7 +42,7 @@ class AdSlotRegister extends MY_Controller {
             $val = $this->security->xss_clean($val);
         }
 
-        $arrPostParams['email'] = $this->arrUser['email'];
+        $arrPostParams['account_id'] = $this->arrUser['account_id'];
 
         $this->load->model('AdSlot');
         $arrRes = $this->AdSlot->insertAdSlotInfo($arrPostParams);

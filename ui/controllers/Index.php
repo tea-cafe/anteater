@@ -1,10 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Welcome extends MY_Controller {
+class Index extends MY_Controller {
 
     public function __construct() {
-        echo 2;exit;
         parent::__construct();
         $this->load->model('User');
     }
@@ -17,6 +16,7 @@ class Welcome extends MY_Controller {
             return $this->login();
         }
 
+        /*
         if (method_exists($this, $method)) {
             $reflection = new ReflectionMethod($this, $method);
             if ($reflection->isProtected()) {
@@ -24,6 +24,7 @@ class Welcome extends MY_Controller {
                 return $this->$method($params);
             }
         }
+         */
 
         $this->index();
     }

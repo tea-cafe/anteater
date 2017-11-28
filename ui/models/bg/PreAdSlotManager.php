@@ -5,12 +5,9 @@ class PreAdSlotManager extends CI_Model {
         parent::__construct();
     }
 
-    public function insertPreAdSlot($sql) {
-
-        $this->load->database();
-        $arrRes = $this->db->query($sql);
-        var_dump($arrRes);exit;
-
+    public function insertPreAdSlot($arrParams) {
+        $this->load->library('DbUtil');
+        $arrRes = $this->dbutil->setPreadslot($arrParams);
     }
 
 }

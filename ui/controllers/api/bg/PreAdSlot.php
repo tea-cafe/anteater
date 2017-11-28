@@ -25,14 +25,13 @@ class PreAdSlot extends MY_Controller {
 
         }
 
-        include_once('/home/work/test.php');
+        include_once('/home/work/anteater/ui/testPreSlotid.php');
         $jsonData = json_encode($data);
-        echo $jsonData;
 
-        $sql = 'insert into pre_adslot(app_id,data) values(' . $app_id . "','" . $jsonData . "\'";
-        $sql = substr($sql, 0, -1);
-        $this->load->model('bg/AdSlotManager');
-        $this->AdSlotManager->insertAdSlotStyle($sql);
+        $arrPostParams['app_id'] = 'ad45cd3fa59ea7dfca549f22b16821ef';
+        $arrPostParams['data'] = $jsonData;
+        $this->load->model('bg/PreAdSlotManager');
+        $this->PreAdSlotManager->insertPreAdSlot($arrPostParams);
 
           
     }

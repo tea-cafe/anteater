@@ -14,6 +14,7 @@ class CSVReader {
   
     var $fields;        /** columns names retrieved after parsing */  
     var $separator = ',';    /** separator used to explode each line */  
+    var $arrFile = [];
   
     /** 
      * Parse a text containing CSV formatted data. 
@@ -34,9 +35,10 @@ class CSVReader {
      * @param    string 
      * @return    array 
      */  
-    function parse_file($p_Filepath) { 
-        $lines = file($p_Filepath);  
-        return $this->parse_lines($lines);  
+    function read_file() { 
+        $strFilepath = $this->arrFile['upload_data']['full_path'];
+        $arrContent = file($strFilepath);  
+        return $arrContent;
     }  
     /** 
      * Parse an array of text lines containing CSV formatted data. 
@@ -49,18 +51,18 @@ class CSVReader {
         $content = FALSE;  
         foreach( $p_CSVLines as $line_num => $line ) {  
             if( $line != '' ) { // skip empty lines  
-                $elements = split($this->separator, $line);  
+                $elements = explode($this->separator, $line);  
   
                 if( !is_array($content) ) { // the first line contains fields names  
-                    $this->fields = $elements;  
-                    $content = array();  
-                } else {  
+                    $this->fields = $elements;
+                    $content = array();
+                } else {
                     $item = array();  
                     foreach( $this->fields as $id => $field ) {  
-                        if( isset($elements[$id]) ) {  
+                        if( isset($elements[$id]) ) {
                             $item[$field] = $elements[$id];  
-                        }  
-                    }  
+                        }
+                    }
                     $content[] = $item;  
                 }  
             }  
@@ -75,22 +77,25 @@ class CSVReader {
     function import() {
         $CI =& get_instance();
         $CI->load->helper(array('form', 'url'));
+        $CI->load->helper('form');
         
         // load csv config
-        $CI->config->load('upload', true);
-        $config = $CI->config->item('csv');
+        $CI->config->load('upload');
+        $arrCsvConf = $CI->config->item('csv');
 
-        $CI->load->library('upload', $config);
+        $CI->load->library('upload', $arrCsvConf);
+
+        $ret = $CI->upload->do_upload();
         
         if ( ! $CI->upload->do_upload())
         {
             $error = array('error' => $CI->upload->display_errors());
-            $CI->load->view('prof/upload_form', $error);
+            return $error;
         }
         else
         {
-            $data = array('upload_data' => $CI->upload->data());
-            $CI->load->view('prof/upload_success', $data);
+            $this->arrFile = ['upload_data' => $CI->upload->data()];
+            return true;
         }
     }
 
