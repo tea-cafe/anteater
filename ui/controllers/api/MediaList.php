@@ -23,4 +23,11 @@ class MediaList extends MY_Controller {
         $arrData = $this->Media->getMediaLists($arrUser['account_id']);
         $this->outJson($arrData, ErrCode::OK);
 	}
+
+    /**
+     *
+     */
+    public function modify() {
+        
+    }
 }

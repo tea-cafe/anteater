@@ -14,6 +14,14 @@
  *     'phone' => 'bbb',
  *     ... ... 
  * ];
+ *
+ * udpXXX($arrParams)
+ * $arrParams = [
+ *     'email' => 'xxx',
+ *     'name' => 'xxx',
+ *     ...
+ *     'where' => 'account_id=1 and app_id=1',
+ * ];
  */
 class DbUtil {
 
@@ -118,16 +126,12 @@ class DbUtil {
      */
     private function udp($strTabName, $arrParams) {
         $arrParams['update_time'] = time();
+        $strWhere = $arrParams['where'];
+        unset($arrParams['where']);
         foreach ($arrParams as $key => $val) {
             $this->CI->db->set($key, $val);
         }
-        switch($strTabName) {
-            case self::TAB_ACCOUNT:
-            case self::TAB_MEDIA:
-                $this->CI->db->where('email', $arrParams['email']);
-                break;
-            default:
-        }
+        $this->CI->db->where($strWhere);
         $this->CI->db->update($strTabName);
         $arrRes = $this->CI->db->error();
         return $arrRes;

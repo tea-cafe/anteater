@@ -20,7 +20,7 @@ class Account extends CI_Model {
     /**
      * 账户基本信息注册
      * @param array $arrParams
-     * return array
+     * @return array
      */
     public function insertAccountBaseInfo($arrParams) {
         $this->load->library('DbUtil');
@@ -29,13 +29,24 @@ class Account extends CI_Model {
     }
 
     /**
+     * 用户基本信息修改
+     * @param array
+     * @return bool
+     */
+    public function updateAccountBaseInfo($arrParams) {
+        $this->load->library('DbUtil');
+        $bolRes = $this->dbutil->udpAccount($arrParams);
+        return $bolRes;
+    }
+
+    /**
      * 账户财务信息提交
      * @param array $arrParams
-     * @return array
+     * @return bool
      */
     public function updateAccountFinanceInfo($arrParams) {
         $this->load->library('DbUtil');
-        $arrRes = $this->dbutil->udpAccount($arrParams);
-        return $arrRes;
+        $bolRes = $this->dbutil->udpAccount($arrParams);
+        return $bolRes;
     }
 }

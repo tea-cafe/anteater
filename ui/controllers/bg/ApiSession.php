@@ -6,29 +6,38 @@ class ApiSession extends MY_Controller {
     }
 
     public function gen_session() {
-        $_md = '{"apps":"android,cn.coupon.kfc,cn.coupon.mac,cn.wps.moffice_eng,com. MobileTicket,com.UCMobile,com.alipay.security.mobile.authenticator,co m.android.BBKClock,com.android.BBKCrontab,com.android.BBKPhoneIn structions,com.android.BBKTools,com.android.VideoPlayer,com.android. attachcamera,com.android.backupconfirm,com.android.bbk.lockscreen3 ","idfa":"AEBE52E7-03EE-455A-B3C4-E57283966239","imei":"355065053 311001","latitude":"104.07642","longitude":"38.6518","model":"MIMAX", "nt":"wifi","os":"Android","os_version":"7","vendor":"Xiaomi"}';
 		$url = 'https://engine.lvehaisen.com/index/activity?appKey=%s&adslotId=%s&md=%s&timestamp=%s&nonce=%s&signature=%s';
-		$appKey = '2i9jsRZNd6rdMzDPoduqm9ZQswqx';
-		$adslotId = '2700';
+        $arrParams = $this->input->get(NULL, true);
+        if(count($arrParams) != 4 
+            || !isset($arrParams['appKey']) 
+            || !isset($arrParams['adslotId'])
+            || !isset($arrParams['appSecret'])
+            || !isset($arrParams['hb'])) {
+            return $this->outJson([], ErrCode::ERR_INVALID_PARAMS);
+        }
+		$appKey = $arrParams['appKey'];
+		$adslotId = $arrParams['adslotId'];
+        $appSecret = $arrParams['appSecret'];
+        $_md = base64_decode($arrParams['hb']);
+        if(is_null(json_decode($md))) {
+            return $this->outJson([], ErrCode::ERR_INVALID_PARAMS);
+        }
+        $md = base64_encode($_md);
+        echo $md;exit;
         $md = base64_encode(gzencode($_md, 9));
         $timestamp = time();
         $nonce = rand(pow(10, 5), pow(10, 6)-1);
-        $appSecret = '3WjQ2DZ1HFMjAt3occZzxWcsKwNXDVVMCVKCvLR';
-        //$strHash = "appSecret={$appSecret}&md={$md}&timestamp={$timestamp}&nonce={$nonce}";
         $strHash = "appSecret={$appSecret}&md={$md}&nonce={$nonce}&timestamp={$timestamp}";
 		$signature = sha1($strHash, false);
         $api_url = sprintf($url, $appKey, $adslotId, urlencode($md), $timestamp, $nonce, $signature);
-        echo $api_url;exit;
         $this->load->library('Curl');
         $this->curl->create($api_url);
         $str = $this->curl->execute();
-        $data = @json_decode($str, true);
-        var_dump($data);
-        /*
-        $base64nonce = base64_encode ( $_nonce );
-        $sessionSecurity = hash ( 'sha256', $app_key . $_nonce, true );
-        $base64Security = base64_encode ( $sessionSecurity );
-         */
-
+        $Headers =  $this->curl->info['url'];
+        if($Headers) {
+            header('Location:'.$Headers, true, 302);
+            return;
+        }
+        return NULL;
     }
 }

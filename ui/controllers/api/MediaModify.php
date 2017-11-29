@@ -3,9 +3,10 @@
  * media注册接口
  * szishuo
  */
-class MediaRegister extends MY_Controller {
+class MediaModify extends MY_Controller {
 
     const VALID_APP_MEDIA_KEY = [
+        'app_id',
         'media_name',
         'media_platform',
         'app_package_name',
@@ -15,6 +16,7 @@ class MediaRegister extends MY_Controller {
     ];
 
     const VALID_H5_MEDIA_KEY = [
+        'app_id',
         'media_name',
         'media_platform',
         'url',
@@ -23,6 +25,7 @@ class MediaRegister extends MY_Controller {
     ];
 
     const VALID_PS_MEDIA_KEY = [
+        'app_id',
         'media_name',
         'media_platform',
         'url',
@@ -74,12 +77,12 @@ class MediaRegister extends MY_Controller {
             }
             $val = $this->security->xss_clean($val);
         }
-        $arrPostParams['account_id'] = $this->arrUser['account_id'];
-        $arrPostParams['app_id'] = empty($arrPostParams['app_package_name']) ? md5($arrPostParams['url']) : md5($arrPostParams['app_package_name']);
+        $arrPostParams['where'] = "app_id='" . $arrPostParams['app_id'] . "'";
+        unset($arrPostParams['app_id']);
         $this->load->model('Media');
-        $bolRes = $this->Media->insertMediaInfo($arrPostParams);
+        $bolRes = $this->Media->updateMediaInfo($arrPostParams);
         if ($bolRes) {
-            return $this->outJson('', ErrCode::OK, '媒体注册成功');
+            return $this->outJson('', ErrCode::OK, '媒体信息修改成功');
         }
         return $this->outJson('', ErrCode::ERR_SYSTEM);
     }//}}}//

@@ -27,6 +27,18 @@ class Media extends CI_Model {
 
 
     /**
+     *
+     */
+    public function updateMediaInfo($arrParams) {
+        $this->load->library('DbUtil');
+        $arrRes = $this->dbutil->udpMedia($arrParams);
+        if (!$arrRes) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * TODO 
      */
     public function getMediaLists($intAccountId) {
