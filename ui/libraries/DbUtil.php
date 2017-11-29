@@ -30,13 +30,19 @@ class DbUtil {
     const TAB_AD_SLOT               = 'ad_slot_info';
     const TAB_MEDIA_PROFIT_SHARE    = 'media_profit_share';
     const TAB_AD_SLOT_PROFIT_SHARE  = 'adslot_profit_share';
+	const TAB_TAKE_MONEY_RECORD = 'take_money_record';
+	const TAB_MONTHLY_BILL = 'month_bill';
+	const TAB_DAILY_BILL = 'daily_bill';
 
     const TAB_MAP = [
         'account'   => self::TAB_ACCOUNT,
         'media'     => self::TAB_MEDIA,
         'adslot'    => self::TAB_AD_SLOT,
         'mps'       => self::TAB_MEDIA_PROFIT_SHARE,
-        'adsps'     => self::TAB_AD_SLOT_PROFIT_SHARE, 
+		'adsps'     => self::TAB_AD_SLOT_PROFIT_SHARE, 
+		'money' => self::TAB_TAKE_MONEY_RECORD,
+		'monthly' => self::TAB_MONTHLY_BILL,
+		'daily' => self::TAB_DAILY_BILL,
     ];
 
     public static $instance;
@@ -85,7 +91,8 @@ class DbUtil {
                 $arrLimit = explode(',', $sqlPart);
                 // ci limit 参数和 sql 相反
                 $this->CI->db->limit($arrLimit[1], $arrLimit[0]);
-            }
+				continue;
+			}
             $this->CI->db->$act($sqlPart);
         }
         $objRes = $this->CI->db->get($strTabName);
