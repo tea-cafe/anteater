@@ -27,22 +27,16 @@ class DbUtil {
 
     const TAB_ACCOUNT               = 'account_info';
     const TAB_MEDIA                 = 'media_info';
-    const TAB_ADSLOT                = 'adslot_info';
-    const TAB_ADSLOT_STYLE          = 'adslot_style_info';
-    const TAB_PRE_ADSLOT            = 'pre_adslot';
-    const TAB_ADSLOT_MAP            = 'adslot_map';
+    const TAB_AD_SLOT               = 'ad_slot_info';
     const TAB_MEDIA_PROFIT_SHARE    = 'media_profit_share';
     const TAB_AD_SLOT_PROFIT_SHARE  = 'adslot_profit_share';
 
     const TAB_MAP = [
-        'account'       => self::TAB_ACCOUNT,
-        'media'         => self::TAB_MEDIA,
-        'adslot'        => self::TAB_ADSLOT,
-        'adslotstyle'   => self::TAB_ADSLOT_STYLE,
-        'preadslot'     => self::TAB_PRE_ADSLOT,
-        'adslotmap'     => self::TAB_ADSLOT_MAP,
-        'mps'           => self::TAB_MEDIA_PROFIT_SHARE,
-        'adsps'         => self::TAB_AD_SLOT_PROFIT_SHARE, 
+        'account'   => self::TAB_ACCOUNT,
+        'media'     => self::TAB_MEDIA,
+        'adslot'    => self::TAB_AD_SLOT,
+        'mps'       => self::TAB_MEDIA_PROFIT_SHARE,
+        'adsps'     => self::TAB_AD_SLOT_PROFIT_SHARE, 
     ];
 
     public static $instance;
@@ -90,8 +84,7 @@ class DbUtil {
             if ($act === 'limit') {
                 $arrLimit = explode(',', $sqlPart);
                 // ci limit 参数和 sql 相反
-                isset($arrLimit[1]) ? $this->CI->db->limit($arrLimit[1], $arrLimit[0]) : $this->CI->db->limit($arrLimit[0]);
-                continue;
+                $this->CI->db->limit($arrLimit[1], $arrLimit[0]);
             }
             $this->CI->db->$act($sqlPart);
         }
@@ -157,11 +150,8 @@ class DbUtil {
      * @return array
      */
     public function query($strSql) {
-        $res = $this->CI->db->query($strSql);
-        if (is_bool($res)) {
-            return $res;
-        }
-        $arrRes = $res->result_array();
+        $objRes = $this->CI->db->query($strSql);
+        $arrRes = $objRes->result_array();
         return $arrRes;
     }
 

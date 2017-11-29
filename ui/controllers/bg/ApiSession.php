@@ -19,11 +19,9 @@ class ApiSession extends MY_Controller {
 		$adslotId = $arrParams['adslotId'];
         $appSecret = $arrParams['appSecret'];
         $_md = base64_decode($arrParams['hb']);
-        if(is_null(json_decode($md))) {
+        if(is_null(json_decode($_md))) {
             return $this->outJson([], ErrCode::ERR_INVALID_PARAMS);
         }
-        $md = base64_encode($_md);
-        echo $md;exit;
         $md = base64_encode(gzencode($_md, 9));
         $timestamp = time();
         $nonce = rand(pow(10, 5), pow(10, 6)-1);
