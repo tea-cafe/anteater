@@ -30,7 +30,7 @@ class User extends CI_Model {
         // 查询数据库 验证账户密码
         $this->load->library('DbUtil');
         $arrFields = [
-            'select' => 'email,passwd,',
+            'select' => 'account_id,email,passwd,',
             'where' => 'email=\'' . $strUserName . '\''
                 . ' AND passwd=\'' . md5($strPasswd) . '\'' 
                 . ' AND create_time>0 AND update_time>0',
@@ -42,6 +42,7 @@ class User extends CI_Model {
             return false;
         }
         $_SESSION['login_time'] = time();
+        $_SESSION['account_id'] = $arrRes[0]['account_id'];
         $_SESSION['email'] = $arrRes[0]['email'];
         $_SESSION['passwd'] = $arrRes[0]['passwd'];
         return true;
@@ -52,10 +53,12 @@ class User extends CI_Model {
 	 */
     public function checkLogin() {
         if (isset($_SESSION['login_time'])
+            && isset($_SESSION['account_id'])
             && isset($_SESSION['email'])
             && isset($_SESSION['passwd'])
             && (time() - $_SESSION['login_time']) <= self::EXPIRE_SESSION) {
             return [
+                'account_id' => $$_SESSION['account_id'],
                 'email' => $_SESSION['email'],
             ];
         }

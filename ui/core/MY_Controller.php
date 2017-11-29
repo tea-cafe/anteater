@@ -4,8 +4,12 @@
  */
 class MY_Controller extends CI_Controller {
     
+    public $arrUser = [];
+
     public function __construct() {
         parent::__construct();
+        $this->load->model('User');
+        $this->arrUser = $this->User->checkLogin();
     }
 
 

@@ -24,10 +24,4 @@ class MediaList extends MY_Controller {
         $this->outJson($arrData, ErrCode::OK);
 	}
 
-    /**
-     *
-     */
-    public function modify() {
-        
-    }
 }
