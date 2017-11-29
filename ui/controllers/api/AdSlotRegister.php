@@ -18,8 +18,6 @@ class AdSlotRegister extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('User');
-        $this->arrUser = $this->User->checkLogin();
     }
 
 	/**
@@ -45,9 +43,9 @@ class AdSlotRegister extends MY_Controller {
         $arrPostParams['account_id'] = $this->arrUser['account_id'];
 
         $this->load->model('AdSlot');
-        $arrRes = $this->AdSlot->insertAdSlotInfo($arrPostParams);
-        if ($arrRes['code'] === 0) {
-            return $this->outJson('', ErrCode::OK, '广告位注册成功');
+        $bolRes = $this->AdSlot->insertAdSlotInfo($arrPostParams);
+        if ($bolRes) {
+            return $this->outJson('', ErrCode::OK, '注册成功');
         }
         return $this->outJson('', ErrCode::ERR_SYSTEM);
 	}

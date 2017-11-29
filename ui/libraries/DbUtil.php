@@ -14,27 +14,42 @@
  *     'phone' => 'bbb',
  *     ... ... 
  * ];
+ *
+ * udpXXX($arrParams)
+ * $arrParams = [
+ *     'email' => 'xxx',
+ *     'name' => 'xxx',
+ *     ...
+ *     'where' => 'account_id=1 and app_id=1',
+ * ];
  */
 class DbUtil {
 
     const TAB_ACCOUNT               = 'account_info';
     const TAB_MEDIA                 = 'media_info';
-    const TAB_ADSLOT                = 'adslot_info';
+    const TAB_ADSLOT               = 'adslot_info';
     const TAB_ADSLOT_STYLE          = 'adslot_style_info';
     const TAB_PRE_ADSLOT            = 'pre_adslot';
     const TAB_ADSLOT_MAP            = 'adslot_map';
+
     const TAB_MEDIA_PROFIT_SHARE    = 'media_profit_share';
     const TAB_AD_SLOT_PROFIT_SHARE  = 'adslot_profit_share';
+	const TAB_TAKE_MONEY_RECORD		= 'take_money_record';
+	const TAB_MONTHLY_BILL			= 'month_bill';
+	const TAB_DAILY_BILL			= 'daily_bill';
 
     const TAB_MAP = [
-        'account'       => self::TAB_ACCOUNT,
-        'media'         => self::TAB_MEDIA,
-        'adslot'        => self::TAB_ADSLOT,
-        'adslotstyle'   => self::TAB_ADSLOT_STYLE,
-        'preadslot'     => self::TAB_PRE_ADSLOT,
-        'adslotmap'     => self::TAB_ADSLOT_MAP,
-        'mps'           => self::TAB_MEDIA_PROFIT_SHARE,
-        'adsps'         => self::TAB_AD_SLOT_PROFIT_SHARE, 
+        'account'   => self::TAB_ACCOUNT,
+        'media'     => self::TAB_MEDIA,
+        'adslot'    => self::TAB_ADSLOT,
+        'adslotstype' => self::TAB_ADSLOT_STYLE,
+        'preadslot' => self::TAB_PRE_ADSLOT,
+        'adslotmap' => self::TAB_ADSLOT_MAP,
+        'mps'       => self::TAB_MEDIA_PROFIT_SHARE,
+		'adsps'     => self::TAB_AD_SLOT_PROFIT_SHARE, 
+		'money'		=> self::TAB_TAKE_MONEY_RECORD,
+		'monthly'	=> self::TAB_MONTHLY_BILL,
+		'daily'		=> self::TAB_DAILY_BILL,
     ];
 
     public static $instance;
@@ -82,9 +97,9 @@ class DbUtil {
             if ($act === 'limit') {
                 $arrLimit = explode(',', $sqlPart);
                 // ci limit 参数和 sql 相反
-                isset($arrLimit[1]) ? $this->CI->db->limit($arrLimit[1], $arrLimit[0]) : $this->CI->db->limit($arrLimit[0]);
-                continue;
-            }
+                $this->CI->db->limit($arrLimit[1], $arrLimit[0]);
+				continue;
+			}
             $this->CI->db->$act($sqlPart);
         }
         $objRes = $this->CI->db->get($strTabName);
@@ -118,16 +133,12 @@ class DbUtil {
      */
     private function udp($strTabName, $arrParams) {
         $arrParams['update_time'] = time();
+        $strWhere = $arrParams['where'];
+        unset($arrParams['where']);
         foreach ($arrParams as $key => $val) {
             $this->CI->db->set($key, $val);
         }
-        switch($strTabName) {
-            case self::TAB_ACCOUNT:
-            case self::TAB_MEDIA:
-                $this->CI->db->where('email', $arrParams['email']);
-                break;
-            default:
-        }
+        $this->CI->db->where($strWhere);
         $this->CI->db->update($strTabName);
         $arrRes = $this->CI->db->error();
         return $arrRes;
@@ -157,7 +168,7 @@ class DbUtil {
         if (is_bool($res)) {
             return $res;
         }
-        $arrRes = $res->result_array();
+        $res = $objRes->result_array();
         return $arrRes;
     }
 

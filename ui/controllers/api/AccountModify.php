@@ -3,11 +3,10 @@
  * 用户注册接口
  * szishuo
  */
-class AccountRegister extends MY_Controller {
+class AccountModify extends MY_Controller {
 
     const VALID_ACCOUNT_BASE_KEY = [
         'email', 
-        'passwd',
         'phone', 
         'company',
         'contact_person',
@@ -43,12 +42,17 @@ class AccountRegister extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->load->model('User');
+        $this->arrUser = $this->User->checkLogin();
     }
 
     /**
      * 基本信息注册
      */
     public function index() {//{{{//
+        if (empty($this->arrUser)) {
+            return $this->outJson('', ErrCode::ERR_NOT_LOGIN);
+        }
         $arrPostParams = $this->input->post();
         if (empty($arrPostParams)
             || count($arrPostParams) !== count(self::VALID_ACCOUNT_BASE_KEY)) {
@@ -61,27 +65,22 @@ class AccountRegister extends MY_Controller {
             }
             $val = $this->security->xss_clean($val);
         }
-        $arrPostParams['passwd'] = md5($arrPostParams['passwd']);
 
+        $arrPostParams['where'] = "account_id=" . $this->arrUser['account_id'];
         // 入库
         $this->load->model('Account');
-        $arrRes = $this->Account->insertAccountBaseInfo($arrPostParams);
+        $bolRes = $this->Account->updateAccountBaseInfo($arrPostParams);
 
-        if ($arrRes['code'] === 0) {
-            $this->load->model('User');
-            $this->User->doLogin($arrPostParams['email'], md5($arrPostParams['passwd']));
-            return $this->outJson('', ErrCode::OK, '注册成功');
-        }
-        if ($arrRes['code'] === 1062) {
-            return $this->outJson('', ErrCode::ERR_DUPLICATE_ACCOUNT);
+        if ($bolRes) {
+            return $this->outJson('', ErrCode::OK, '账户信息修改成功');
         }
         return $this->outJson('', ErrCode::ERR_SYSTEM);
     }//}}}//
 
     /**
-     * 财务信息注册
+     *
      */
-    public function updateFinanceInfo() {//{{{//
+    public function reAuthentication() {
         if (empty($this->arrUser)) {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN); 
         }
@@ -104,9 +103,10 @@ class AccountRegister extends MY_Controller {
         $bolRes = $this->Account->updateAccountFinanceInfo($arrPostParams);
 
         if ($bolRes) {
-            return $this->outJson('', ErrCode::OK, '财务信息提交成功');
+            return $this->outJson('', ErrCode::OK, '财务信息修改成功');
         }
-        return $this->outJson('', ErrCode::ERR_SYSTEM, '财务信息提交失败');
-    }//}}}//
+        return $this->outJson('', ErrCode::ERR_SYSTEM, '财务信息修改失败');
+
+    }
 
 }

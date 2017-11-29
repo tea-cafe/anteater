@@ -26,20 +26,4 @@ class UserLogin extends MY_Controller {
         }
         return $this->outJson('', ErrCode::ERR_LOGIN_FAILED);
     }
-
-    /**
-     *
-     */
-    public function checkUserLogin() {
-        $arrData = [];
-        $this->load->model('User');
-        $arrData['user'] = $this->User->checkLogin();
-        if (empty($arrData['user'])) {
-            return $this->outJson([], ErrCode::ERR_NOT_LOGIN);
-        }
-        $this->load->model('Account');
-        $arrData['account'] = $this->Account->getAccountInfo($arrData['user']['account_id']);
-        unset($arrData['user']['account_id']);
-        return $this->outJson($arrData, ErrCode::OK);
-    }
 }

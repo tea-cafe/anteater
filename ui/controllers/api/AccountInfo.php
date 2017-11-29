@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * 接口 用户信息
  */
 
-class AccountInfo extends CI_Controller {
+class AccountInfo extends MY_Controller {
 
     /*
      *
