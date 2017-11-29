@@ -154,7 +154,6 @@ class DbUtil {
      */
     public function query($strSql) {
         $res = $this->CI->db->query($strSql);
-        var_dump($objRes);exit;
         if (is_bool($res)) {
             return $res;
         }

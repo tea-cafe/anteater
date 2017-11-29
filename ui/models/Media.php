@@ -29,9 +29,9 @@ class Media extends CI_Model {
     /**
      * TODO 
      */
-    public function getMediaLists() {
+    public function getMediaLists($intAccountId) {
         $this->load->model('media/Lists');
-        $arrData = $this->Lists->getLists();
+        $arrData = $this->Lists->getLists($intAccountId);
         return $arrData;
     } 
 
