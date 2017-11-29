@@ -2,6 +2,8 @@
 /**
  * 账户相关 总类
  */
+
+
 class Account extends CI_Model {
 
     public function __construct() {
@@ -11,9 +13,9 @@ class Account extends CI_Model {
     /**
      * 获取媒体信息
      */
-    public function getAccountInfo($intAccountId) {
+    public function getAccountInfo() {
         $this->load->model('account/Info');
-        $arrData = $this->Info->getInfo($intAccountId);
+        $arrData = $this->Lists->getInfo();
         return $arrData;
     } 
 

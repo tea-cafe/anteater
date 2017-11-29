@@ -15,6 +15,7 @@ class Media extends CI_Model {
         if ($intAutoIncrementId === 0) {
             return false;
         }
+        $arrParams['app_id'] = $this->dbutil->getAutoincrementId('media') + 1000; 
         $arrRes = $this->dbutil->setMedia($arrParams);
         if ($arrRes['code'] !== 0) {
             if ($arrRes['code'] === 1062) {
@@ -29,9 +30,9 @@ class Media extends CI_Model {
     /**
      * TODO 
      */
-    public function getMediaLists($intAccountId) {
+    public function getMediaLists() {
         $this->load->model('media/Lists');
-        $arrData = $this->Lists->getLists($intAccountId);
+        $arrData = $this->Lists->getLists();
         return $arrData;
     } 
 

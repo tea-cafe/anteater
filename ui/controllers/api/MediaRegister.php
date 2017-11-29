@@ -7,7 +7,7 @@ class MediaRegister extends MY_Controller {
 
     const VALID_APP_MEDIA_KEY = [
         'media_name',
-        'media_platform',
+        'platform',
         'app_package_name',
         'media_keywords',
         'media_desc',
@@ -16,19 +16,18 @@ class MediaRegister extends MY_Controller {
 
     const VALID_H5_MEDIA_KEY = [
         'media_name',
-        'media_platform',
+        'platform',
         'url',
         'media_keywords',
         'media_desc',
     ];
 
-    const VALID_PS_MEDIA_KEY = [
+    const VALID_PN_MEDIA_KEY = [
         'media_name',
-        'media_platform',
-        'url',
-        'public_sign_name',
-        'public_sign_type',
-        'public_sign_object',
+        'platform',
+        'public_num_name',
+        'public_num_type',
+        'public_num_object',
         'media_keywords',
         'media_desc',
     ];
@@ -48,12 +47,12 @@ class MediaRegister extends MY_Controller {
         }
 
         $arrPostParams = $this->input->post();
-        switch($arrPostParams['media_platform']) {
+        switch($arrPostParams['platform']) {
             case 'h5':
                 $strValidKeys = self::VALID_H5_MEDIA_KEY;
                 break;
-            case 'public_sign':
-                $strValidKeys = self::VALID_PS_MEDIA_KEY; 
+            case 'public_num':
+                $strValidKeys = self::VALID_PN_MEDIA_KEY; 
                 break;
             default:
                 $strValidKeys = self::VALID_APP_MEDIA_KEY;
@@ -71,8 +70,7 @@ class MediaRegister extends MY_Controller {
             }
             $val = $this->security->xss_clean($val);
         }
-        $arrPostParams['account_id'] = $this->arrUser['account_id'];
-        $arrPostParams['app_id'] = empty($arrPostParams['app_package_name']) ? md5($arrPostParams['url']) : md5($arrPostParams['app_package_name']);
+        $arrPostParams['email'] = $this->arrUser['email'];
         $this->load->model('Media');
         $bolRes = $this->Media->insertMediaInfo($arrPostParams);
         if ($bolRes) {
