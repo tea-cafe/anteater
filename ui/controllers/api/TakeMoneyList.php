@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * 获取提现明细列表
  */
 
-class TakeMoneyList extends CI_Controller{
+class TakeMoneyList extends MY_Controller{
 	public function __construct(){
 		parent::__construct();
 	}
@@ -20,12 +20,7 @@ class TakeMoneyList extends CI_Controller{
 		$status = $this->input->get("status",true);
 
 		if(empty($startDate) || empty($endDate) || empty($pageSize)){
-			$data['code'] = 1;
-			$data['msg'] = '参数不合法';
-			$data['data'] = '';
-			
-			echo json_encode($data);
-			return false;
+			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS);
 		}
 
 		$statusCode = array(
@@ -34,26 +29,26 @@ class TakeMoneyList extends CI_Controller{
 			'3' => '3',
 			'4' => '4',
 		);
+
 		if(!empty($status) && empty($statusCode[$status])){
 			$status = '';
 		}
+
+		$this->load->model('User');
+		$account = $this->User->checkLogin();
+		if(empty($account)){
+			$account = 'ccc@qq.com';
+		}else{
+			$account = $account['email'];
+		}
+
 		$this->load->model("Finance");
-		$account = 'aaa@qq.com';
 		$result = $this->Finance->getTakeMoney($account,$startDate,$endDate,$pageSize,$currentPage,$status);
 		
 		if(empty($result) || count($result) == 0){
-			$data['code'] = 0;
-			$data['msg'] = "数据获取成功";
-			$data['data'] = '';
-
-			echo json_encode($data);
-			return false;
+			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS);
 		}
 
-		$data['code'] = 0;
-		$data['msg'] = "数据获取成功";
-		$data['data'] = $result;
-		
-		echo json_encode($data);
+		return $this->outJson($result,ErrCode::OK,'数据获取成功');
 	}
 }
