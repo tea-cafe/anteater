@@ -9,7 +9,7 @@ class TakeMoneyInfo extends MY_Controller{
 	}
 
 	public function index(){
-		header("Content-Type: application/json");
+		//header("Content-Type: application/json");
 
 		/*
 		$media_list = array(

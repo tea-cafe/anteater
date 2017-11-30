@@ -43,8 +43,8 @@ class TakeMoneyList extends MY_Controller{
 		}
 
 		$this->load->model("Finance");
-		$result = $this->Finance->getTakeMoney($account,$startDate,$endDate,$pageSize,$currentPage,$status);
-		
+		$result = $this->Finance->getTakeMoneyList($account,$startDate,$endDate,$pageSize,$currentPage,$status);
+
 		if(empty($result) || count($result) == 0){
 			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS);
 		}

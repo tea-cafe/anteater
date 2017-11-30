@@ -62,7 +62,6 @@ class MonthlyBillList extends MY_Controller{
 
 		$this->load->model("Finance");
 		$result = $this->Finance->getMonthlyBill($account,$pageSize,$currentPage);
-		
 		if(empty($result) || count($result) == 0){
 			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS);
 		}

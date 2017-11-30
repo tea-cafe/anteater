@@ -35,7 +35,7 @@ class DbUtil {
     const TAB_MEDIA_PROFIT_SHARE    = 'media_profit_share';
     const TAB_AD_SLOT_PROFIT_SHARE  = 'adslot_profit_share';
 	const TAB_TAKE_MONEY_RECORD		= 'take_money_record';
-	const TAB_MONTHLY_BILL			= 'month_bill';
+	const TAB_MONTHLY_BILL			= 'monthly_bill';
 	const TAB_DAILY_BILL			= 'daily_bill';
 
     const TAB_MAP = [
@@ -103,7 +103,8 @@ class DbUtil {
             $this->CI->db->$act($sqlPart);
         }
         $objRes = $this->CI->db->get($strTabName);
-        if (empty($objRes)) {
+		//echo $this->CI->db->last_query();
+		if (empty($objRes)) {
             return [];
         }
         $arrRes = $objRes->result_array();
