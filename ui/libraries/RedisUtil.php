@@ -12,10 +12,10 @@ class RedisUtil extends Redis {
     public function __construct() {
         parent::__construct();
         $CI =& get_instance();
-        $CI->config->load('redis', true);
-        $arrRedisConf = $CI->config->item('redis');
-        $this->connect($arrRedisConf['redis'][0]['server'], $arrRedisConf['server'][0]['port']);
-    } 
+		$CI->config->load('redis',true);
+		$arrRedisConf = $CI->config->item('redis');
+		$this->connect($arrRedisConf['redis'][0]['server'], $arrRedisConf['redis'][0]['port']);
+	} 
 
     /**
      *
