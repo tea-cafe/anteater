@@ -48,6 +48,9 @@ class MediaRegister extends MY_Controller {
         }
 
         $arrPostParams = $this->input->post();
+        if (empty($arrPostParams['media_platform'])) {
+            return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
+        }
         switch($arrPostParams['media_platform']) {
             case 'h5':
                 $strValidKeys = self::VALID_H5_MEDIA_KEY;
@@ -72,7 +75,6 @@ class MediaRegister extends MY_Controller {
             $val = $this->security->xss_clean($val);
         }
         $arrPostParams['account_id'] = $this->arrUser['account_id'];
-        $arrPostParams['app_id'] = empty($arrPostParams['app_package_name']) ? md5($arrPostParams['url']) : md5($arrPostParams['app_package_name']);
         $this->load->model('Media');
         $bolRes = $this->Media->insertMediaInfo($arrPostParams);
         if ($bolRes) {

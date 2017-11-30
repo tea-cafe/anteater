@@ -44,7 +44,7 @@ class ErrCode {
     public static function getDefaultErrMsg($intErrCode) {
         switch ($intErrCode) {
             case self::OK:
-                return '';
+                return 'OK';
             case self::ERR_SYSTEM:
                 return '系统错误.';
             case self::ERR_INVALID_PARAMS:

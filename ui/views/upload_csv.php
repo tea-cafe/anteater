@@ -6,7 +6,7 @@
 
 <?php echo $error;?>
 
-<?php echo form_open_multipart('chart/uploadChart/bd');?>
+<?php echo form_open_multipart('chart/uploadChart/BAI');?>
 
 <input type="file" name="userfile" size="20" />
 

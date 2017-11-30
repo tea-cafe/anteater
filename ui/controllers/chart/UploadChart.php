@@ -4,21 +4,33 @@ class UploadChart extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->helper(['form', 'url']);
+        $this->load->model('chart/CsvAdapter');
     }
 
     public function index() {
         $this->load->view('upload_csv', array('error' => ''));
     }
-    public function _remap($method, $params = []) {
 
+    /**
+     * @param void
+     * @return void
+     */
+    public function _remap($method, $params = []) {
+		if (method_exists($this, $method)) {
+			$reflection = new ReflectionMethod($this, $method);
+            return $this->$method($params);
+		}
+        return $this->index();
     }
-    public function bd() {
-        $this->load->library('CsvReader');
-        $ret = $this->csvreader->import();
-        if($ret == true) {
-            $arrContent = $this->csvreader->read_file();
-            var_dump($arrContent);
-        }
+
+    /**
+     * @param void
+     * @return void
+     */
+    public function BAI() {
+        $arrData = $this->CsvAdapter->bai();
+
+        $this->outJson($arrData, ErrCode::OK);
     }
 
 }

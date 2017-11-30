@@ -37,6 +37,7 @@ class DbUtil {
 	const TAB_TAKE_MONEY_RECORD		= 'take_money_record';
 	const TAB_MONTHLY_BILL			= 'monthly_bill';
 	const TAB_DAILY_BILL			= 'daily_bill';
+	const TAB_PLATFORM              = 'tab_platform';
 
     const TAB_MAP = [
         'account'   => self::TAB_ACCOUNT,
@@ -50,6 +51,7 @@ class DbUtil {
 		'money'		=> self::TAB_TAKE_MONEY_RECORD,
 		'monthly'	=> self::TAB_MONTHLY_BILL,
 		'daily'		=> self::TAB_DAILY_BILL,
+		'platform'	=> self::TAB_PLATFORM,
     ];
 
     public static $instance;

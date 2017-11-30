@@ -6,6 +6,23 @@ class AdSlot extends CI_Model {
         $this->load->library('DbUtil');
     }
 
+    /**
+     * @return array
+     */
+    public function getAllSlotTypeList() {
+        $arrSelect = [
+            'select' = 'slot_style_id,slot_type,slot_style,proportion,img,size',
+            'where' => '',
+            'limit' => '0,100',
+        ];
+        $arrRes = $this->dbutil->getAdslotstype();  
+        return $arrRes;
+    }
+
+    /**
+     * @param array $arrParams
+     * @return array
+     */
     public function insertAdSlotInfo($arrParams) {
         // 检验媒体是否过审
         $arrCheckMediaLegal = [
