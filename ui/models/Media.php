@@ -36,15 +36,19 @@ class Media extends CI_Model {
     }
 
     /**
-     *
+     * @param string $strAppId
+     * @return array;
      */
-    public function getMediaSlotList($strAppId) {
+    public function getMediaValidSlotIds($strAppId) {
         $arrSelect = [
             'select' => 'valid_slot_ids',
             'where' => "appid='" . $strAppId . "'",
         ];
         $arrRes = $this->dbutil->getMedia($arrSelect);
-        return $arrRes;
+        if (!empty($arrRes[0]['valid_slot_ids'])) {
+            return explode(',', $arrRes[0]['valid_slot_ids']);
+        }
+        return [];
     }
 
     /**

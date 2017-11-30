@@ -2,7 +2,7 @@
 /**
  * getXXX($arrParams)
  * $arrParams = [
- *     'select' => 'username,passwd',
+ *     'select' => 'username,passwd',  // 'count(*)' 查询总数
  *     'where' => 'create_time>0 AND update_time>0',
  *     'order_by' => 'passwd DESC',
  *     'limit' => '0,1',
@@ -43,7 +43,7 @@ class DbUtil {
         'account'   => self::TAB_ACCOUNT,
         'media'     => self::TAB_MEDIA,
         'adslot'    => self::TAB_ADSLOT,
-        'adslotstype' => self::TAB_ADSLOT_STYLE,
+        'adslotstyle' => self::TAB_ADSLOT_STYLE,
         'preadslot' => self::TAB_PRE_ADSLOT,
         'adslotmap' => self::TAB_ADSLOT_MAP,
         'mps'       => self::TAB_MEDIA_PROFIT_SHARE,
@@ -92,9 +92,9 @@ class DbUtil {
      * @return array
      */
     private function get($strTabName, $arrParams) {
-        if (empty($arrParams['limit'])) {
-            $arrParams['limit'] = '0,1';
-        }
+        //if (empty($arrParams['limit'])) {
+        //    $arrParams['limit'] = '0,1';
+        //}
         foreach ($arrParams as $act => $sqlPart) {
             if ($act === 'limit') {
                 $arrLimit = explode(',', $sqlPart);

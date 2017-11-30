@@ -7,15 +7,15 @@ class AdSlot extends CI_Model {
     }
 
     /**
+     * @param $strSlotType
      * @return array
      */
-    public function getAllSlotTypeList() {
+    public function getAllSlotTypeList($strSlotType) {
         $arrSelect = [
-            'select' = 'slot_style_id,slot_type,slot_style,proportion,img,size',
-            'where' => '',
-            'limit' => '0,100',
+            'select' => 'slot_style_id,slot_style,img,size',
+            'where' => "slot_frozen_status=0 AND slot_type='" . $strSlotType . "'",
         ];
-        $arrRes = $this->dbutil->getAdslotstype();  
+        $arrRes = $this->dbutil->getAdslotstyle($arrSelect);  
         return $arrRes;
     }
 
