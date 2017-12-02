@@ -9,7 +9,7 @@ class AdSlot extends CI_Model {
     /**
      *
      */
-    public function getAdSlotLists($intAccountId, $pn = 1, $rn = 10, $intCount = 0, $condition='') {
+    public function getAdSlotLists($intAccountId, $pn = 1, $rn = 10, $intCount = 0, $strSlotName = '') {
         $this->load->library('DbUtil');
         if ($intCount === 0) {
             $arrSelect = [
@@ -20,12 +20,13 @@ class AdSlot extends CI_Model {
             $intCount = $arrRes[0]['total'];
         }
         $arrSelect = [
-            'select' => 'app_id,media_name,media_platform,slot_name,slot_type,slot_style,slot_size,switch,update_time',
+            'select' => 'slot_id,app_id,media_name,media_platform,slot_name,slot_type,slot_style,slot_size,switch,create_time',
             'where' => 'account_id=' . $intAccountId,
+            'order_by' => 'create_time DESC',
             'limit' => $rn*($pn-1) . ',' . $rn,
         ];
         if (!empty($condition)) {
-            $arrSelect['where'] .= " AND media_name like '%" . $condition . "%'"; 
+            $arrSelect['where'] .= " AND media_name like '%" . $strSlotName . "%'"; 
         }
         $arrRes = $this->dbutil->getAdSlot($arrSelect);
         return [

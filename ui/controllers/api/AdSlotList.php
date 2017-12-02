@@ -14,7 +14,7 @@ class AdSlotList extends MY_Controller {
 	 */
 	public function index()
 	{
-        $condition = $this->input->get('media_name');
+        $slot_name = $this->input->get('slot_name');
         $pn = intval($this->input->get('currentPage'));
         $rn = intval($this->input->get('pageSize'));
         $total = intval($this->input->get('total'));
@@ -23,7 +23,7 @@ class AdSlotList extends MY_Controller {
         //}
         $this->arrUser['account_id'] = 1;
         $this->load->model('AdSlot');
-        $arrData = $this->AdSlot->getAdSlotLists($this->arrUser['account_id'], $pn, $rn, $total, $condition);
+        $arrData = $this->AdSlot->getAdSlotLists($this->arrUser['account_id'], $pn, $rn, $total, $slot_name);
 
         $this->outJson($arrData, ErrCode::OK);
 	}
