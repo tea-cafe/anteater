@@ -9,6 +9,8 @@
  */
 class ErrCode {
 
+    public static $msg = ''; // 如果有消息需要向上传递，对它赋值
+
     const OK = 0;
 
     const ERR_SYSTEM     = 1;
@@ -46,6 +48,9 @@ class ErrCode {
             case self::OK:
                 return 'OK';
             case self::ERR_SYSTEM:
+                if (!empty(self::$msg)) {
+                    return self::$msg;
+                }
                 return '系统错误.';
             case self::ERR_INVALID_PARAMS:
                 return '参数错误.';

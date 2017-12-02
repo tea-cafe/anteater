@@ -5,6 +5,7 @@ scripts
 # files
 *.DS_Store
 *.swp
+*.swo
 tags
 ui/config/database.php
 ui/config/redis.php

@@ -3,8 +3,7 @@ $config['source_map'] = [
     'SDK' => [
         'hengfu' => [
             'size' => [
-                '1',
-                '2',
+                '',
             ],
             'proportion' => [
                 'BAIDU' => 5,

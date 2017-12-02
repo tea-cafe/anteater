@@ -28,7 +28,7 @@ class UploadChart extends MY_Controller {
      * @return void
      */
     public function BAI() {
-        $arrData = $this->CsvAdapter->bai();
+        $arrData = $this->CsvAdapter->baidu();
 
         $this->outJson($arrData, ErrCode::OK);
     }
