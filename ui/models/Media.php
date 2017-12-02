@@ -66,7 +66,7 @@ class Media extends CI_Model {
             $intCount = $arrRes[0]['total'];
         }
         $arrSelect = [
-            'select' => 'app_id,media_name,check_status,media_platform,update_time',
+            'select' => 'app_id,media_name,check_status,media_platform,create_time',
             'where' => 'account_id=' . $intAccountId,
             'limit' => $rn*($pn-1) . ',' . $rn,
         ];
