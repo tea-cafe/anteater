@@ -55,7 +55,7 @@ class Media extends CI_Model {
      * @param array
      * @return array 
      */
-    public function getMediaLists($intAccountId, $pn = 1, $rn = 10, $intCount = 0, $condition='') {
+    public function getMediaLists($intAccountId, $pn = 1, $rn = 10, $intCount = 0, $strMediaName='', $strStatus) {
         $this->load->library('DbUtil');
         if ($intCount === 0) {
             $arrSelect = [
@@ -66,12 +66,21 @@ class Media extends CI_Model {
             $intCount = $arrRes[0]['total'];
         }
         $arrSelect = [
-            'select' => 'app_id,media_name,check_status,media_platform',
+            'select' => 'app_id,media_name,check_status,media_platform,update_time',
             'where' => 'account_id=' . $intAccountId,
             'limit' => $rn*($pn-1) . ',' . $rn,
         ];
-        if (!empty($condition)) {
-            $arrSelect['where'] .= " AND media_name like '%" . $condition . "%'"; 
+        if (!empty($strMediaName)) {
+            $arrSelect['where'] .= " AND media_name like '%" . $strMediaName . "%'"; 
+        }
+        if (!empty($strStatus)) {
+            $arrStatus = explode(',', $strStatus);
+             $arrSelect['where'] .= " AND (";
+            foreach ($arrStatus as $state) {
+                $arrSelect['where'] .= "check_status=" . $state . " OR "; 
+            }
+            $arrSelect['where'] = substr($arrSelect['where'], 0, -4);
+            $arrSelect['where'] .= ")";
         }
         $arrRes = $this->dbutil->getMedia($arrSelect);
         return [

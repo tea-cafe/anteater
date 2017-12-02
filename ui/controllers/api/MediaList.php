@@ -14,7 +14,8 @@ class MediaList extends MY_Controller {
 	 */
 	public function index()
 	{
-        $condition = $this->input->get('media_name');
+        $condition = $this->input->get('media_name', true);
+        $checkstatus = $this->input->get('check_status', true);
         $pn = intval($this->input->get('currentPage'));
         $rn = intval($this->input->get('pageSize'));
         $total = intval($this->input->get('total'));
@@ -23,8 +24,7 @@ class MediaList extends MY_Controller {
         //}
         $this->arrUser['account_id'] = 1;
         $this->load->model('Media');
-        $arrData = $this->Media->getMediaLists($this->arrUser['account_id'], $pn, $rn, $total, $condition);
-
+        $arrData = $this->Media->getMediaLists($this->arrUser['account_id'], $pn, $rn, $total, $condition, $checkstatus);
         $this->outJson($arrData, ErrCode::OK);
 	}
 
