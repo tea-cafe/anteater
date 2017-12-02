@@ -22,6 +22,23 @@
  *     ...
  *     'where' => 'account_id=1 and app_id=1',
  * ];
+ *
+ * sqlTrans($arrParams);
+ * $arrParams = array(
+ *	0 => array (
+ *		'type' => '操作类型 insert,update,delete',
+ *		'tabName' => '表名',
+ *		'where' => 'update和delete操作',
+ *		'data' => array(
+ *			'表字段' => 'value',
+ *			...
+ *		),
+ *	),
+ *	1 => array(
+ *	...
+ *	),
+ *
+ * ),
  */
 class DbUtil {
 
@@ -38,6 +55,7 @@ class DbUtil {
 	const TAB_MONTHLY_BILL			= 'monthly_bill';
 	const TAB_DAILY_BILL			= 'daily_bill';
 	const TAB_PLATFORM              = 'tab_platform';
+	const TAB_ACCOUNT_BALANCE       = 'account_balance';
 
     const TAB_MAP = [
         'account'   => self::TAB_ACCOUNT,
@@ -48,10 +66,11 @@ class DbUtil {
         'adslotmap' => self::TAB_ADSLOT_MAP,
         'mps'       => self::TAB_MEDIA_PROFIT_SHARE,
 		'adsps'     => self::TAB_AD_SLOT_PROFIT_SHARE, 
-		'money'		=> self::TAB_TAKE_MONEY_RECORD,
+		'tmr'		=> self::TAB_TAKE_MONEY_RECORD,
 		'monthly'	=> self::TAB_MONTHLY_BILL,
 		'daily'		=> self::TAB_DAILY_BILL,
 		'platform'	=> self::TAB_PLATFORM,
+		'accbalance' => self::TAB_ACCOUNT_BALANCE,
     ];
 
     public static $instance;
@@ -92,9 +111,9 @@ class DbUtil {
      * @return array
      */
     private function get($strTabName, $arrParams) {
-        //if (empty($arrParams['limit'])) {
-        //    $arrParams['limit'] = '0,1';
-        //}
+        if (empty($arrParams['limit'])) {
+            $arrParams['limit'] = '0,1';
+        }
         foreach ($arrParams as $act => $sqlPart) {
             if ($act === 'limit') {
                 $arrLimit = explode(',', $sqlPart);
@@ -188,5 +207,59 @@ class DbUtil {
             return 0;
         }
         return intval($arrRes[0]['AUTO_INCREMENT']);
-    }
+	}
+
+	/*
+	 * CI手动事务，临时禁用自动事务
+	 * @params array $arrParams
+	 * return bool true OR false
+	 * 注：由于ci事务判断出错回滚的条件是语句是否执行成功，而更新操作时，就算影响的条数为0，sql语句执行的结果过仍然为1，因为它执行成功了，只是影响的条数为0。
+	 */
+	public function sqlTrans($arrParams){
+		var_dump($arrParams);
+		if(empty($arrParams)){
+			return [];
+		}
+
+		$this->CI->db->trans_strict(FALSE);
+		$this->CI->db->trans_begin();
+		foreach($arrParams as $key => $value){
+			$type = $value['type'];
+			$TabName = self::TAB_MAP[strtolower($value['tabName'])];
+
+			switch($type){
+				case 'insert':
+					$this->CI->db->insert($TabName,$value['data']);
+					break;
+				case 'update':
+					$this->CI->db->where($value['where']);
+					$this->CI->db->update($TabName,$value['data']);
+					if(!$this->CI->db->affected_rows()){
+						$this->CI->db->trans_rollback();
+						continue;
+					}
+					break;
+				case 'delete':
+					$this->CI->db->where($value['where']);
+					$this->CI->db->delete($TabName);
+					
+					if(!$this->CI->db->affected_rows()){
+						$this->CI->db->trans_rollback();
+						continue;
+					}
+					break;
+			}
+		}
+
+		/* 事务回滚和提交*/
+		if ($this->CI->db->trans_status() === FALSE){
+			//@todo 事务回滚 异常处理部分
+			$this->CI->db->trans_rollback();
+			return false;
+		}else{
+			//@todo 事务提交
+			$this->CI->db->trans_commit();
+			return true;
+		}
+	}
 }
