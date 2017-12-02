@@ -17,6 +17,7 @@ class Media extends CI_Model {
         if ($arrRes['code'] !== 0) {
             if ($arrRes['code'] === 1062) {
                 log_message('error', 'Duplicate entry of ' . $arrRes['message']);
+                ErrCode::$msg = $arrRes['message'] . '已经被使用';
             }
             return false;
         }
@@ -68,6 +69,7 @@ class Media extends CI_Model {
         $arrSelect = [
             'select' => 'app_id,media_name,check_status,media_platform,create_time',
             'where' => 'account_id=' . $intAccountId,
+            'order_by' => 'create_time DESC',
             'limit' => $rn*($pn-1) . ',' . $rn,
         ];
         if (!empty($strMediaName)) {

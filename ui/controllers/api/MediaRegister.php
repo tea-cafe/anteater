@@ -25,11 +25,11 @@ class MediaRegister extends MY_Controller {
      * 基本信息注册
      */
     public function index() {//{{{//
-        if (empty($this->arrUser)) {
-            return $this->outJson('', ErrCode::ERR_NOT_LOGIN);
-        }
+        //if (empty($this->arrUser)) {
+        //    return $this->outJson('', ErrCode::ERR_NOT_LOGIN);
+        //}
 
-        $arrPostParams = $this->input->post();
+        $arrPostParams = json_decode($GLOBALS['HTTP_RAW_POST_DATA'], true);
         if (empty($arrPostParams['media_platform'])) {
             return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
         }
@@ -41,7 +41,8 @@ class MediaRegister extends MY_Controller {
             }
             $val = $this->security->xss_clean($val);
         }
-        $arrPostParams['account_id'] = $this->arrUser['account_id'];
+        //$arrPostParams['account_id'] = $this->arrUser['account_id'];
+        $arrPostParams['account_id'] = 1;
         $this->load->model('Media');
         $bolRes = $this->Media->insertMediaInfo($arrPostParams);
         if ($bolRes) {
