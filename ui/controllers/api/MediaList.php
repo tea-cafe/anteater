@@ -16,8 +16,8 @@ class MediaList extends MY_Controller {
 	{
         $condition = $this->input->get('media_name', true);
         $checkstatus = $this->input->get('check_status', true);
-        $pn = intval($this->input->get('currentPage'));
-        $rn = intval($this->input->get('pageSize'));
+        $pn = empty($this->input->get('currentPage')) ? 1 : intval($this->input->get('currentPage'));
+        $rn = empty($this->input->get('pageSize')) ? 10 : intval($this->input->get('pageSize'));
         $total = intval($this->input->get('total'));
         if (empty($this->arrUser)) {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN);

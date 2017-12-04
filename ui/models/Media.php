@@ -56,7 +56,7 @@ class Media extends CI_Model {
      * @param array
      * @return array 
      */
-    public function getMediaLists($intAccountId, $pn = 1, $rn = 10, $intCount = 0, $strMediaName='', $strStatus) {
+    public function getMediaLists($intAccountId, $pn, $rn, $intCount, $strMediaName, $strStatus) {
         $this->load->library('DbUtil');
         if ($intCount === 0) {
             $arrSelect = [
@@ -64,7 +64,7 @@ class Media extends CI_Model {
                 'where' => 'account_id=' . $intAccountId,
             ];
             $arrRes = $this->dbutil->getMedia($arrSelect);
-            $intCount = $arrRes[0]['total'];
+            $intCount = intval($arrRes[0]['total']);
         }
         $arrSelect = [
             'select' => 'app_id,media_name,check_status,media_platform,create_time',
