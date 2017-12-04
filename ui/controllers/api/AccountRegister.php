@@ -8,6 +8,7 @@ class AccountRegister extends MY_Controller {
     const VALID_ACCOUNT_BASE_KEY = [
         'email', 
         'passwd',
+        'confirm',
         'phone', 
         'company',
         'contact_person',
@@ -46,14 +47,14 @@ class AccountRegister extends MY_Controller {
     }
 
     /**
-     * 基本信息注册
+     * 基本信息修改
      */
     public function index() {//{{{//
-        $arrPostParams = $this->input->post();
-        if (empty($arrPostParams)
-            || count($arrPostParams) !== count(self::VALID_ACCOUNT_BASE_KEY)) {
+        $arrPostParams = json_decode(file_get_contents('php://input'), true);
+        if (empty($arrPostParams)) {
             return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
         }
+
         // TODO 各种号码格式校验
         foreach ($arrPostParams as $key => &$val) {
             if(!in_array($key, self::VALID_ACCOUNT_BASE_KEY)) {
@@ -63,6 +64,7 @@ class AccountRegister extends MY_Controller {
         }
         $arrPostParams['passwd'] = md5($arrPostParams['passwd']);
 
+        unset($arrPostParams['confirm']);
         // 入库
         $this->load->model('Account');
         $arrRes = $this->Account->insertAccountBaseInfo($arrPostParams);

@@ -30,7 +30,7 @@ class Media extends CI_Model {
      */
     public function updateMediaInfo($arrParams) {
         $arrRes = $this->dbutil->udpMedia($arrParams);
-        if (!$arrRes) {
+        if ($arrRes['code'] !== 0) {
             return false;
         }
         return true;

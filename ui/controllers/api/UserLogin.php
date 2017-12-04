@@ -13,8 +13,9 @@ class UserLogin extends MY_Controller {
      *
      */
     public function index() {
-        $strUserName = $this->input->post('username', true);
-        $strPasswd = $this->input->post('passwd', true);
+        $arrPostParams = json_decode(file_get_contents('php://input'), true);
+        $strUserName = $arrPostParams['username'];
+        $strPasswd = $arrPostParams['passwd'];
         if (empty($strUserName)
             || empty($strPasswd)) {
             return $this->outJson('', ErrCode::ERR_LOGIN_FAILED);

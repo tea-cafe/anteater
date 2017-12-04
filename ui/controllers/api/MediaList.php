@@ -19,10 +19,9 @@ class MediaList extends MY_Controller {
         $pn = intval($this->input->get('currentPage'));
         $rn = intval($this->input->get('pageSize'));
         $total = intval($this->input->get('total'));
-        //if (empty($arrUser)) {
-        //    $this->outJson('', ErrCode::ERR_NOT_LOGIN);
-        //}
-        $this->arrUser['account_id'] = 1;
+        if (empty($this->arrUser)) {
+            return $this->outJson('', ErrCode::ERR_NOT_LOGIN);
+        }
         $this->load->model('Media');
         $arrData = $this->Media->getMediaLists($this->arrUser['account_id'], $pn, $rn, $total, $condition, $checkstatus);
         $this->outJson($arrData, ErrCode::OK);
