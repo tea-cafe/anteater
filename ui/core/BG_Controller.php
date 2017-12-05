@@ -9,7 +9,7 @@ class BG_Controller extends CI_Controller {
     public function __construct() {
         parent::__construct();
 		$this->load->model('bg/FunBgUser');
-		$this->arrUser = $this->FunBgUser->doLogin($userName,$passWord);
+        $this->arrUser = $this->FunBgUser->checkLogin();
     }
 
 
