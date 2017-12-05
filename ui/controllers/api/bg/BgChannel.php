@@ -1,14 +1,15 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 /**
- * 后台 登陆
+ * 后台 渠道管理
  */
 
 class BgChannel extends MY_Controller {
 	public function __construct(){
 		parent::__construct();
 	}
-	
+
+	/*渠道列表*/
 	public function index(){
 		$pageSize = $this->input->get('pagesize',true);
 		$currentPage = $this->input->get('currentpage',true);
@@ -19,8 +20,8 @@ class BgChannel extends MY_Controller {
 			$pageSize = '';
 			$currentPage = '';
 		}
-		$this->load->model('bg/FunBgChannel');
-		$res = $this->FunBgChannel->getChannelList($keyWord,$pageSize,$currentPage,$status);
+		$this->load->model('bg/Channel');
+		$res = $this->Channel->getList($keyWord,$pageSize,$currentPage,$status);
 		
 		if(empty($res)){
 			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'渠道列表查询失败');
@@ -29,13 +30,14 @@ class BgChannel extends MY_Controller {
 		return $this->outJson($res,ErrCode::OK,'渠道列表查询成功');
 	}
 
+	/*渠道信息详情*/
 	public function content(){
 		$account_id = $this->input->get('accountid',true);
 		if(empty($account_id)){
 			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'参数有误');
 		}
-		$this->load->model('bg/FunBgChannel');
-		$res = $this->FunBgChannel->getChannelInfo($account_id);
+		$this->load->model('bg/Channel');
+		$res = $this->Channel->getInfo($account_id);
 		
 		if(empty($res)){
 			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'参数错误');
@@ -44,13 +46,12 @@ class BgChannel extends MY_Controller {
 		return $this->outJson($res,ErrCode::OK,'获取数据成功');
 	}
 
-	public function adoptFinanceInfo(){
+	/*财务认证*/
+	public function authFinance(){
 		$account_id = $this->input->post('accountid',true);
 		$status = $this->input->post('status',true);
 		$remark = $this->input->post('remark',true);
-		//$account_id = $this->input->get('accountid',true);
-		//$status = $this->input->get('status',true);
-		//$remark = $this->input->get('remark',true);
+		
 		if(empty($account_id)){
 			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'参数有误');
 		}
@@ -68,9 +69,8 @@ class BgChannel extends MY_Controller {
 			$email = $account['email'];
 		}
 
-		$this->load->model('bg/FunBgChannel');
-		$res = $this->FunBgChannel->adoptFinanceStatus($account_id,$email,$status,$remark);
-		exit;
+		$this->load->model('bg/Channel');
+		$res = $this->Channel->modifyFinanceStatus($account_id,$email,$status,$remark);
 		if($res){
 			return $this->outJson('',ErrCode::OK,'修改成功');
 		}else{

@@ -2,7 +2,7 @@
 /**
  * 后台登陆
  */
-class FunBgUser extends CI_Model {
+class BgUser extends CI_Model {
 
     const EXPIRE_SESSION = 86400;
 

@@ -3,8 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * 后台 登陆
  */
-
-class BgUser extends BG_Controller {
+class User extends BG_Controller {
 	public function __construct(){
 		parent::__construct();
 	}
@@ -13,8 +12,8 @@ class BgUser extends BG_Controller {
         $arrPostParam = json_decode(file_get_contents('php://input'), true);
 		$userName = $arrPostParam['username'];
 		$passWord = $arrPostParam['password'];
-		$this->load->model('bg/FunBgUser');
-		$loginRes = $this->FunBgUser->doLogin($userName,$passWord);
+		$this->load->model('bg/BgUser');
+		$loginRes = $this->BgUser->doLogin($userName,$passWord);
 		
 		if($loginRes){
 			return $this->outJson('',ErrCode::OK,'登陆成功');
