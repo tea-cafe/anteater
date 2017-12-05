@@ -164,6 +164,12 @@ class DbUtil {
         }
         $this->CI->db->where($strWhere);
         $this->CI->db->update($strTabName);
+        if ($this->CI->db->affected_rows() === 0) {
+            return [
+                'code' => '-1',
+                'message' => 'affected rows 0',
+            ];
+        }
         $arrRes = $this->CI->db->error();
         return $arrRes;
     }

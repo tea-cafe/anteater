@@ -17,6 +17,7 @@ class Media extends CI_Model {
         if ($arrRes['code'] !== 0) {
             if ($arrRes['code'] === 1062) {
                 log_message('error', 'Duplicate entry of ' . $arrRes['message']);
+                ErrCode::$msg = $arrRes['message'] . '已经被使用';
             }
             return false;
         }
@@ -29,7 +30,7 @@ class Media extends CI_Model {
      */
     public function updateMediaInfo($arrParams) {
         $arrRes = $this->dbutil->udpMedia($arrParams);
-        if (!$arrRes) {
+        if ($arrRes['code'] !== 0) {
             return false;
         }
         return true;
@@ -55,7 +56,7 @@ class Media extends CI_Model {
      * @param array
      * @return array 
      */
-    public function getMediaLists($intAccountId, $pn = 1, $rn = 10, $intCount = 0, $condition='') {
+    public function getMediaLists($intAccountId, $pn, $rn, $intCount, $strMediaName, $strStatus) {
         $this->load->library('DbUtil');
         if ($intCount === 0) {
             $arrSelect = [
@@ -63,15 +64,25 @@ class Media extends CI_Model {
                 'where' => 'account_id=' . $intAccountId,
             ];
             $arrRes = $this->dbutil->getMedia($arrSelect);
-            $intCount = $arrRes[0]['total'];
+            $intCount = intval($arrRes[0]['total']);
         }
         $arrSelect = [
-            'select' => 'app_id,media_name,check_status,media_platform',
+            'select' => 'app_id,media_name,check_status,media_platform,create_time',
             'where' => 'account_id=' . $intAccountId,
+            'order_by' => 'create_time DESC',
             'limit' => $rn*($pn-1) . ',' . $rn,
         ];
-        if (!empty($condition)) {
-            $arrSelect['where'] .= " AND media_name like '%" . $condition . "%'"; 
+        if (!empty($strMediaName)) {
+            $arrSelect['where'] .= " AND media_name like '%" . $strMediaName . "%'"; 
+        }
+        if (!empty($strStatus)) {
+            $arrStatus = explode(',', $strStatus);
+             $arrSelect['where'] .= " AND (";
+            foreach ($arrStatus as $state) {
+                $arrSelect['where'] .= "check_status=" . $state . " OR "; 
+            }
+            $arrSelect['where'] = substr($arrSelect['where'], 0, -4);
+            $arrSelect['where'] .= ")";
         }
         $arrRes = $this->dbutil->getMedia($arrSelect);
         return [

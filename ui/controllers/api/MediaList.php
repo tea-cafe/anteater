@@ -14,17 +14,16 @@ class MediaList extends MY_Controller {
 	 */
 	public function index()
 	{
-        $condition = $this->input->get('media_name');
-        $pn = intval($this->input->get('currentPage'));
-        $rn = intval($this->input->get('pageSize'));
+        $condition = $this->input->get('media_name', true);
+        $checkstatus = $this->input->get('check_status', true);
+        $pn = empty($this->input->get('currentPage')) ? 1 : intval($this->input->get('currentPage'));
+        $rn = empty($this->input->get('pageSize')) ? 10 : intval($this->input->get('pageSize'));
         $total = intval($this->input->get('total'));
-        //if (empty($arrUser)) {
-        //    $this->outJson('', ErrCode::ERR_NOT_LOGIN);
-        //}
-        $this->arrUser['account_id'] = 1;
+        if (empty($this->arrUser)) {
+            return $this->outJson('', ErrCode::ERR_NOT_LOGIN);
+        }
         $this->load->model('Media');
-        $arrData = $this->Media->getMediaLists($this->arrUser['account_id'], $pn, $rn, $total, $condition);
-
+        $arrData = $this->Media->getMediaLists($this->arrUser['account_id'], $pn, $rn, $total, $condition, $checkstatus);
         $this->outJson($arrData, ErrCode::OK);
 	}
 
