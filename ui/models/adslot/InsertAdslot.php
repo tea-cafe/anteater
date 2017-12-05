@@ -28,7 +28,7 @@ class InsertAdslot extends CI_Model {
      * step 2: 获取运营为此media预分配的slot_id列表，
      *
      */
-    public function getPreSlotid($strAppId) {
+    public function getPreSlotId($strAppId) {
         $arrSelect = [
             'select' => 'data',
             'where' => "app_id='" . $strAppId . "'",
