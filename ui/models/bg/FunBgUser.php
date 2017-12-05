@@ -18,13 +18,16 @@ class FunBgUser extends CI_Model {
 		$userRes = $this->dbutil->getBgUser($params);
 
 		if(empty($userRes)){
-			return false;
+			return [];
 		}
 		$_SESSION['login_time'] = time();
 		$_SESSION['bg_account_id'] = $userRes[0]['id'];
 		$_SESSION['username'] = $userRes[0]['username'];
 		$_SESSION['password'] = $userRes[0]['password'];
-		return true;
+        return [
+            'bg_account_id' => $userRes[0]['id'],
+            'username' => $userRes[0]['username'],
+        ];
 
 	}
 }
