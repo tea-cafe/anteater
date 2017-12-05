@@ -2,12 +2,13 @@
 /**
  * 渠道信息列表
  */
-class FunBgChannel extends CI_Model{
+class Channel extends CI_Model{
 	public function __construct(){
 		parent::__construct();
 	}
 
-	public function getChannelList($keyWord,$pageSize,$currentPage,$status){
+	/*获取渠道列表*/
+	public function getList($keyWord,$pageSize,$currentPage,$status){
 		if($currentPage == 1){
 			$currentPage = 0;
 		}
@@ -61,7 +62,8 @@ class FunBgChannel extends CI_Model{
 		return $data;
 	}
 
-	public function getChannelInfo($account_id){
+	/*获取渠道信息*/
+	public function getInfo($account_id){
 		$where = array(
 			'select' => '',
 			'where' => 'account_id = '.$account_id,
@@ -80,7 +82,8 @@ class FunBgChannel extends CI_Model{
 		return $res[0];
 	}
 
-	public function adoptFinanceStatus($account_id,$email,$status,$remark){
+	/*修改财务认证*/
+	public function modifyFinanceStatus($account_id,$email,$status,$remark){
 		$where = array(
 			'check_status' => $status,
 			'remark' => $remark,
