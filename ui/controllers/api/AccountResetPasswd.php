@@ -10,9 +10,9 @@ class AccountResetPasswd extends CI_Controller{
 	}
 
 	public function index(){
-		header("Content-Type:application/json");
-		$email = $this->input->post("email",true);
-		//$email = $this->input->get("email",true);
+		//header("Content-Type:application/json");
+		//$email = $this->input->post("email",true);
+		$email = $this->input->get("email",true);
 
 		if(empty($email) || !stristr($email,"@")){
 			
@@ -41,8 +41,8 @@ class AccountResetPasswd extends CI_Controller{
 			$data['data']['email'] = $email;
 		}
 
-		echo json_encode($data);
-		return false;
+		//echo json_encode($data);
+		//return false;
 	}
 
 	public function CheckCode(){

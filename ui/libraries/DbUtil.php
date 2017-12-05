@@ -56,6 +56,7 @@ class DbUtil {
 	const TAB_DAILY_BILL			= 'daily_bill';
 	const TAB_PLATFORM              = 'tab_platform';
 	const TAB_ACCOUNT_BALANCE       = 'account_balance';
+	const TAB_BG_USER				= 'bg_user';
 
     const TAB_MAP = [
         'account'   => self::TAB_ACCOUNT,
@@ -71,7 +72,8 @@ class DbUtil {
 		'daily'		=> self::TAB_DAILY_BILL,
 		'platform'	=> self::TAB_PLATFORM,
 		'accbalance' => self::TAB_ACCOUNT_BALANCE,
-    ];
+		'bguser' => self::TAB_BG_USER,
+	];
 
     public static $instance;
 
