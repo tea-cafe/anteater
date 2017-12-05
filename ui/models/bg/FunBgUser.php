@@ -3,8 +3,12 @@
  * 后台登陆
  */
 class FunBgUser extends CI_Model {
+
+    const EXPIRE_SESSION = 86400;
+
 	public function __construct(){
 		parent::__construct();
+        session_start();
 	}
 
 	public function doLogin($userName,$passWord){
@@ -22,10 +26,25 @@ class FunBgUser extends CI_Model {
 		}
 		$_SESSION['login_time'] = time();
 		$_SESSION['bg_account_id'] = $userRes[0]['id'];
-		$_SESSION['username'] = $userRes[0]['username'];
-		$_SESSION['password'] = $userRes[0]['password'];
-		return true;
-
+		$_SESSION['email'] = $userRes[0]['username'];
+        return true;
 	}
+
+	/**
+     * @return array
+	 */
+    public function checkLogin() {
+        if (isset($_SESSION['login_time'])
+            && isset($_SESSION['bg_account_id'])
+            && isset($_SESSION['email'])
+            && (time() - $_SESSION['login_time']) <= self::EXPIRE_SESSION) {
+            return [
+                'bg_account_id' => $_SESSION['bg_account_id'],
+                'email' => $_SESSION['email'],
+            ];
+        }
+        return [];
+    } 
+
 }
 ?>
