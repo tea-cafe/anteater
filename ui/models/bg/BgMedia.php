@@ -10,12 +10,16 @@ class BgMedia extends CI_Model {
      * @param array $arrParams
      * @return bool
      */
-    public function updateMediaInfo($arrParams) {
-        $arrRes = $this->dbutil->udpMedia($arrParams);
-        if ($arrRes['code'] !== 0) {
-            return false;
+    public function getMediaDetail($strAppId) {
+        $arrSelect = [
+            'select' => '*',
+            'where' => "app_id='" . $strAppId . "'",
+        ];
+        $arrRes = $this->dbutil->getMedia($arrSelect);
+        if (empty($arrRes[0])) {
+            return [];
         }
-        return true;
+        return $arrRes[0];
     }
 
     /**
