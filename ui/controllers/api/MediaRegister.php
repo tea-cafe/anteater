@@ -52,8 +52,10 @@ class MediaRegister extends MY_Controller {
         if ($arrPostParams['media_platform'] === 'iOS'
             || $arrPostParams['media_platform'] === 'Android') {
             $arrPostParams['default_valid_style'] = '1,2,3,4,5,6,7'; 
+            $arrPostParams['check_status'] = 0;
         } else if ($arrPostParams['media_platform'] === 'H5') {
             $arrPostParams['default_valid_style'] = '9,10,11,12,13,14';
+            $arrPostParams['check_status'] = 1;
         } else {
             return $this->outJson('', ErrCode::ERR_INVALID_PARAMS, $arrPostParams['default_valid_style'] .' wrong');;
         }

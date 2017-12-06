@@ -16,8 +16,8 @@ class Account extends CI_Model {
     public function getInfo($account_id) {
         $this->load->library('DbUtil');
         $where = array(
-            'select' => 'company,email,phone,contact_person',
-            //'select' => 'company,email,phone,contact_person,financial_object,collection_company,contact_address,bussiness_license_num,bussiness_license_pic,account_open_permission,bank,bank_account,bank_account,remark',
+            //'select' => 'company,email,phone,contact_person',
+            'select' => 'company,email,phone,contact_person,financial_object,collection_company,contact_address,bussiness_license_num,bussiness_license_pic,account_open_permission,account_company,bank,city,bank_branch,bank_account,remark,check_status',
             //'select' => '*',
             'where' => 'account_id = '.$account_id,
         );

@@ -78,9 +78,8 @@ class AdSlot extends CI_Model {
 
         $arrSlotIdsForApp = $this->InsertAdslot->distributePreSlotId(
             $arrPreSlotIds,
-            $arrParams['slot_type'],
-            $arrParams['slot_style'],
-            $arrParams['slot_size'], 
+            intval($arrParams['slot_style']),
+            intval($arrParams['slot_size']), 
             $arrParams['app_id']
         );
         if (empty($arrSlotIdsForApp)) {

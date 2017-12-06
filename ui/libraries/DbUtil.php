@@ -126,8 +126,9 @@ class DbUtil {
             $this->CI->db->$act($sqlPart);
         }
         $objRes = $this->CI->db->get($strTabName);
-		//echo $this->CI->db->last_query();
-		if (empty($objRes)) {
+        //echo $this->CI->db->last_query();
+        //exit;
+        if (empty($objRes)) {
             return [];
         }
         $arrRes = $objRes->result_array();

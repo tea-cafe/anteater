@@ -1,5 +1,5 @@
 <?php
-$config['plat'] = array(
+$config['style2platform_map'] = array(
 	1=>array(
 		"des"=>'横幅',
 		"BAIDU"=> array(
@@ -129,4 +129,3 @@ $config['plat'] = array(
 	)
 );
 ?>
-

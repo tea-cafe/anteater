@@ -12,7 +12,7 @@ class InsertAdslot extends CI_Model {
     public function checkMediaLigal($arrParams) {
         $arrCheckMediaLegal = [
             'select' => 'app_id',
-            'where' => "app_id='" . $arrParams['app_id'] . "' AND media_name='" . $arrParams['media_name'] . "' AND check_status=2",
+            'where' => "app_id='" . $arrParams['app_id'] . "' AND check_status=3",
             'limit' => '0,1',
         ];
         $arrRes = $this->dbutil->getMedia($arrCheckMediaLegal);
@@ -46,16 +46,15 @@ class InsertAdslot extends CI_Model {
     /**
      * step 3: 为此媒体分配预生成的广告位id.从与分配的slot_id列表按渠道分别选出一个可用的上游slot_id，标记已占用，然后回写预分配的slot_id列表。最终返回此mediaslot_id对应的每个上游的slot_id列表.
      * @param array $arrPreSlotIds 预分配slot_id数据
-     * @param string $strSlotType
-     * @param string $strSlotStyle
-     * @param string $strSlotSize
+     * @param string $intSlotStyle
+     * @param string $intSlotSize
      * @param string $strAppId
      * @return array 分配的上游slot_id列表
      */
-    public function distributePreSlotId($arrPreSlotIds, $strSlotType, $strSlotStyle, $strSlotSize, $strAppId) {
+    public function distributePreSlotId($arrPreSlotIds, $intSlotStyle, $intSlotSize, $strAppId) {
         $arrSlotIdsForApp = [];
         foreach($arrPreSlotIds as $upstream => &$arrType){
-            $arrTmp = $arrType[$strSlotType][$strSlotStyle][$strSlotSize];
+            $arrTmp = $arrType[$intSlotStyle][$intSlotSize];
             foreach ($arrTmp as $slotid => $used) {
                 if ($used === 0) {
                     $arrSlotIdsForApp[] = [
@@ -66,7 +65,7 @@ class InsertAdslot extends CI_Model {
                     break;
                 }
             }
-            $arrType[$strSlotType][$strSlotStyle][$strSlotSize] = $arrTmp;
+            $arrType[$intSlotStyle][$intSlotSize] = $arrTmp;
         }
 
         if (empty($arrSlotIdsForApp)) {

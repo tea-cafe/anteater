@@ -9,11 +9,9 @@ class AdSlotRegister extends MY_Controller {
     const VALID_ADSLOT_KEY = [
         'slot_name',
         'app_id',
-        'media_name',
         'slot_type',
         'slot_style',
         'slot_size',
-        'slot_style_id',
     ];
 
     public function __construct() {
@@ -27,7 +25,7 @@ class AdSlotRegister extends MY_Controller {
         if (empty($this->arrUser)) {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN);
         }
-        $arrPostParams = $this->input->post();
+        $arrPostParams = json_decode(file_get_contents('php://input'), true); 
         if (empty($arrPostParams)
             || count($arrPostParams) !== count(self::VALID_ADSLOT_KEY)) {
             return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 

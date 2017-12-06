@@ -10,18 +10,13 @@ class Tools extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->config->load('upload');
-        $this->load->helper(['form', 'url']);
+        $this->load->library('UploadTools');
     }
 
-    public function index() {
-        $this->load->view('upload_form', ['error' => '']);
-    }
-
-	/**
+    /**
      *
-	 */
-	public function uploadImg() {
+     */
+    public function uploadImg() {
         $this->load->model('User');
         $arrUser = $this->User->checkLogin();
         if (empty($arrUser)) {
@@ -29,17 +24,14 @@ class Tools extends MY_Controller {
         } 
 
         $arrUdpImgConf = $this->config->item('img');
-        $arrUdpImgConf['file_name'] = md5($arrUser['email'] . self::KEY_IMG_URL_SALT . $_FILES['id']);
-        $this->load->library('upload', $arrUdpImgConf);
+        $arrUdpImgConf['file_name'] = md5($arrUser['account_id'] . self::KEY_IMG_URL_SALT . $_FILES['id']);
 
-        if (!$this->upload->do_upload('file')) {
-            return $this->outJson('', ErrCode::ERR_UPLOAD);
+        $strUrl = $this->uploadtools->uploadImg($arrUdpImgConf);
+        if (empty($strUrl)) {
+            return $this->outJson('', ErrCode::ERR_UPLOAD, '上传csv文件失败，请重试');
         }
-        $arrRes = $this->upload->data();
-
-        $strImgUrl = str_replace(WEBROOT, '', $arrRes['full_path']);
         return $this->outJson(
-            ['img_url' => $strImgUrl],
+            ['url' => $strUrl],
             ErrCode::OK,
             '图片上传成功');
     }
@@ -47,25 +39,19 @@ class Tools extends MY_Controller {
     /**
      * upload csv
      */
-	public function uploadCsv() {
+    public function uploadCsv() {
         $this->load->model('User');
         $arrUser = $this->User->checkLogin();
         if (empty($arrUser)) {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN, '会话已过期,请重新登录');
         } 
-
-        // 用户白名单过滤
-
         $arrUdpCsvConf = $this->config->item('csv');
-        $this->load->library('upload', $arrUdpCsvConf);
-
-        if (!$this->upload->do_upload('file')) {
+        $strUrl = $this->uploadtools->upload($arrUdpCsvConf);
+        if (empty($strUrl)) {
             return $this->outJson('', ErrCode::ERR_UPLOAD, '上传csv文件失败，请重试');
         }
-        $arrRes = $this->upload->data();
-        $strCsvUrl = str_replace(WEBROOT, '', $arrRes['full_path']);
         return $this->outJson(
-            ['img_url' => $strCsvUrl],
+            ['url' => $strUrl],
             ErrCode::OK,
             '文件上传成功');
     }
@@ -73,7 +59,7 @@ class Tools extends MY_Controller {
     /**
      * upload app
      */
-	public function uploadApp() {
+    public function uploadApp() {
         if (empty($this->arrUser)) {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN, '会话已过期,请重新登录');
         } 
@@ -86,32 +72,20 @@ class Tools extends MY_Controller {
 
         $arrUdpAppConf = $this->config->item('app');
         $arrUdpAppConf['file_name'] = md5($strAppId . $_FILES['file']['name']);
-        $this->load->library('upload', $arrUdpAppConf);
-        if (!$this->upload->do_upload('file')) {
-            return $this->outJson('', ErrCode::ERR_UPLOAD, '上传app失败，请重试');
-        }
-        $arrRes = $this->upload->data();
-        $strAppUrl = '/' . $arrRes['file_name'];
-        $arrUpdate = [
-            'app_verify_url' => $strAppUrl,
-            'check_status' => 2,
-            'where' => "app_id='" . $this->input->post('app_id', true) . "'",
-        ];
-        $this->load->model('Media');
-        $bolRes = $this->Media->updateMediaInfo($arrUpdate);
-        if (!$bolRes) {
-            return $this->outJson('', ErrCode::ERR_UPLOAD, 'app地址生成失败，请重新上传');
+        $strUrl = $this->uploadtools->upload($arrUdpAppConf);
+        if (empty($strUrl)) {
+            return $this->outJson('', ErrCode::ERR_UPLOAD, '上传csv文件失败，请重试');
         }
         return $this->outJson(
-            ['app_url' => $strAppUrl],
+            ['url' => $strUrl],
             ErrCode::OK,
-            'app上传成功');
+            '文件上传成功');
     }
 
     /**
      * 仅限运营使用
      */
-	public function uploadTxt() {
+    public function uploadTxt() {
         if (empty($this->arrUser)) {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN, '会话已过期,请重新登录');
         } 
@@ -147,3 +121,4 @@ class Tools extends MY_Controller {
             'app_key文件上传成功');
     }
 }
+
