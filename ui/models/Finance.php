@@ -160,33 +160,29 @@
 		/**
 		 * 检查账户财务状态
 		 */
-		public function checkFinanceInfo($account){
+		public function checkFinanceInfo($account_id){
 			$where = array(
 				'select' => 'check_status',
 				'where' => 'email = "'.$account.'"',
-				'order_by' => '',
-				'limit' => '',
 			);
 			$this->load->library('DbUtil');
 			$status = $this->dbutil->getAccount($where);
 			$status = $status[0]['check_status'];
 			
 			if($status === '2'){
-				return true;
+				return $status;
 			}else{
-				return false;
+				return [];
 			}
 		}
 
 		/**
 		 * 查询账户余额
 		 */
-		public function getAccountMoney($email){
+		public function getAccountMoney($account_id){
 			$where = array(
 				'select' => 'status,money',
-				'where' => 'account = "'.$email.'"',
-				'order_by' => '',
-				'limit' => '',
+				'where' => 'account_id = "'.$account_id.'"',
 			);
 
 			$this->load->library('DbUtil');
@@ -205,59 +201,51 @@
 		/**
 		 * 提现操作
 		 */
-		public function confirmTakeMoney($account,$money){
+		public function confirmTakeMoney($account_id,$email,$money){
 			/*获取媒体提现的月账单*/
 			$startDate = 1490976000;
 			$endDate = time();
-			$mediaWhere = array(
+			$billWhere = array(
 				'select' => 'time,appid,media_name,media_platform,money',
-				'where' => 'time > '.$startDate.' AND time <'.$endDate.' AND account = "'.$account.'"',
+				'where' => 'time > '.$startDate.' AND time <'.$endDate.' AND account_id = "'.$account_id.'"',
 				'order_by' => 'time',
-				'limit' => '',
 			);
 			$this->load->library('DbUtil');
-			$tmpList = $this->dbutil->getMonthly($mediaWhere);
+			$tmpList = $this->dbutil->getMonthly($billWhere);
 			
 			foreach($tmpList as $key => $value){
-				$MediaList[$key]['time'] = date("Y-m",$value['time']);
-				$MediaList[$key]['appid'] = $value['appid'];
-				$MediaList[$key]['media_name'] = $value['media_name'];
-				$MediaList[$key]['media_platform'] = $value['media_platform'];
-				$MediaList[$key]['money'] = $value['money'];
+				$billList[$key]['time'] = date("Y-m",$value['time']);
+				$billList[$key]['appid'] = $value['appid'];
+				$billList[$key]['media_name'] = $value['media_name'];
+				$billList[$key]['media_platform'] = $value['media_platform'];
+				$billList[$key]['money'] = $value['money'];
 			}
 
 			/*获取媒体信息*/
 			$infoWhere = array(
 				'select' => 'email,contact_person,phone,bank_account,company_address,company,bank,bank_branch',
-				'where' => 'email = "'.$account.'"',
-				'order_by' => '',
-				'limit' => '',
+				'where' => 'account_id = "'.$account_id.'"',
 			);
 			$tmpInfo = $this->dbutil->getAccount($infoWhere);
-			$tmpInfo[0]['media'] = $MediaList[0]['media_name'].'等';
+			$tmpInfo[0]['media'] = $billList[0]['media_name'].'等';
 			$tmpInfo[0]['money'] = $money;
-			$info['media_info'] = $tmpInfo[0];
+			$info['channel_info'] = $tmpInfo[0];
 
-			$invoiceInfo = array(
-				'company' => '杭州推啊网络科技有限公司',
-				'company_address' => '杭州市西湖区文一西路98号数娱大厦808室',
-				'phone' => '0571-28258680',
-			);
+            $this->config->load('company_invoice_info');
+            $info[''] = $this->config->item('invoice');
 
-			$info['invoice_info'] = $invoiceInfo;
-			
 			$params = array(
 				0 => array(
 					'type' => 'insert',
 					'tabName' => 'tmr',
 					'data' => array(
 						'time' => time(),
-						'account' => $account,
+						'email' => $email,
 						'number' => date("YmdHi").mt_rand(101,999),
 						'money' => $money,
-						'media_list' => serialize($MediaList),
+						'bill_list' => serialize($billList),
 						'info' => serialize($info),
-						'note' => '',
+						'remark' => '',
 						'status' => '1',
 						'create_time' => time(),
 						'update_time' => time(),
@@ -266,17 +254,16 @@
 				1 => array(
 					'type' => 'update',
 					'tabName' => 'accbalance',
-					'where' => 'account = "'.$account.'"',
+					'where' => 'account_id = "'.$account_id.'"',
 					'data' => array(
 						'money' => 0,
-						'create_time' => time(),
 						'update_time' => time(),
 					),
 				),
 				2 => array(
 					'type' => 'update',
 					'tabName' => 'monthly',
-					'where' => 'time > '.$startDate.' AND time <'.$endDate.' AND account = "'.$account.'"',
+					'where' => 'time > '.$startDate.' AND time <'.$endDate.' AND account_id = "'.$account_id.'"',
 					'data' => array(
 						'status' => '2',
 					),

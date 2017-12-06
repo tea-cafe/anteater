@@ -24,7 +24,6 @@ class AccountInfo extends MY_Controller {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN);
         }
         
-        var_dump($arrUser);
         $this->load->model('Account');
         $arrInfo = $this->Account->getInfo($this->arrUser['account_id']);
 

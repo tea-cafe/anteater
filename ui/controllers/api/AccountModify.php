@@ -8,7 +8,6 @@ class AccountModify extends MY_Controller {
     const VALID_ACCOUNT_BASE_KEY = [
         'email', 
         'phone', 
-        //'company',
         'contact_person',
     ]; 
         
@@ -54,12 +53,14 @@ class AccountModify extends MY_Controller {
         if (empty($this->arrUser)) {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN);
         }
-        $arrPostParams = $this->input->post();
+
         //$arrPostParams = json_decode(file_get_contents('php://input'), true);
-        if (empty($arrPostParams)
-            || count($arrPostParams) !== count(self::VALID_ACCOUNT_BASE_KEY)) {
+        $arrPostParams = $this->input->post();
+        
+        if (empty($arrPostParams) || count($arrPostParams) !== count(self::VALID_ACCOUNT_BASE_KEY)) {
             return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
         }
+        
         // TODO 各种号码格式校验
         foreach ($arrPostParams as $key => &$val) {
             if(!in_array($key, self::VALID_ACCOUNT_BASE_KEY)) {
@@ -82,16 +83,19 @@ class AccountModify extends MY_Controller {
     /**
      * 财务信息修改
      */
-    public function reAuthentication() {//{{{//
+    publaic function reAuthentication() {//{{{//
         if (empty($this->arrUser)) {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN); 
         }
+
+        /* 1为公司 2为个人 */
         $arrPostParams = $this->input->post();
-        $arrValidKeys = $arrPostParams['financial_object'] == '公司' ? self::VALID_ACCOUNT_COMPANY_FINANCE_KEY : self::VALID_ACCOUNT_PERSIONAL_FINANCE_KEY;
-        if (empty($arrPostParams)
-            || count($arrPostParams) !== count($arrValidKeys)) {
+        $arrValidKeys = $arrPostParams['financial_object'] == '1' ? self::VALID_ACCOUNT_COMPANY_FINANCE_KEY : self::VALID_ACCOUNT_PERSIONAL_FINANCE_KEY;
+        
+        if (empty($arrPostParams) || count($arrPostParams) !== count($arrValidKeys)) {
             return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
         }
+
         foreach ($arrPostParams as $key => &$val) {
             if(!in_array($key, $arrValidKeys)) {
                 return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
@@ -108,7 +112,6 @@ class AccountModify extends MY_Controller {
             return $this->outJson('', ErrCode::OK, '财务信息修改成功');
         }
         return $this->outJson('', ErrCode::ERR_SYSTEM, '财务信息修改失败');
-
     }//}}}//
 
 }

@@ -84,16 +84,22 @@ class AccountRegister extends MY_Controller {
     /**
      * 财务信息注册
      */
-    public function updateFinanceInfo() {//{{{//
+    publiac function updateFinanceInfo() {//{{{//
+        $this->load->model('User');
+        $this->arrUser = $this->User->checkLogin();
+
         if (empty($this->arrUser)) {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN); 
         }
+
+        /* 1为公司 2为个人 */
         $arrPostParams = $this->input->post();
-        $arrValidKeys = $arrPostParams['financial_object'] == '公司' ? self::VALID_ACCOUNT_COMPANY_FINANCE_KEY : self::VALID_ACCOUNT_PERSIONAL_FINANCE_KEY;
-        if (empty($arrPostParams)
-            || count($arrPostParams) !== count($arrValidKeys)) {
+        $arrValidKeys = $arrPostParams['financial_object'] == '1' ? self::VALID_ACCOUNT_COMPANY_FINANCE_KEY : self::VALID_ACCOUNT_PERSIONAL_FINANCE_KEY;
+        
+        if (empty($arrPostParams) || count($arrPostParams) !== count($arrValidKeys)) {
             return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
         }
+
         foreach ($arrPostParams as $key => &$val) {
             if(!in_array($key, $arrValidKeys)) {
                 return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 

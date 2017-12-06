@@ -22,8 +22,7 @@ class AccountResetPasswd extends MY_Controller{
 		$result = $this->Account->resetPwdCode($email);
 		
 		if($result === 2){
-			$data['data']['email'] = $email;
-			return $this->outJson($data,ErrCode::ERR_INVALID_PARAMS,'没有此账号');
+			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'没有此账号');
 		}else if(!$result){
 			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'验证码发送失败');
 		}else{
@@ -50,7 +49,6 @@ class AccountResetPasswd extends MY_Controller{
 		if($VerifyCode == $RdsValue['code'] && $email == $RdsValue['email']){
             $this->load->helper('createkey');
             $strToken = keys(32);
-
 
 			$data['email'] = $email;
 			$data['strToken'] = $strToken;
