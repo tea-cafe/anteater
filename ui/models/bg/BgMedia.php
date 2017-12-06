@@ -52,7 +52,7 @@ class BgMedia extends CI_Model {
             $intCount = intval($arrRes[0]['total']);
         }
         $arrSelect = [
-            'select' => 'app_id,media_name,check_status,media_platform,create_time',
+            'select' => 'app_id,industry,media_name,check_status,media_platform,create_time',
             'order_by' => 'create_time DESC',
             'limit' => $rn*($pn-1) . ',' . $rn,
         ];
@@ -69,6 +69,7 @@ class BgMedia extends CI_Model {
             $arrSelect['where'] .= ")";
         }
         $arrRes = $this->dbutil->getMedia($arrSelect);
+        $arrRes = $this->industryMap($arrRes);
         return [
             'list' => $arrRes,
             'pagination' => [
@@ -78,5 +79,20 @@ class BgMedia extends CI_Model {
             ],
         ];
     } 
+
+    /**
+     *
+     */
+    private function industryMap($arrData) {
+        $this->config->load('industry');
+        $arrIndustryMap = $this->config->item('industry');
+        foreach ($arrData as &$val) {
+            // TODO
+            $val['industry'] = '2438-2613';
+            $idTmp = explode('-', $val['industry']);
+            $val['industry'] = empty($arrIndustryMap[$idTmp[0]][$idTmp[1]]) ? '' : $arrIndustryMap[$idTmp[0]][$idTmp[1]]['sub'] . '-' . $arrIndustryMap[$idTmp[0]][$idTmp[1]]['text']; 
+        }
+        return $arrData;
+     }
 
 }

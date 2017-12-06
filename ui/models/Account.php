@@ -11,12 +11,23 @@ class Account extends CI_Model {
     }
 
     /**
-     * 获取媒体信息
+     * 获取渠道信息
      */
-    public function getAccountInfo() {
-        $this->load->model('account/Info');
-        $arrData = $this->Lists->getInfo();
-        return $arrData;
+    public function getInfo($account_id) {
+        $this->load->library('DbUtil');
+        $where = array(
+            'select' => 'company,email,phone,contact_person',
+            //'select' => 'company,email,phone,contact_person,financial_object,collection_company,contact_address,bussiness_license_num,bussiness_license_pic,account_open_permission,bank,bank_account,bank_account,remark',
+            //'select' => '*',
+            'where' => 'account_id = '.$account_id,
+        );
+        $arrInfo = $this->dbutil->getAccount($where);
+        
+        if(empty($arrInfo)){
+            return [];
+        }
+
+        return $arrInfo[0];
     } 
 
     /**

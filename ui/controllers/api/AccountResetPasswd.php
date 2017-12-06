@@ -4,58 +4,42 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * 重置密码
  */
-class AccountResetPasswd extends CI_Controller{
+class AccountResetPasswd extends MY_Controller{
 	public function __construct(){
 		parent::__construct();
 	}
 
 	public function index(){
-		//header("Content-Type:application/json");
+		header("Content-Type:application/json");
 		//$email = $this->input->post("email",true);
-		$email = $this->input->get("email",true);
+		$email = $this->input->get('email',true);
 
 		if(empty($email) || !stristr($email,"@")){
-			
-			$data['code'] = 2;
-			$data['msg'] = '参数错误';
-			$data['data']['email'] = $email;
-			
-			echo json_encode($data);
-			return false;
+			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'参数错误');
 		}
 
 		$this->load->model("Account");
 		$result = $this->Account->resetPwdCode($email);
 		
 		if($result === 2){
-			$data['code'] = 2;
-			$data['msg'] = '没有此账号';
 			$data['data']['email'] = $email;
+			return $this->outJson($data,ErrCode::ERR_INVALID_PARAMS,'没有此账号');
 		}else if(!$result){
-			$data['code'] = 2;
-			$data['msg'] = '邮件发送失败,请重试';
-			$data['data']['email'] = $email;
+			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'验证码发送失败');
 		}else{
-			$data['code'] = 0;
-			$data['msg'] = '邮件发送成功';
 			$data['data']['email'] = $email;
+			return $this->outJson($data,ErrCode::OK,'验证码发送成功');
 		}
-
-		//echo json_encode($data);
-		//return false;
 	}
 
 	public function CheckCode(){
-		$VerifyCode = $this->input->post("verifycode",true);
-		$email = $this->input->post("email",true);
+		//$VerifyCode = $this->input->post('verifycode',true);
+		//$email = $this->input->post('email',true);
+		$VerifyCode = $this->input->get('verifycode',true);
+		$email = $this->input->get('email',true);
 
 		if(empty($VerifyCode) || empty($email) || !stristr($email,'@')){
-			$data['code'] = 2;
-			$data['msg'] = '参数错误';
-			$data['data'] = '';
-
-			echo json_encode($data);
-			return false;
+			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'参数错误');
 		}
 
 		$this->load->library("RedisUtil");
@@ -64,71 +48,52 @@ class AccountResetPasswd extends CI_Controller{
 		$RdsValue = unserialize($RdsValue);
 
 		if($VerifyCode == $RdsValue['code'] && $email == $RdsValue['email']){
-			$data['code'] = 0;
-			$data['msg'] = '验证码正确';
-			$data['data'] = '';
-		
-			$RdsValue['status'] = 'ok';
+            $this->load->helper('createkey');
+            $strToken = keys(32);
+
+
+			$data['email'] = $email;
+			$data['strToken'] = $strToken;
+		    
+			$RdsValue['strToken'] = $strToken;
 			$this->redisutil->set($RdsKey,serialize($RdsValue));
 			$this->redisutil->expire($RdsKey,60*5);
-		}else{
-			$data['code'] = 2;
-			$data['msg'] = '验证码错误';
-			$data['data'] = '';
-		
+			return $this->outJson($data,ErrCode::OK,'验证成功');
+        }else{
+			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'验证码错误');
 		}
-
-		echo json_encode($data);
-		return false;
 	}
 
 	public function ModifyPwd(){
-		$email = $this->input->post("email",true);
-		$newPwd = $this->input->post("newpwd",true);
-		$confirmPwd = $this->input->post("confirmpwd",true);
+		//$email = $this->input->post('email',true);
+		//$newPwd = $this->input->post('newpwd',true);
+		//$confirmPwd = $this->input->post('confirmpwd',true);
+		$email = $this->input->get('email',true);
+		$strToken = $this->input->get('strToken',true);
+		$newPwd = $this->input->get('password',true);
+		$confirmPwd = $this->input->get('confirm',true);
 
-		if(empty($email) || empty($newPwd) || empty($confirmPwd)){
-			$data['code'] = 2;
-			$data['msg'] = '参数错误';
-			$data['data'] = '';		
+        if(empty($email) || empty($newPwd) || empty($confirmPwd) || empty($strToken)){
+			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'参数错误');
 		}
 		
 		if($newPwd !== $confirmPwd){
-			$data['code'] = 2;
-			$data['msg'] = '密码输入不一致';
-			$data['data'] = '';
-
-			echo json_encode($data);
-			return false;
+			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'密码输入不一致');
 		}
 		$this->load->library("RedisUtil");
 		$RdsKey = 'ResetPwd_'.$email;
 		$RdsValue = $this->redisutil->get($RdsKey);
 		$RdsValue = unserialize($RdsValue);
-		if($RdsValue['status'] == 'ok'){
+		if($RdsValue['strToken'] == $strToken){
 			$this->load->model('Account');
 			$result = $this->Account->UpdatePwd($email,$newPwd,$confirmPwd);
 			if($result){
-				$data['code'] = 0;
-				$data['msg'] = '密码重置成功';
-				$data['data'] = '';
-				echo json_encode($data);
-				return false;
+			    return $this->outJson('',ErrCode::OK,'密码重置成功');
 			}else{
-				$data['code'] = 2;
-				$data['msg'] = '密码重置失败';
-				$data['data'] = '';
-				
-				echo json_encode($data);
-				return false;
+			    return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'密码重置失败');
 			}
 		}else{
-			$data['code'] = 2;
-			$data['msg'] = '请重新获取验证码';
-			$data['data'] = '';
-
-			echo json_encode($data);
-			return false;
+			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'请重新获取验证码');
 		}
 	}
 }

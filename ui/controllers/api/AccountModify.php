@@ -8,7 +8,7 @@ class AccountModify extends MY_Controller {
     const VALID_ACCOUNT_BASE_KEY = [
         'email', 
         'phone', 
-        'company',
+        //'company',
         'contact_person',
     ]; 
         

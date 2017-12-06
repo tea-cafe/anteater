@@ -67,7 +67,7 @@ class Media extends CI_Model {
             $intCount = intval($arrRes[0]['total']);
         }
         $arrSelect = [
-            'select' => 'app_id,media_name,check_status,media_platform,create_time',
+            'select' => 'app_id,media_name,industry,app_platform,check_status,media_platform,create_time',
             'where' => 'account_id=' . $intAccountId,
             'order_by' => 'create_time DESC',
             'limit' => $rn*($pn-1) . ',' . $rn,
@@ -85,6 +85,7 @@ class Media extends CI_Model {
             $arrSelect['where'] .= ")";
         }
         $arrRes = $this->dbutil->getMedia($arrSelect);
+        $this->explane($arrRes);
         return [
             'list' => $arrRes,
             'pagination' => [
@@ -94,5 +95,18 @@ class Media extends CI_Model {
             ],
         ];
     } 
+
+    /**
+     *
+     */
+    private function explane(&$arrData) {
+        // TODO
+        if (!empty($arrData['industry'])) {
+            $arrData['industry'] = '手机'; 
+        }
+        if (!empty($arrData['app_platform'])) {
+            $arrData['app_platform'] = '手百';    
+        }
+    }
 
 }

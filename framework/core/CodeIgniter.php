@@ -522,6 +522,7 @@ if ( ! is_php('5.4'))
 
 	$CI = new $class();
 
+
 /*
  * ------------------------------------------------------
  *  Is there a "post_controller_constructor" hook?

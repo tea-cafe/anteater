@@ -6,33 +6,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class PreAdSlot extends MY_Controller {
 
-    const VALID_ADSLOT_KEY = [
-        'app_id',
-        'data',
-    ];
-
-    public function __construct() {
-        parent::__construct();
-    }
 
 	/**
      *
 	 */
-	public function testInsertPreAdSlot() {
-        $arrPostParams = $this->input->post();
-        
-        foreach($arrPostParams as $key => $val) {
-
-        }
-
-        include_once('/home/work/anteater/ui/testPreSlotid.php');
-        $jsonData = json_encode($data);
-
-        $arrPostParams['app_id'] = 'ad45cd3fa59ea7dfca549f22b16821ef';
-        $arrPostParams['data'] = $jsonData;
-        $this->load->model('bg/PreAdSlotManager');
-        $this->PreAdSlotManager->insertPreAdSlot($arrPostParams);
-
+	public function index() {
+        $arrPostData = json_decode(file_get_contents('php://input'), true);
+        var_dump($arrPostData);exit;
           
     }
 }

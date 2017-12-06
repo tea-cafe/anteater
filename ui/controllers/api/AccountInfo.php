@@ -11,6 +11,8 @@ class AccountInfo extends MY_Controller {
      */
     public function __construct() {
         parent::__construct();
+        $this->load->model('User');
+        $this->arrUser = $this->User->checkLogin();
     }
 
 	/**
@@ -18,8 +20,18 @@ class AccountInfo extends MY_Controller {
 	 */
 	public function index()
 	{
+        if (empty($this->arrUser)) {
+            return $this->outJson('', ErrCode::ERR_NOT_LOGIN);
+        }
+        
+        var_dump($arrUser);
         $this->load->model('Account');
-        $arrAccountInfo = $this->account->getInfo();
-        $this->outJson($arrAccountInfo, ErrCode::OK);
+        $arrInfo = $this->Account->getInfo($this->arrUser['account_id']);
+
+        if(empty($arrInfo)){
+            return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'获取失败');
+        }
+        
+        return $this->outJson($arrInfo, ErrCode::OK,'获取成功');
 	}
 }
