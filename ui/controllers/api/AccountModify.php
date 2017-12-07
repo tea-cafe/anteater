@@ -118,27 +118,27 @@ class AccountModify extends MY_Controller {
         return $this->outJson('', ErrCode::ERR_SYSTEM, '财务信息修改失败');
      }//}}}//
 
-    /*上传财务认证图片*/
+    /**
+     * 上传财务认证图片
+     */
     public function UpAuthPhoto(){
         if(empty($this->arrUser)){
             return $this->outJson('',ErrCode::ERR_NOT_LOGIN);
         }
-
+        $this->load->library('UploadTools');
+        $arrUdpImgConf = $this->config->item('img');
         $newName = '/authfinance_'.time().mt_rand(100,999).str_replace('image/','.',$_FILES['file']['type']);
-        $newDir = 'upload/imgs/'.date('Ym');
-        $newPath = FCPATH.$newDir;
+        $arrUdpImgConf['file_name'] = $newName; 
 
-        if(!is_dir($newPath)){
-            @mkdir($newPath);
+        $strUrl = $this->uploadtools->upload($arrUdpImgConf);
+        if (empty($strUrl)) {
+            return $this->outJson('', ErrCode::ERR_UPLOAD, '上传csv文件失败，请重试');
         }
-
-        $res = move_uploaded_file($_FILES['file']['tmp_name'],$newPath.$newName);
-
-        if($res){
-            $data['img_url'] = '/'.$newDir.$newName;
-            return $this->outJson($data,ErrCode::OK,'认证图片上传成功');
-        }else{
-            return $this->outJson('', ErrCode::ERR_INVALID_PARAMS,'认证图片上传失败');
-        }
+        return $this->outJson(
+            ['url' => $strUrl],
+            ErrCode::OK,
+            '图片上传成功'
+        );
     }
+
 }

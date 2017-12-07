@@ -13,7 +13,7 @@ class TakeMoney extends MY_Controller{
     /* 获取提现单列表 */
 	public function index(){
         if(empty($this->arrUser)){
-            return $this->outJson('',ErrCode::ERR_NOT_LOGON);
+            return $this->outJson('',ErrCode::ERR_NOT_LOGIN);
         }
 		
 		$startDate = strtotime($this->input->get("startdate",true));

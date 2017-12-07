@@ -6,6 +6,7 @@ scripts
 *.DS_Store
 *.swp
 *.swo
+*.bak
 tags
 ui/config/database.php
 ui/config/redis.php

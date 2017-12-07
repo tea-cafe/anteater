@@ -58,6 +58,9 @@ class User extends CI_Model {
             && isset($_SESSION['email'])
             && isset($_SESSION['username'])
             && (time() - $_SESSION['login_time']) <= self::EXPIRE_SESSION) {
+            /* 更新session时间 */
+            $_SESSION['login_time'] = time();
+
             return [
                 'account_id' => $_SESSION['account_id'],
                 'email' => $_SESSION['email'],

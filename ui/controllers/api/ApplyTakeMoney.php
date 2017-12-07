@@ -7,11 +7,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class ApplyTakeMoney extends MY_Controller{
 	public function __construct(){
 		parent::__construct();
-        $this->load->model('User');
-        $this->arrUser = $this->User->checkLogin();
     }
 	
-	public function confirm(){
+	public function index(){
         if (empty($this->arrUser)) {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN);
         }
@@ -41,7 +39,7 @@ class ApplyTakeMoney extends MY_Controller{
 			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'账户余额低于100元,无法提现');
 		}
 
-        $result = $this->Finance->confirmTakeMoney($account_id,$email,$RdsValue['money']);
+        $result = $this->Finance->confirmTakeMoney($account_id,$email,$accMoney['money']);
         
         if($result){
             return $this->outJson('',ErrCode::OK,'提现成功,待审核');

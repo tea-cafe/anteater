@@ -59,6 +59,16 @@ class MediaRegister extends MY_Controller {
         } else {
             return $this->outJson('', ErrCode::ERR_INVALID_PARAMS, $arrPostParams['default_valid_style'] .' wrong');;
         }
+
+        if (is_array($arrPostParams['industry'])) {
+            $strIndustry = '';
+            foreach ($arrPostParams['industry'] as $v) {
+                $strIndustry .= $v . '-';
+            }
+            $strIndustry = substr($strIndustry, 0, -1);
+        }
+        $arrPostParams['industry'] = $strIndustry;
+
         $arrPostParams['account_id'] = $this->arrUser['account_id'];
         $this->load->model('Media');
         $bolRes = $this->Media->insertMediaInfo($arrPostParams);

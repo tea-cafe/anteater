@@ -113,9 +113,6 @@ class DbUtil {
      * @return array
      */
     private function get($strTabName, $arrParams) {
-        if (empty($arrParams['limit'])) {
-            $arrParams['limit'] = '0,1';
-        }
         foreach ($arrParams as $act => $sqlPart) {
             if ($act === 'limit') {
                 $arrLimit = explode(',', $sqlPart);

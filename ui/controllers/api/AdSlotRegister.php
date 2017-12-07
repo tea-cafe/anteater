@@ -41,7 +41,7 @@ class AdSlotRegister extends MY_Controller {
         $arrPostParams['account_id'] = $this->arrUser['account_id'];
 
         $this->load->model('AdSlot');
-        $bolRes = $this->AdSlot->insertAdSlotInfo($arrPostParams);
+        $bolRes = $this->AdSlot->addAdSlotInfo($arrPostParams);
         if ($bolRes) {
             return $this->outJson('', ErrCode::OK, '注册成功');
         }

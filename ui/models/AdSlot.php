@@ -56,7 +56,7 @@ class AdSlot extends CI_Model {
      * @param array $arrParams
      * @return array
      */
-    public function insertAdSlotInfo($arrParams) {
+    public function addAdSlotInfo($arrParams) {
         $this->load->model('adslot/InsertAdslot');
         // 检验媒体是否过审
         $bolRes = $this->InsertAdslot->checkMediaLigal($arrParams);
@@ -97,6 +97,7 @@ class AdSlot extends CI_Model {
             return false;
         }
 
+        $arrParams['upstream_adslots']= json_encode($arrSlotIdsForApp);
         // 插入adslot_info
         $arrRes = $this->dbutil->setAdslot($arrParams);
         if (!$arrRes

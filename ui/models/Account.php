@@ -16,9 +16,7 @@ class Account extends CI_Model {
     public function getInfo($account_id) {
         $this->load->library('DbUtil');
         $where = array(
-            //'select' => 'company,email,phone,contact_person',
             'select' => 'company,email,phone,contact_person,financial_object,collection_company,contact_address,bussiness_license_num,bussiness_license_pic,account_open_permission,account_company,bank,city,bank_branch,bank_account,remark,check_status',
-            //'select' => '*',
             'where' => 'account_id = '.$account_id,
         );
         $arrInfo = $this->dbutil->getAccount($where);
@@ -71,8 +69,6 @@ class Account extends CI_Model {
 		$where = array(
 			'select' => '',
 			'where' => 'email = "'.$email.'"',
-			'order_by' => '',
-			'limit' => '',
 		);
 		$this->load->library("DbUtil");
 		$result = $this->dbutil->getAccount($where);
@@ -83,7 +79,8 @@ class Account extends CI_Model {
 		}
 
 		$this->load->library("RedisUtil");
-		$token = '19961024';
+        $this->load->helper('createkey');
+        $token = keys(6);
 		$RdsKey = 'ResetPwd_'.$email;
 		$RdsValue = array(
 			'email' => $email,
@@ -93,8 +90,9 @@ class Account extends CI_Model {
 		$this->load->library('email');
 		$this->email->from('15911129682@163.com', 'SSP平台');
 		$this->email->to($email);
-		$this->email->subject('SSP账号密码重置');
-		$this->email->message('您的验证码为：'.$token.',5分钟内输入有效');
+		$this->email->subject('XX媒体更换邮箱通知');
+        $msgHtml = '<div><span>尊敬的用户:</span><br/><br/><div>您在媒体平台(<a href="http://www.baidu.com/">http://www.baidu.com/</a>),更换邮箱的验证码是：<b>'.$token.'</b> (该验证码在1小时内有效，请尽快进行验证)</div><br/><span>能力有限平台</span></div>';
+        $this->email->message($msgHtml);
 
 		$res = $this->email->send();
 		//echo $this->email->print_debugger();
