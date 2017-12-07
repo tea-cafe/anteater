@@ -5,16 +5,16 @@
  * @param string
  * @return bool
  */
-if (!function_exists('ParamsCheck')) {
-    function ParamsCheck($key, $val){ 
+if (!function_exists('param_check')) {
+    function param_check($key, $val){ 
         switch($key) {
             case 'app_id':
-                if (preg_match('#^[a-zA-Z0-9]#', $val)
-                    || strlen($val) !== 7) {
+                if (preg_match('#^[a-zA-Z0-9]#', $val)) {
                     return false;
                 }
                 break;
             case 'email':
+            case 'username':
                 if (!preg_match('#^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$#', $val)) {
                     return false;
                 }
@@ -24,8 +24,8 @@ if (!function_exists('ParamsCheck')) {
                     return false;
                 }
                 break;
-            case 'app_platform':
-                if (!preg_match('#^[0-9]#')) {
+            case 'slot_type':
+                if (!in_array($val, ['SDK','API','JS'])) {
                     return false;
                 }
                 break;
@@ -33,13 +33,19 @@ if (!function_exists('ParamsCheck')) {
                 if (!in_array($val, ['Android', 'iOS', 'H5'])) {
                     return false;
                 }
-            case 'url':
-                if (!preg_match('#^[A-Za-z]+://[A-Za-z0-9-_]+\\.[A-Za-z0-9-_%&\?\/.=]+$#', $val)) {
-                    return fasle;
+            case 'app_platform':
+            case 'slot_style':
+            case 'slot_size':
+                if (!preg_match('#^[0-9]#')) {
+                    return false;
                 }
                 break;
-            case 'app_detail_url':
-
+            //case 'url':
+            //case 'app_detail_url':
+            //    if (!preg_match('#^[A-Za-z]+://[A-Za-z0-9-_]+\\.[A-Za-z0-9-_%&\?\/.=]+$#', $val)) {
+            //        return fasle;
+            //    }
+            //    break;
             default:
                 return true;
         }

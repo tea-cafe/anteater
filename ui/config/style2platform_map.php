@@ -128,4 +128,4 @@ $config['style2platform_map'] = array(
 		),
 	)
 );
-?>
+file_put_contents('/home/work/a.json', json_encode($config['style2platform_map']));

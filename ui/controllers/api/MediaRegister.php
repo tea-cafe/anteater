@@ -18,7 +18,7 @@ class MediaRegister extends MY_Controller {
     ];
 
     const VALID_MEDIA_VARIFY_KEY = [
-        'media_id',
+        'app_id',
         'media_platform',
         'app_package_name',
         'app_download_url',
@@ -99,10 +99,10 @@ class MediaRegister extends MY_Controller {
             $val = $this->security->xss_clean($val);
         }
 
-        unset($arrPostParams['media_id']);
+        unset($arrPostParams['app_id']);
         $this->load->model('Media');
 
-        $arrUpdate['where'] = 'account_id=' . $this->arrUser['account_id'] . " AND media_id='" . $arrPostParams['media_id'] . "'";
+        $arrUpdate['where'] = 'account_id=' . $this->arrUser['account_id'] . " AND app_id='" . $arrPostParams['app_id'] . "'";
         $bolRes = $this->Media->updateMediaInfo($arrPostParams);
         if ($bolRes) {
             return $this->outJson('', ErrCode::OK, '提交验证信息成功');

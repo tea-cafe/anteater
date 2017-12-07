@@ -18,7 +18,7 @@
 			if($currentPage == 1){
 				$currentPage = 0;
 			}else{
-				$currentPage = $currentPage * $pageSize;
+				$currentPage = ($currentPage - 1) * $pageSize;
             }
 
             /* 提现单查询 */
@@ -85,7 +85,7 @@
 			if($currentPage == 1){
 				$currentPage = 0;
 			}else{
-				$currentPage = $currentPage * $pageSize;
+				$currentPage = ($currentPage - 1) * $pageSize;
 			}
 
 			$listWhere = array(

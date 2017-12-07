@@ -8,6 +8,7 @@ scripts
 *.swo
 *.bak
 tags
+Test.php
 ui/config/database.php
 ui/config/redis.php
 ui/config/memcached.php
