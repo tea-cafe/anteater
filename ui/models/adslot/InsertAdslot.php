@@ -36,7 +36,7 @@ class InsertAdslot extends CI_Model {
         $arrRes = $this->dbutil->getPreadslot($arrSelect);
         if (empty($arrRes[0]['data'])) {
             log_message('error', 'adslot regist step 2 : pre_slot list for ' . $strAppId . 'is empty');
-            echo 'getPreSlotid false';exit;
+            echo 'preslot id 是空的，看看有没有插入，getPreSlotid false';exit;
             return false;
         }
         return json_decode($arrRes[0]['data'], true);
@@ -69,7 +69,7 @@ class InsertAdslot extends CI_Model {
         }
 
         if (empty($arrSlotIdsForApp)) {
-            ErrCode::$msg = '广告位申请超出限制，请联系工作人员';
+            ErrCode::$msg = '此类型广告位申请超出限制，请联系工作人员';
 
             log_message('error', 'adslot regist step 3 : can not get a slot_id can be used for ' . $strAppId);
             return [];

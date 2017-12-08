@@ -9,7 +9,6 @@ class AdSlotRegister extends MY_Controller {
     const VALID_ADSLOT_KEY = [
         'slot_name',
         'app_id',
-        'slot_type',
         'slot_style',
         'slot_size',
     ];
@@ -26,22 +25,18 @@ class AdSlotRegister extends MY_Controller {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN);
         }
         $arrPostParams = json_decode(file_get_contents('php://input'), true); 
-        if (empty($arrPostParams)
-            || count($arrPostParams) !== count(self::VALID_ADSLOT_KEY)) {
-            return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
-        }
-        // TODO 各种号码格式校验
-        foreach ($arrPostParams as $key => &$val) {
-            if(!in_array($key, self::VALID_ADSLOT_KEY)) {
-                return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
-            }
-            $val = $this->security->xss_clean($val);
-        }
 
-        $arrPostParams['account_id'] = $this->arrUser['account_id'];
+        $app_id = $this->security->xss_clean($arrPostParams['app_id']);
+        $slot_name = $this->security->xss_clean($arrPostParams['slot_name']);
+        $slot_style = intval($arrPostParams['slot_type'][0]); 
+        $slot_size = intval($arrPostParams['slot_type'][1]);
+
+        $arrParams = compact('app_id', 'slot_name', 'slot_style', 'slot_size');
+
+        $arrParams['account_id'] = $this->arrUser['account_id'];
 
         $this->load->model('AdSlot');
-        $bolRes = $this->AdSlot->addAdSlotInfo($arrPostParams);
+        $bolRes = $this->AdSlot->addAdSlotInfo($arrParams);
         if ($bolRes) {
             return $this->outJson('', ErrCode::OK, '注册成功');
         }

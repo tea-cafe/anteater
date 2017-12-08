@@ -7,20 +7,18 @@ class AdSlot extends CI_Model {
     }
 
     /**
-     *
+     * 
      */
-    public function getAdSlotLists($intAccountId, $pn = 1, $rn = 10, $intCount = 0, $strSlotName = '') {
+    public function getAdSlotList($intAccountId, $pn = 1, $rn = 10, $strSlotName = '') {
         $this->load->library('DbUtil');
-        if ($intCount === 0) {
-            $arrSelect = [
-                'select' => 'count(*) as total',
-                'where' => 'account_id=' . $intAccountId,
-            ];
-            $arrRes = $this->dbutil->getAdSlot($arrSelect);
-            $intCount = $arrRes[0]['total'];
-        }
         $arrSelect = [
-            'select' => 'slot_id,app_id,media_name,media_platform,slot_name,slot_type,slot_style,slot_size,switch,create_time',
+            'select' => 'count(*) as total',
+            'where' => 'account_id=' . $intAccountId,
+        ];
+        $arrRes = $this->dbutil->getAdSlot($arrSelect);
+        $intCount = $arrRes[0]['total'];
+        $arrSelect = [
+            'select' => 'slot_id,app_id,media_name,media_platform,slot_name,slot_style,slot_size,switch,create_time',
             'where' => 'account_id=' . $intAccountId,
             'order_by' => 'create_time DESC',
             'limit' => $rn*($pn-1) . ',' . $rn,
@@ -69,7 +67,7 @@ class AdSlot extends CI_Model {
         // 生成媒体的slot_id
         $arrParams['slot_id'] = $this->dbutil->getAutoincrementId('adslot');
 
-        // 从预生成的slotid中为此slotid 分配， 并插如映射记录到映射表
+        // 有多少个slot_style的上游，就从从预生成的slotid中分配几个和本站的slot_id对应，并插如映射记录到映射表
         $arrPreSlotIds = $this->InsertAdslot->getPreSlotid($arrParams['app_id']); 
         if (empty($arrPreSlotIds)) {
             echo 'getPreSlotid false';exit;

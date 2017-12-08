@@ -15,14 +15,13 @@ class AdSlotList extends MY_Controller {
 	public function index()
 	{
         $slot_name = $this->input->get('slot_name');
-        $pn = intval($this->input->get('currentPage'));
-        $rn = intval($this->input->get('pageSize'));
-        $total = intval($this->input->get('total'));
+        $pn = empty($this->input->get('currentPage')) ? 1 : intval($this->input->get('currentPage'));
+        $rn = empty($this->input->get('pageSize')) ? 10 : intval($this->input->get('pageSize'));
         if (empty($this->arrUser)) {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN);
         }
         $this->load->model('AdSlot');
-        $arrData = $this->AdSlot->getAdSlotLists($this->arrUser['account_id'], $pn, $rn, $total, $slot_name);
+        $arrData = $this->AdSlot->getAdSlotList($this->arrUser['account_id'], $pn, $rn, $slot_name);
 
         $this->outJson($arrData, ErrCode::OK);
 	}
