@@ -15,6 +15,7 @@ class MediaRegister extends MY_Controller {
         'url',
         'app_platform',
         'industry',
+        'media_delivery_method',
     ];
 
     const VALID_MEDIA_VARIFY_KEY = [
@@ -22,7 +23,7 @@ class MediaRegister extends MY_Controller {
         'media_platform',
         'app_package_name',
         'app_download_url',
-        'h5_app_key',    
+        'h5_app_key',
     ];
 
     public function __construct() {
@@ -39,23 +40,30 @@ class MediaRegister extends MY_Controller {
 
         $arrPostParams = json_decode(file_get_contents('php://input'), true);
         if (empty($arrPostParams['media_platform'])) {
-            return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
+            return $this->outJson('', ErrCode::ERR_INVALID_PARAMS);
         }
 
         // TODO 各种号码格式校验
         foreach ($arrPostParams as $key => &$val) {
             if(!in_array($key, self::VALID_MEDIA_KEY)) {
-                return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
+                return $this->outJson('', ErrCode::ERR_INVALID_PARAMS);
             }
             $val = $this->security->xss_clean($val);
         }
         if ($arrPostParams['media_platform'] === 'iOS'
             || $arrPostParams['media_platform'] === 'Android') {
-            $arrPostParams['default_valid_style'] = '1,2,3,4,5,6,7'; 
+            // 投放方式
+            if ($arrPostParams['media_delivery_method'] === 'SDK') {
+                $arrPostParams['default_valid_style'] = '1,2,3,4,5,6';
+            } else {
+                $arrPostParams['media_delivery_method'] === 'API';
+                $arrPostParams['default_valid_style'] = '7,8';
+            }
             $arrPostParams['check_status'] = 0;
         } else if ($arrPostParams['media_platform'] === 'H5') {
             $arrPostParams['default_valid_style'] = '9,10,11,12,13,14';
             $arrPostParams['check_status'] = 1;
+            $arrPostParams['media_delivery_method'] = 'JS';
         } else {
             return $this->outJson('', ErrCode::ERR_INVALID_PARAMS, $arrPostParams['default_valid_style'] .' wrong');;
         }
@@ -88,13 +96,13 @@ class MediaRegister extends MY_Controller {
 
         $arrPostParams = json_decode(file_get_contents('php://input'), true);
         if (empty($arrPostParams['media_platform'])) {
-            return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
+            return $this->outJson('', ErrCode::ERR_INVALID_PARAMS);
         }
 
         // TODO 各种号码格式校验
         foreach ($arrPostParams as $key => &$val) {
             if(!in_array($key, self::VALID_MEDIA_VARIFY_KEY)) {
-                return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
+                return $this->outJson('', ErrCode::ERR_INVALID_PARAMS);
             }
             $val = $this->security->xss_clean($val);
         }

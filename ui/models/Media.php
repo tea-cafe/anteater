@@ -67,7 +67,7 @@ class Media extends CI_Model {
             $intCount = intval($arrRes[0]['total']);
         }
         $arrSelect = [
-            'select' => 'app_id,media_name,industry,app_platform,check_status,media_platform,app_verify_url,create_time',
+            'select' => 'app_id,media_name,app_platform,check_status,media_delivery_method,media_platform,app_verify_url,create_time',
             'where' => 'account_id=' . $intAccountId,
             'order_by' => 'create_time DESC',
             'limit' => $rn*($pn-1) . ',' . $rn,
@@ -85,7 +85,6 @@ class Media extends CI_Model {
             $arrSelect['where'] .= ")";
         }
         $arrRes = $this->dbutil->getMedia($arrSelect);
-        $this->explane($arrRes);
         return [
             'list' => $arrRes,
             'pagination' => [
@@ -97,16 +96,17 @@ class Media extends CI_Model {
     } 
 
     /**
-     *
+     * industry id 2 文字
+     * @param array $arrData
+     * @return $array
      */
-    private function explane(&$arrData) {
-        // TODO
-        if (!empty($arrData['industry'])) {
-            $arrData['industry'] = '手机'; 
+    private function industryMap($arrData) {
+        $this->config->load('industry');
+        $arrIndustryMap = $this->config->item('industry');
+        foreach ($arrData as &$val) {
+            $idTmp = explode('-', $val['industry']);
+            $val['industry'] = empty($arrIndustryMap[$idTmp[0]][$idTmp[1]]) ? '' : $arrIndustryMap[$idTmp[0]][$idTmp[1]]['sub'] . '-' . $arrIndustryMap[$idTmp[0]][$idTmp[1]]['text']; 
         }
-        if (!empty($arrData['app_platform'])) {
-            $arrData['app_platform'] = '手百';    
-        }
-    }
-
+        return $arrData;
+     }
 }
