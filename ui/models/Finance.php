@@ -23,14 +23,14 @@
 
             /* 提现单查询 */
 			$listWhere = array(
-				'select' => '',
+				'select' => 'id,time,account_id,number,money,bill_list,info,status,remark',
 				'where' => 'time > '.$startDate.' AND time < '.$endDate.' AND account_id = '.$account_id.$statusStr,
 				'order_by' => 'time',
 				'limit' => empty($pageSize) || empty($currentPage) ? '0,20' : $currentPage.','.$pageSize,
             );
 			$this->load->library("DbUtil");
 			$tmrList = $this->dbutil->getTmr($listWhere);
-
+			
             if(!empty($tmrList)){
                 foreach($tmrList as $key => $value){
                     $tmrList[$key]['time'] = date("Y-m-d H:i:s",$value['time']);
@@ -243,13 +243,14 @@
 
             /* 获取可以提现的月账单 */
             $billWhere = array(
-				'select' => 'time,app_id,media_name,media_platform,money',
+				'select' => 'id,time,app_id,media_name,media_platform,money',
 				'where' => 'time > '.$startDate.' AND time <'.$endDate.' AND account_id = "'.$account_id.'"',
             );
 			$this->load->library('DbUtil');
 			$tmpList = $this->dbutil->getMonthly($billWhere);
 			
 			foreach($tmpList as $key => $value){
+				$billList[$key]['id'] = $value['id'];
 				$billList[$key]['time'] = date("Y-m",$value['time']);
 				$billList[$key]['app_id'] = $value['app_id'];
 				$billList[$key]['media_name'] = $value['media_name'];
