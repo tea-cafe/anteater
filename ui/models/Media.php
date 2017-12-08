@@ -56,7 +56,23 @@ class Media extends CI_Model {
      * @param array
      * @return array 
      */
-    public function getMediaLists($intAccountId, $pn, $rn, $intCount, $strMediaName, $strStatus) {
+    public function getPassedMediaList($intAccountId) {
+        $this->load->library('DbUtil');
+        $arrSelect = [
+            'select' => 'app_id,media_name,default_valid_style',
+            'where' => 'check_status=3',
+        ];
+        $arrRes = $this->dbutil->getMedia($arrSelect);
+        return [
+            'list' => $arrRes,
+        ];
+    } 
+
+    /**
+     * @param array
+     * @return array 
+     */
+    public function getMediaList($intAccountId, $pn, $rn, $intCount, $strMediaName, $strStatus) {
         $this->load->library('DbUtil');
         if ($intCount === 0) {
             $arrSelect = [

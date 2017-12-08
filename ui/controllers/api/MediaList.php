@@ -11,6 +11,7 @@ class MediaList extends MY_Controller {
     }
 
 	/**
+     * 账号所有的媒体列表
 	 */
 	public function index()
 	{
@@ -23,8 +24,21 @@ class MediaList extends MY_Controller {
         $rn = empty($this->input->get('pageSize')) ? 10 : intval($this->input->get('pageSize'));
         $total = intval($this->input->get('total'));
         $this->load->model('Media');
-        $arrData = $this->Media->getMediaLists($this->arrUser['account_id'], $pn, $rn, $total, $condition, $checkstatus);
+        $arrData = $this->Media->getMediaList($this->arrUser['account_id'], $pn, $rn, $total, $condition, $checkstatus);
         $this->outJson($arrData, ErrCode::OK);
 	}
+
+
+    /**
+     * 获取已经过审的媒体列表
+     */
+    public function getPassedList() {
+        if (empty($this->arrUser)) {
+            return $this->outJson('', ErrCode::ERR_NOT_LOGIN);
+        }
+        $this->load->model('Media');
+        $arrData = $this->Media->getPassedMediaList($this->arrUser['account_id']);
+        $this->outJson($arrData, ErrCode::OK);
+    }
 
 }
