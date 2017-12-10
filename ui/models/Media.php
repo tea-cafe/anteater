@@ -69,6 +69,7 @@ class Media extends CI_Model {
                 $arrList[$val['app_id']]= [
                     'media_name' => $val['media_name'],
                     'default_valid_style' => $val['default_valid_style'],
+                    'media_platform' => $val['media_platform'],
                 ];
             }
         }

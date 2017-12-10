@@ -91,7 +91,7 @@ class AccountModify extends MY_Controller {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN); 
         }
 
-        /* 1为公司 2为个人 */
+        /* 0为公司 1为个人 */
         //$arrPostParams = $this->input->post();
         $arrPostParams = json_decode(file_get_contents('php://input'), true);
         $arrValidKeys = $arrPostParams['financial_object'] == '1' ? self::VALID_ACCOUNT_COMPANY_FINANCE_KEY : self::VALID_ACCOUNT_PERSIONAL_FINANCE_KEY;

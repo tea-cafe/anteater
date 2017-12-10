@@ -6,6 +6,8 @@
 
 class Account extends CI_Model {
 
+    const ACCOUNT_MD5_SALT = '!OrFXJOyEg&Ue3em';
+
     public function __construct() {
         parent::__construct();
     }
@@ -35,6 +37,7 @@ class Account extends CI_Model {
      */
     public function insertAccountBaseInfo($arrParams) {
         $this->load->library('DbUtil');
+        $arrParams['account_id'] = md5(self::ACCOUNT_MD5_SALT . $this->dbutil->getAutoincrementId('account'));
         $arrRes = $this->dbutil->setAccount($arrParams);
         return $arrRes;
     }
