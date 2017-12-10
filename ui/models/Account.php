@@ -142,7 +142,7 @@ class Account extends CI_Model {
 		$this->email->from('15911129682@163.com', 'SSP平台');
 		$this->email->to($email);
 		$this->email->subject('XX媒体更换邮箱通知');
-        $msgHtml = '<div><span>尊敬的用户:</span><br/><br/><div>您在媒体平台(<a href="http://www.baidu.com/">http://www.baidu.com/</a>),更换邮箱的验证码是：<b>'.$token.'</b> (该验证码在1小时内有效，请尽快进行验证)</div><br/><span>能力有限平台</span></div>';
+        $msgHtml = '<div><span>尊敬的用户:</span><br/><br/><div>您在媒体平台(<a href="http://www.baidu.com/">http://www.zhiweihl.com/</a>),更换邮箱的验证码是：<b>'.$token.'</b> (该验证码在1小时内有效，请尽快进行验证)</div><br/><span>能力有限平台</span></div>';
         $this->email->message($msgHtml);
 
 		$res = $this->email->send();
@@ -150,7 +150,7 @@ class Account extends CI_Model {
 		
 		if($res){
 			$this->redisutil->set($RdsKey,serialize($RdsValue));
-			$this->redisutil->expire($RdsKey,60*5);
+			$this->redisutil->expire($RdsKey,60*60);
 		}
 
 		return $res;

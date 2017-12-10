@@ -23,21 +23,17 @@
 
             /* 提现单查询 */
 			$listWhere = array(
-				'select' => 'id,time,account_id,number,money,bill_list,info,status,remark',
+				'select' => 'id,time,account_id,number,money,status',
 				'where' => 'time > '.$startDate.' AND time < '.$endDate.' AND account_id = '.$accId.$statusStr,
 				'order_by' => 'time',
 				'limit' => empty($pageSize) || empty($currentPage) ? '0,20' : $currentPage.','.$pageSize,
             );
 			$this->load->library("DbUtil");
 			$tmrList = $this->dbutil->getTmr($listWhere);
-			
-            if(!empty($tmrList)){
-                foreach($tmrList as $key => $value){
-                    $tmrList[$key]['time'] = date("Y-m-d H:i:s",$value['time']);
-                    $tmrList[$key]['bill_list'] = unserialize($value['bill_list']);
-                    $tmrList[$key]['info'] = unserialize($value['info']);
-                }
+            if(empty($tmrList)){
+                return [];
             }
+
             /* end */
 
             /* 分页信息查询 */
@@ -63,6 +59,9 @@
 
             $AccBalance = $this->dbutil->getAccBalance($balanceWhere);
             /* end */
+            if(empty($AccBalance)){
+                return [];
+            }
 
             /* 财务认证状态 */
             $financeWhere = array(
@@ -123,10 +122,10 @@
 		}
 
 		/* 获取提现单详情 */
-		public function getTakeMoneyInfo($account_id,$number){
+		public function getTakeMoneyInfo($accId,$number){
 			$where = array(
 				'select' => '',
-				'where' => 'account_id = "'.$account_id.'" AND number = '.$number,
+				'where' => 'account_id = "'.$accId.'" AND number = '.$number,
 			);
 
 			$this->load->library("DbUtil");
@@ -202,10 +201,10 @@
 		/**
 		 * 查询账户余额
 		 */
-		public function getAccountMoney($account_id){
+		public function getAccountMoney($accId){
 			$where = array(
 				'select' => 'status,money',
-				'where' => 'account_id = "'.$account_id.'"',
+				'where' => 'account_id = "'.$accId.'"',
 			);
 
 			$this->load->library('DbUtil');
@@ -256,7 +255,11 @@
             $this->config->load('company_invoice_info');
             $info['company_info'] = $this->config->item('invoice')['info'];
             $info['mail'] = $this->config->item('invoice')['mail'];
-            $info['invoice_info'] = '';
+            $info['invoice_info'] = array(
+                'money' => '',
+                'code' => '',
+                'number' => '',
+            );
 
 			$params = array(
 				0 => array(

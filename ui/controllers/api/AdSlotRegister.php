@@ -27,11 +27,13 @@ class AdSlotRegister extends MY_Controller {
         $arrPostParams = json_decode(file_get_contents('php://input'), true); 
 
         $app_id = $this->security->xss_clean($arrPostParams['app_id']);
+        $media_name = $this->security->xss_clean($arrPostParams['media_name']);
+        $media_platform = $this->security->xss_clean($arrPostParams['media_platform']);
         $slot_name = $this->security->xss_clean($arrPostParams['slot_name']);
         $slot_style = intval($arrPostParams['slot_type'][0]); 
         $slot_size = intval($arrPostParams['slot_type'][1]);
 
-        $arrParams = compact('app_id', 'slot_name', 'slot_style', 'slot_size');
+        $arrParams = compact('app_id', 'media_name', 'media_platform', 'slot_name', 'slot_style', 'slot_size');
 
         $arrParams['account_id'] = $this->arrUser['account_id'];
 

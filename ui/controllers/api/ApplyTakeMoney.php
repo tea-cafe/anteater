@@ -14,19 +14,19 @@ class ApplyTakeMoney extends MY_Controller{
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN);
         }
 
-        $account_id = $this->arrUser['account_id'];
+        $accId = $this->arrUser['account_id'];
         $email = $this->arrUser['email'];
         
         $this->load->model('Finance');
 		
 		/* 查询账号财务信息状态 */
-		$accStatus = $this->Finance->checkFinanceInfo($account_id);
+		$accStatus = $this->Finance->checkFinanceInfo($accId);
 		if(empty($accStatus)){
 			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'财务信息未认证,请认证');
 		}
 
 		/*查询账号余额*/
-		$accMoney = $this->Finance->getAccountMoney($account_id);
+		$accMoney = $this->Finance->getAccountMoney($accId);
 		if(empty($accMoney)){
 			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'提现失败,请稍后重试');
 		}
@@ -39,7 +39,7 @@ class ApplyTakeMoney extends MY_Controller{
 			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'账户余额低于100元,无法提现');
 		}
 
-        $result = $this->Finance->confirmTakeMoney($account_id,$email,$accMoney['money']);
+        $result = $this->Finance->confirmTakeMoney($accId,$email,$accMoney['money']);
         
         if($result){
             return $this->outJson('',ErrCode::OK,'提现成功,待审核');

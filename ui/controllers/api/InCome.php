@@ -22,10 +22,10 @@ class InCome extends MY_Controller{
         $pageSize = empty($pageSize) ? 20 : $pageSize;
         $currentPage = empty($currentSize) ? 1 : $currentPage;
         
-        $account_id = $this->arrUser['account_id'];
+        $accId = $this->arrUser['account_id'];
         $email = $this->arrUser['email'];
 		$this->load->model("Finance");
-		$result = $this->Finance->getMonthlyBill($account_id,$pageSize,$currentPage);
+		$result = $this->Finance->getMonthlyBill($accId,$pageSize,$currentPage);
         
         if(empty($result) || count($result) == 0){
 			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'暂无月账单');

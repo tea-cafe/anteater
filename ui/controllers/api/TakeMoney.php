@@ -38,12 +38,14 @@ class TakeMoney extends MY_Controller{
 		}
 
         $email = $this->arrUser['email'];
-        $account_id = $this->arrUser['account_id'];
+        $accId = $this->arrUser['account_id'];
         
 		$this->load->model("Finance");
-		$result = $this->Finance->getTakeMoneyList($account_id,$startDate,$endDate,$pageSize,$currentPage,$status);
-        
-		return $this->outJson($result,ErrCode::OK,'数据获取成功');
+		$result = $this->Finance->getTakeMoneyList($accId,$startDate,$endDate,$pageSize,$currentPage,$status);
+        if(empty($result)){
+            return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'数据获取失败');
+        }
+        return $this->outJson($result,ErrCode::OK,'数据获取成功');
     }
 
 	/**
@@ -55,16 +57,16 @@ class TakeMoney extends MY_Controller{
         }
 
 		$number = $this->input->get("number",true);
-		if(empty($number) || strlen($number) != 13){
+		if(empty($number) || strlen($number) != 15){
 			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS);
 		}
 
-        $account_id = $this->arrUser['account_id'];
+        $accId = $this->arrUser['account_id'];
         $email = $this->arrUser['email'];
 
 		$this->load->model("Finance");
-		$result = $this->Finance->getTakeMoneyInfo($account_id,$number);
-		
+		$result = $this->Finance->getTakeMoneyInfo($accId,$number);
+
 		if(empty($result) || count($result) == 0){
 			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS);
 		}

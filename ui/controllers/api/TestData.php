@@ -34,7 +34,7 @@ class TestData extends MY_Controller{
         );
         foreach($a as $k =>$v){
             $data['time'] = 1509465600;
-            $data['account_id'] = 1;
+            $data['account_id'] = 3;
             $data['app_id'] = $k;
             $data['media_name'] = $v;
             $data['media_platform'] = 'H5';
