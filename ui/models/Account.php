@@ -7,7 +7,31 @@
 class Account extends CI_Model {
 
     const ACCOUNT_MD5_SALT = '!OrFXJOyEg&Ue3em';
-
+    
+    const ACCOUNT_ALL_INFO_KEY = [
+        'company',
+        'email',
+        'phone',
+        'contact_person',
+        'financial_object',
+        'collection_company',
+        'contact_address',
+        'bussiness_license_num',
+        'bussiness_license_pic',
+        'account_open_permission',
+        'account_company',
+        'bank',
+        'city',
+        'bank_branch',
+        'bank_account',
+        'remark',
+        'check_status',
+        'account_holder',
+        'identity_card_num',
+        'identity_card_front',
+        'identity_card_back',
+    ];
+    
     public function __construct() {
         parent::__construct();
     }
@@ -15,18 +39,18 @@ class Account extends CI_Model {
     /**
      * 获取渠道信息
      */
-    public function getInfo($account_id) {
+    public function getInfo($accId) {
         $this->load->library('DbUtil');
         $where = array(
-            'select' => 'company,email,phone,contact_person,financial_object,collection_company,contact_address,bussiness_license_num,bussiness_license_pic,account_open_permission,account_company,bank,city,bank_branch,bank_account,remark,check_status',
-            'where' => 'account_id = '.$account_id,
+            'select' => implode(',',self::ACCOUNT_ALL_INFO_KEY),
+            'where' => 'account_id = '.$accId,
         );
         $arrInfo = $this->dbutil->getAccount($where);
         
         if(empty($arrInfo)){
             return [];
         }
-
+        
         return $arrInfo[0];
     } 
 
@@ -39,6 +63,8 @@ class Account extends CI_Model {
         $this->load->library('DbUtil');
         $arrParams['account_id'] = md5(self::ACCOUNT_MD5_SALT . $this->dbutil->getAutoincrementId('account'));
         $arrRes = $this->dbutil->setAccount($arrParams);
+
+
         return $arrRes;
     }
 
@@ -47,10 +73,21 @@ class Account extends CI_Model {
      * @param array
      * @return bool
      */
-    public function updateAccountBaseInfo($arrParams) {
+    public function updateAccountBaseInfo($accId,$arrParams) {
         $this->load->library('DbUtil');
         $bolRes = $this->dbutil->udpAccount($arrParams);
-        return $bolRes;
+
+        if($bolRes['code'] != 0){
+            return [];
+        }
+
+        $where = array(
+            'select' => implode(',',self::ACCOUNT_ALL_INFO_KEY),
+            'where' => 'account_id = '.$accId,
+        );
+        $arrInfo = $this->dbutil->getAccount($where);
+    
+        return $arrInfo[0];
     }
 
     /**
@@ -58,10 +95,21 @@ class Account extends CI_Model {
      * @param array $arrParams
      * @return bool
      */
-    public function updateAccountFinanceInfo($arrParams) {
+    public function updateAccountFinanceInfo($accId,$arrParams) {
         $this->load->library('DbUtil');
         $bolRes = $this->dbutil->udpAccount($arrParams);
-        return $bolRes;
+        
+        if($bolRes['code'] != 0){
+            return [];
+        }
+
+        $where = array(
+            'select' => implode(',',self::ACCOUNT_ALL_INFO_KEY),
+            'where' => 'account_id = '.$accId,
+        );
+        $arrInfo = $this->dbutil->getAccount($where);
+    
+        return $arrInfo[0];
 	}
 
 	/**

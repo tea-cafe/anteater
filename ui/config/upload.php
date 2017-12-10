@@ -4,9 +4,7 @@
 $config['img'] = [
     'upload_path' => 'upload/imgs/',
     'allowed_types' => 'gif|jpg|png|jpeg',
-    'max_size' => 500, // kb
-    'max_width' => 1200, // 像素
-    'max_height' => 1200,
+    'max_size' => 102400, // kb
     'overwrite' => true,
 ];
 $config['csv'] = [

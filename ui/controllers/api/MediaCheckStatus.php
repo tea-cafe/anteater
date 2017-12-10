@@ -28,7 +28,6 @@ class MediaCheckStatus extends MY_Controller {
             $val = $this->security->xss_clean($val);
         }
         $arrUpdate = [
-            'app_verify_url' => $arrPostParams['app_verify_url'],
             'check_status' => 2,
             'where' => "app_id='" . $arrPostParams['app_id'] . "'",
         ];

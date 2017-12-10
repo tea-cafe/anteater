@@ -7,6 +7,22 @@ class Media extends CI_Model {
     }
 
     /**
+     * @param string $app_id
+     * @return array
+     */
+    public function getMediaInfo($app_id) {
+        $arrSelect = [
+            'select' => 'app_id,media_name,media_platform,app_detail_url,app_package_name,media_keywords,media_desc,url,app_platform,industry,media_delivery_method',
+            'where' => "app_id='" . $app_id . "'",
+        ]; 
+        $arrRes = $this->dbutil->getMedia($arrSelect);
+        if (!empty($arrRes[0])) {
+            return $arrRes[0];
+        }
+        return [];
+    }
+
+    /**
      * @param array $arrParams
      * @return bool
      */

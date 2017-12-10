@@ -54,6 +54,11 @@ class InsertAdslot extends CI_Model {
     public function distributePreSlotId($arrPreSlotIds, $intSlotStyle, $intSlotSize, $strAppId) {
         $arrSlotIdsForApp = [];
         foreach($arrPreSlotIds as $upstream => &$arrType){
+            if (empty($arrType)
+                || empty($arrType[$intSlotStyle])
+                || empty($arrType[$intSlotStyle][$intSlotSize])) {
+                return [];
+            }
             $arrTmp = $arrType[$intSlotStyle][$intSlotSize];
             foreach ($arrTmp as $slotid => $used) {
                 if ($used === 0) {
@@ -69,9 +74,6 @@ class InsertAdslot extends CI_Model {
         }
 
         if (empty($arrSlotIdsForApp)) {
-            ErrCode::$msg = '此类型广告位申请超出限制，请联系工作人员';
-
-            log_message('error', 'adslot regist step 3 : can not get a slot_id can be used for ' . $strAppId);
             return [];
         }
 

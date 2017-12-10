@@ -1,7 +1,6 @@
 <?php
 /**
  * media注册接口
- * szishuo
  */
 class MediaRegister extends MY_Controller {
 
@@ -60,6 +59,9 @@ class MediaRegister extends MY_Controller {
                 $arrPostParams['default_valid_style'] = '7,8';
             }
             $arrPostParams['check_status'] = 0;
+            if ($arrPostParams['media_platform'] === 'Android') {
+                $arrPostParams['check_status'] = 1;
+            }
         } else if ($arrPostParams['media_platform'] === 'H5') {
             $arrPostParams['default_valid_style'] = '9,10,11,12,13,14';
             $arrPostParams['check_status'] = 1;

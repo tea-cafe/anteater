@@ -70,7 +70,8 @@ class AdSlot extends CI_Model {
         // 有多少个slot_style的上游，就从从预生成的slotid中分配几个和本站的slot_id对应，并插如映射记录到映射表
         $arrPreSlotIds = $this->InsertAdslot->getPreSlotid($arrParams['app_id']); 
         if (empty($arrPreSlotIds)) {
-            echo 'getPreSlotid false';exit;
+            echo 'pre slot id 为空';exit;
+            ErrCode::$msg = '广告位申请超出限制，请联系工作人员';
             return false;
         }
 
@@ -81,6 +82,7 @@ class AdSlot extends CI_Model {
             $arrParams['app_id']
         );
         if (empty($arrSlotIdsForApp)) {
+            ErrCode::$msg = '此类型广告位申请超额，请联系工作人员';
             return false; 
         }
         
