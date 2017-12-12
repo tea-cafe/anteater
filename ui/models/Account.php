@@ -116,7 +116,6 @@ class Account extends CI_Model {
 	 * 获取重置密码的验证码
 	 */
 	public function resetPwdCode($email){
-		var_dump($email);
 		$where = array(
 			'select' => '',
 			'where' => 'email = "'.$email.'"',
@@ -138,15 +137,10 @@ class Account extends CI_Model {
 			'code' => $token,
 		);
 
-		$this->load->library('email');
-		$this->email->from('15911129682@163.com', 'SSP平台');
-		$this->email->to($email);
-		$this->email->subject('XX媒体更换邮箱通知');
         $msgHtml = '<div><span>尊敬的用户:</span><br/><br/><div>您在媒体平台(<a href="http://www.baidu.com/">http://www.zhiweihl.com/</a>),更换邮箱的验证码是：<b>'.$token.'</b> (该验证码在1小时内有效，请尽快进行验证)</div><br/><span>能力有限平台</span></div>';
-        $this->email->message($msgHtml);
 
-		$res = $this->email->send();
-		//echo $this->email->print_debugger();
+		$this->load->library('mailer');
+		$res = $this->mailer->smtp($email,'用户','XX媒体更换邮箱通知',$msgHtml);
 		
 		if($res){
 			$this->redisutil->set($RdsKey,serialize($RdsValue));

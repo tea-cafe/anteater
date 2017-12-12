@@ -25,6 +25,7 @@ class MediaList extends MY_Controller {
         $total = intval($this->input->get('total'));
         $this->load->model('Media');
         $arrData = $this->Media->getMediaList($this->arrUser['account_id'], $pn, $rn, $total, $condition, $checkstatus);
+        log_message('error', 'test');
         $this->outJson($arrData, ErrCode::OK);
 	}
 

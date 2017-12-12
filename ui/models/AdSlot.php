@@ -16,6 +16,18 @@ class AdSlot extends CI_Model {
             'where' => 'account_id=' . $intAccountId,
         ];
         $arrRes = $this->dbutil->getAdSlot($arrSelect);
+        if (empty($arrRes)) {
+            $intCount = 0;
+            $arrRes = [];
+            return [
+                'list' => $arrRes,
+                'pagination' => [
+                    'total' => $intCount,
+                    'pageSize' => $rn,
+                    'current' => $pn,
+                ],
+            ];
+        }
         $intCount = $arrRes[0]['total'];
         $arrSelect = [
             'select' => 'slot_id,app_id,media_name,media_platform,slot_name,slot_style,slot_size,switch,create_time',

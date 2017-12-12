@@ -20,6 +20,9 @@ class MediaCheckStatus extends MY_Controller {
      * check_status 0 => 2
      */
     public function index() {
+        if(empty($this->arrUser)){
+            return $this->outJson('',ErrCode::ERR_NOT_LOGIN);
+        }
         $arrPostParams = json_decode(file_get_contents('php://input'), true);
         foreach ($arrPostParams as $key => &$val) {
             if(!in_array($key, self::VALID_PARAMS_KEY)) {
@@ -27,8 +30,12 @@ class MediaCheckStatus extends MY_Controller {
             }
             $val = $this->security->xss_clean($val);
         }
+        if (empty($arrPostParams['app_id'])) {
+            return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
+        }
         $arrUpdate = [
             'check_status' => 2,
+            'app_verify_url' => $arrPostParams['app_verify_url'],
             'where' => "app_id='" . $arrPostParams['app_id'] . "'",
         ];
 

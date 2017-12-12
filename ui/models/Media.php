@@ -72,7 +72,7 @@ class Media extends CI_Model {
      * @param array
      * @return array 
      */
-    public function getPassedMediaList($intAccountId) {
+    public function getPassedMediaList($strAccountId) {
         $this->load->library('DbUtil');
         $arrSelect = [
             'select' => 'app_id,media_name,media_platform,default_valid_style',
@@ -98,19 +98,31 @@ class Media extends CI_Model {
      * @param array
      * @return array 
      */
-    public function getMediaList($intAccountId, $pn, $rn, $intCount, $strMediaName, $strStatus) {
+    public function getMediaList($strAccountId, $pn, $rn, $intCount, $strMediaName, $strStatus) {
         $this->load->library('DbUtil');
         if ($intCount === 0) {
             $arrSelect = [
                 'select' => 'count(*) as total',
-                'where' => 'account_id=' . $intAccountId,
+                'where' => "account_id='" . $strAccountId . "'",
             ];
             $arrRes = $this->dbutil->getMedia($arrSelect);
-            $intCount = intval($arrRes[0]['total']);
+            if (empty($arrRes)) {
+                $arrRes = [];
+                $intCount = 0;
+                return [
+                    'list' => $arrRes,
+                    'pagination' => [
+                        'total' => $intCount,
+                        'pageSize' => $rn,
+                        'current' => $pn,
+                    ],
+                ];
+            } 
         }
+        $intCount = intval($arrRes[0]['total']);
         $arrSelect = [
             'select' => 'app_id,media_name,app_platform,check_status,media_delivery_method,media_platform,app_verify_url,create_time',
-            'where' => 'account_id=' . $intAccountId,
+            'where' => "account_id='" . $strAccountId . "'",
             'order_by' => 'create_time DESC',
             'limit' => $rn*($pn-1) . ',' . $rn,
         ];

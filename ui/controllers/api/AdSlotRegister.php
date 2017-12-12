@@ -7,10 +7,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class AdSlotRegister extends MY_Controller {
 
     const VALID_ADSLOT_KEY = [
-        'slot_name',
         'app_id',
-        'slot_style',
-        'slot_size',
+        'media_name',
+        'media_platform',
+        'slot_name',
     ];
 
     public function __construct() {
@@ -25,6 +25,12 @@ class AdSlotRegister extends MY_Controller {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN);
         }
         $arrPostParams = json_decode(file_get_contents('php://input'), true); 
+
+        foreach (self::VALID_ADSLOT_KEY as $val ) {
+            if (empty($arrPostParams[$val])) {
+                return $this->outJson('', ErrCode::ERR_INVALID_PARAMS);
+            }
+        }
 
         $app_id = $this->security->xss_clean($arrPostParams['app_id']);
         $media_name = $this->security->xss_clean($arrPostParams['media_name']);

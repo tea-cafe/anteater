@@ -28,7 +28,7 @@ class AccountInfo extends MY_Controller {
         $arrInfo = $this->Account->getInfo($this->arrUser['account_id']);
 
         if(empty($arrInfo)){
-            return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'获取失败');
+            return $this->outJson('',ErrCode::ERR_SYSTEM,ErrCode::$msg);
         }
         
         return $this->outJson($arrInfo, ErrCode::OK,'获取成功');

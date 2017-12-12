@@ -15,7 +15,6 @@ class TakeMoney extends MY_Controller{
         if(empty($this->arrUser)){
             return $this->outJson('',ErrCode::ERR_NOT_LOGIN);
         }
-		
 		$startDate = strtotime($this->input->get("startdate",true));
         $startDate = empty($startDate) ? 1483200000 : $startDate-1;
         $endDate = strtotime($this->input->get("enddate",true));

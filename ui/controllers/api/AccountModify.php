@@ -127,9 +127,9 @@ class AccountModify extends MY_Controller {
      * 上传财务认证图片
      */
     public function UpAuthPhoto(){
-        //if(empty($this->arrUser)){
-        //    return $this->outJson('',ErrCode::ERR_NOT_LOGIN);
-        //}
+        if(empty($this->arrUser)){
+            return $this->outJson('',ErrCode::ERR_NOT_LOGIN);
+        }
         $this->load->library('UploadTools');
         $arrUdpImgConf = $this->config->item('img');
         $newName = '/authfinance_'.time().mt_rand(100,999).str_replace('image/','.',$_FILES['file']['type']);
