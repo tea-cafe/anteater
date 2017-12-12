@@ -14,7 +14,7 @@ class Mailer {
 	public function __construct(){
 		$this->mail = new PHPMailer(true);
 		$this->mail->IsSMTP();
-		$this->mail->SMTPDebug  = 2;
+		$this->mail->SMTPDebug  = 0;
 
 		$this->mail->Host       = "smtp.mxhichina.com";
 		$this->mail->Port       = 465;

@@ -58,6 +58,8 @@ class DbUtil {
 	const TAB_ACCOUNT_BALANCE       = 'account_balance';
 	const TAB_BG_USER				= 'bg_user';
 
+    const TAB_DATA_FOR_SDK = 'data_for_sdk';
+
     const TAB_MAP = [
         'account'   => self::TAB_ACCOUNT,
         'media'     => self::TAB_MEDIA,
@@ -73,6 +75,7 @@ class DbUtil {
 		'platform'	=> self::TAB_PLATFORM,
 		'accbalance' => self::TAB_ACCOUNT_BALANCE,
 		'bguser' => self::TAB_BG_USER,
+        'sdkdata' => self::TAB_DATA_FOR_SDK,
 	];
 
     public static $instance;

@@ -76,7 +76,7 @@ class AdSlot extends CI_Model {
             return false;
         }
 
-        // 生成媒体的slot_id
+        // 生成本站媒体的slot_id
         $arrParams['slot_id'] = $this->dbutil->getAutoincrementId('adslot');
 
         // 有多少个slot_style的上游，就从从预生成的slotid中分配几个和本站的slot_id对应，并插如映射记录到映射表
@@ -116,6 +116,11 @@ class AdSlot extends CI_Model {
             || $arrRes['code'] !== 0) {
             return false;
         }
+
+        // 格式化数据，插入data_for_sdk
+        $this->load->model('syncSdkMediaInfo');
+        $this->syncSdkMediaInfo->syncWhenAdSlotIdRegist($arrParams['app_id'], $arrParams['slot_id'], $arrParams['slot_style'], $arrSlotIdsForApp);
+
         return true;
     }
 
