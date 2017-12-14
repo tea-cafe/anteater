@@ -11,16 +11,22 @@ class InsertAdslot extends CI_Model {
      */
     public function checkMediaLigal($arrParams) {
         $arrCheckMediaLegal = [
-            'select' => 'app_id',
+            'select' => 'app_id,app_id_map',
             'where' => "app_id='" . $arrParams['app_id'] . "' AND check_status=3",
             'limit' => '0,1',
         ];
         $arrRes = $this->dbutil->getMedia($arrCheckMediaLegal);
-        if (empty($arrRes[0])) {
-            log_message('error', 'adslot regist step 1: Media info illege');
-            return false;
+        if (empty($arrRes[0])
+            || empty($arrRes[0]['app_id_map'])) {
+            ErrCode::$msg = '媒体未过审，请联系工作人员';
+            return [];
         }
-        return true;
+        $arrAppIdMap = json_decode($arrRes[0]['app_id_map'], true);
+        if (empty($arrAppIdMap)) {
+            ErrCode::$msg = '媒体信息有误，请联系工作人员';
+            return [];
+        }
+        return $arrAppIdMap;
     }
 
 
@@ -35,8 +41,7 @@ class InsertAdslot extends CI_Model {
         ];
         $arrRes = $this->dbutil->getPreadslot($arrSelect);
         if (empty($arrRes[0]['data'])) {
-            log_message('error', 'adslot regist step 2 : pre_slot list for ' . $strAppId . 'is empty');
-            echo 'preslot id 是空的，看看有没有插入，getPreSlotid false';exit;
+            ErrCode::$msg = '广告位申请超出限制0，请联系工作人员';
             return false;
         }
         return json_decode($arrRes[0]['data'], true);
@@ -49,14 +54,22 @@ class InsertAdslot extends CI_Model {
      * @param string $intSlotStyle
      * @param string $intSlotSize
      * @param string $strAppId
+     * @param array $arrAppIdMap check分配的slotid是否跟上游对的上
      * @return array 分配的上游slot_id列表
      */
-    public function distributePreSlotId($arrPreSlotIds, $intSlotStyle, $intSlotSize, $strAppId) {
+    public function distributePreSlotId($arrPreSlotIds, $intSlotStyle, $intSlotSize, $strAppId, $arrAppIdMap) {
         $arrSlotIdsForApp = [];
         foreach($arrPreSlotIds as $upstream => &$arrType){
+            if (!array_key_exists($upstream, $arrAppIdMap)) {
+                // TODO
+                echo  '预生成广告位上游' .  $upstream . '和app_id_map 对不上: '. json_encode($arrAppIdMap);exit; 
+                continue; 
+            }
             if (empty($arrType)
                 || empty($arrType[$intSlotStyle])
                 || empty($arrType[$intSlotStyle][$intSlotSize])) {
+                // 数据错误
+                ErrCode::$msg = '广告位申请超出限制1，请联系工作人员';
                 return [];
             }
             $arrTmp = $arrType[$intSlotStyle][$intSlotSize];
@@ -74,6 +87,8 @@ class InsertAdslot extends CI_Model {
         }
 
         if (empty($arrSlotIdsForApp)) {
+            // pre_slotid 均已使用
+            ErrCode::$msg = '广告位申请超出限制2，请联系工作人员';
             return [];
         }
 
@@ -85,8 +100,8 @@ class InsertAdslot extends CI_Model {
         $arrRes = $this->dbutil->udpPreadslot($arrUpdate);
         if (!$arrRes
             || $arrRes['code'] !== 0) {
-            echo 'huixie pre_slotid shibai';exit;
-            log_message('error', 'adslot regist step 3 : preslot write back failed ' . $strAppId);
+            // slot_id 分配后回写失败
+            ErrCode::$msg = '广告位申请超出限制3，请联系工作人员';
             return [];
         }
         return $arrSlotIdsForApp;
@@ -110,9 +125,8 @@ class InsertAdslot extends CI_Model {
         $sql = substr($sql, 0, -1);
         $bolRes = $this->dbutil->query($sql);
         if (!$bolRes) {
-            echo 'insertSlotMap shibai';exit;
-            log_message('error', 'adslot regist step 4 : insert slot map failed for ' . $strAppId);
-            
+            // slot_id 映射表更新失败
+            ErrCode::$msg = '广告位申请超出限制4，请联系工作人员';
         }
         return $bolRes;
     }

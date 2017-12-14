@@ -84,10 +84,8 @@ class AdSlot extends CI_Model {
     public function addAdSlotInfo($arrParams) {
         $this->load->model('adslot/InsertAdslot');
         // 检验媒体是否过审
-        $bolRes = $this->InsertAdslot->checkMediaLigal($arrParams);
-        if (!$bolRes) {
-            // todo
-            echo 'checkMediaLigal false';exit; 
+        $arrAppIdMap = $this->InsertAdslot->checkMediaLigal($arrParams);
+        if (empty($arrAppIdMap)) {
             return false;
         }
 
@@ -97,8 +95,6 @@ class AdSlot extends CI_Model {
         // 有多少个slot_style的上游，就从从预生成的slotid中分配几个和本站的slot_id对应，并插如映射记录到映射表
         $arrPreSlotIds = $this->InsertAdslot->getPreSlotid($arrParams['app_id']); 
         if (empty($arrPreSlotIds)) {
-            echo 'pre slot id 为空';exit;
-            ErrCode::$msg = '广告位申请超出限制，请联系工作人员';
             return false;
         }
 
@@ -106,10 +102,10 @@ class AdSlot extends CI_Model {
             $arrPreSlotIds,
             intval($arrParams['slot_style']),
             intval($arrParams['slot_size']), 
-            $arrParams['app_id']
+            $arrParams['app_id'],
+            $arrAppIdMap
         );
         if (empty($arrSlotIdsForApp)) {
-            ErrCode::$msg = '此类型广告位申请超额，请联系工作人员';
             return false; 
         }
         
@@ -129,6 +125,7 @@ class AdSlot extends CI_Model {
         $arrRes = $this->dbutil->setAdslot($arrParams);
         if (!$arrRes
             || $arrRes['code'] !== 0) {
+            ErrCode::$msg = '广告位申请失败，请重试或联系工作人员';
             return false;
         }
 

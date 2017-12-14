@@ -6,11 +6,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class MediaCheckStatus extends MY_Controller {
 
-    const VALID_PARAMS_KEY = [
-        'app_id',
-        'app_verify_url', 
-    ];
-
     public function __construct() {
         parent::__construct();
     }
@@ -25,14 +20,20 @@ class MediaCheckStatus extends MY_Controller {
         }
         $arrPostParams = json_decode(file_get_contents('php://input'), true);
         foreach ($arrPostParams as $key => &$val) {
-            if(!in_array($key, self::VALID_PARAMS_KEY)) {
-                return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
-            }
             $val = $this->security->xss_clean($val);
         }
-        if (empty($arrPostParams['app_id'])) {
+        if (empty($arrPostParams['app_id'])
+            || empty($arrPostParams['media_platform'])
+            || !in_array($arrPostParams['media_platform'], ['Android','H5','iOS'])) {
             return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
         }
+
+        if ($arrPostParams['media_platform'] == 'Android') {
+            if (empty($arrPostParams['app_verify_url'])) {
+                return $this->outJson('', ErrCode::ERR_INVALID_PARAMS, '请先上传签名后的app');
+            }
+        }
+
         $arrUpdate = [
             'check_status' => 2,
             'app_verify_url' => $arrPostParams['app_verify_url'],
