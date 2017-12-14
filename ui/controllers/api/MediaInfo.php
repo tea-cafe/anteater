@@ -20,7 +20,7 @@ class MediaInfo extends MY_Controller {
         $this->load->model('Media');
         $arrRes = $this->Media->getMediaInfo($app_id);
         if ($arrRes) {
-            return $this->outJson($arrRes, ErrCode::OK, '媒体注册成功');
+            return $this->outJson($arrRes, ErrCode::OK, '');
         }
         return $this->outJson('', ErrCode::ERR_SYSTEM);
     }

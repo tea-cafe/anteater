@@ -24,15 +24,12 @@
             /* 提现单查询 */
 			$listWhere = array(
 				'select' => 'id,time,account_id,number,money,status',
-				'where' => 'time > '.$startDate.' AND time < '.$endDate.' AND account_id = '.$accId.$statusStr,
+				'where' => 'time > '.$startDate.' AND time < '.$endDate.' AND account_id = "'.$accId.'"'.$statusStr,
 				'order_by' => 'time',
 				'limit' => empty($pageSize) || empty($currentPage) ? '0,20' : $currentPage.','.$pageSize,
             );
 			$this->load->library("DbUtil");
 			$tmrList = $this->dbutil->getTmr($listWhere);
-            if(empty($tmrList)){
-                return [];
-            }
 
             /* end */
 
@@ -54,9 +51,9 @@
             /* 账户余额查询 */
             $balanceWhere = array(
                 'select' => 'money',
-                'where' => 'account_id = '.$accId.' AND status = "1"',
+                'where' => 'account_id = "'.$accId.'" AND status = "1"',
             );
-
+            
             $AccBalance = $this->dbutil->getAccBalance($balanceWhere);
             /* end */
             if(empty($AccBalance)){
@@ -66,7 +63,7 @@
             /* 财务认证状态 */
             $financeWhere = array(
                 'select' => 'check_status',
-                'where' => 'account_id = '.$accId,
+                'where' => 'account_id = "'.$accId.'"',
             );
             $strFinance = $this->dbutil->getAccount($financeWhere);
             /* end */
@@ -88,7 +85,7 @@
 			}
 			$listWhere = array(
 				'select' => 'time,account_id,app_id,media_name,media_platform,money,status',
-				'where' => 'account_id = '.$accId,
+				'where' => 'account_id = "'.$accId.'"',
 				'order_by' => 'time',
 				'limit' => empty($pageSize) || empty($currentPage) ? '0,20' : $currentPage.','.$pageSize,
             );

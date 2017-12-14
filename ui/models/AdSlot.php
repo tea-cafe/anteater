@@ -9,11 +9,11 @@ class AdSlot extends CI_Model {
     /**
      * 
      */
-    public function getAdSlotList($intAccountId, $pn = 1, $rn = 10, $strSlotName = '') {
+    public function getAdSlotList($strAccountId, $pn = 1, $rn = 10, $strSlotName = '') {
         $this->load->library('DbUtil');
         $arrSelect = [
             'select' => 'count(*) as total',
-            'where' => 'account_id=' . $intAccountId,
+            'where' => "account_id='" . $strAccountId . "'",
         ];
         $arrRes = $this->dbutil->getAdSlot($arrSelect);
         if (empty($arrRes)) {
@@ -31,7 +31,7 @@ class AdSlot extends CI_Model {
         $intCount = $arrRes[0]['total'];
         $arrSelect = [
             'select' => 'slot_id,app_id,media_name,media_platform,slot_name,slot_style,slot_size,switch,create_time',
-            'where' => 'account_id=' . $intAccountId,
+            'where' => "account_id='" . $strAccountId . "'",
             'order_by' => 'create_time DESC',
             'limit' => $rn*($pn-1) . ',' . $rn,
         ];
@@ -39,6 +39,21 @@ class AdSlot extends CI_Model {
             $arrSelect['where'] .= " AND media_name like '%" . $strSlotName . "%'"; 
         }
         $arrRes = $this->dbutil->getAdSlot($arrSelect);
+        if (!empty($arrRes[0])) {
+            $this->config->load('style2platform_map');
+            $arrStyleMap = $this->config->item('style2platform_map');
+            foreach ($arrRes as &$arrSlot) {
+                foreach ($arrStyleMap[$arrSlot['slot_style']] as $key => $val) {
+                    if ($key === 'des') {
+                        continue;
+                    }
+                    $arrSlot['slot_size'] = $val['size'][$arrSlot['slot_size']];
+                    break;
+                }
+                $arrSlot['slot_style'] = $arrStyleMap[$arrSlot['slot_style']]['des'];
+            }
+        }
+
         return [
             'list' => $arrRes,
             'pagination' => [
@@ -118,8 +133,9 @@ class AdSlot extends CI_Model {
         }
 
         // 格式化数据，插入data_for_sdk
-        $this->load->model('syncSdkMediaInfo');
-        $this->syncSdkMediaInfo->syncWhenAdSlotIdRegist($arrParams['app_id'], $arrParams['slot_id'], $arrParams['slot_style'], $arrSlotIdsForApp);
+        // TODO
+        //$this->load->model('SyncSdkMediaInfo');
+        //$this->SyncSdkMediaInfo->syncWhenAdSlotIdRegist($arrParams['app_id'], $arrParams['slot_id'], $arrParams['slot_style'], $arrSlotIdsForApp);
 
         return true;
     }

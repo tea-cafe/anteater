@@ -112,11 +112,10 @@ class AccountModify extends MY_Controller {
         }
 
         $newPostParams['check_status'] = '1';
-        $newPostParams['where'] = 'account_id=' . $account_id;
+        $newPostParams['where'] = 'account_id= "' . $account_id.'"';
 
         $this->load->model('Account');
         $Res = $this->Account->updateAccountFinanceInfo($account_id,$newPostParams);
-
         if ($Res) {
             return $this->outJson($Res, ErrCode::OK, '财务信息修改成功');
         }

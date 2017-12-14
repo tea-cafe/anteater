@@ -5,7 +5,6 @@
 class MediaRegister extends MY_Controller {
 
     const VALID_MEDIA_KEY = [
-        'media_name',
         'media_platform',
         'app_detail_url',
         'app_package_name',
@@ -42,21 +41,31 @@ class MediaRegister extends MY_Controller {
             return $this->outJson('', ErrCode::ERR_INVALID_PARAMS);
         }
 
-        // TODO 各种号码格式校验
         foreach ($arrPostParams as $key => &$val) {
-            if(!in_array($key, self::VALID_MEDIA_KEY)) {
-                return $this->outJson('', ErrCode::ERR_INVALID_PARAMS);
-            }
             $val = $this->security->xss_clean($val);
         }
+
+        if (empty($arrPostParams['media_name'])
+            || !is_array($arrPostParams['industry'])
+            || empty($arrPostParams['media_delivery_method'])
+            || empty($arrPostParams['media_platform'])) {
+            return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
+        }
+
+
         if ($arrPostParams['media_platform'] === 'iOS'
             || $arrPostParams['media_platform'] === 'Android') {
+            $this->config->load('app_platform');
+            $arrPlatformList = $this->config->item('app_platform');
+            if (empty($arrPlatformList[$arrPostParams['app_platform']])) {
+                return $this->outJson('', ErrCode::ERR_SYSTEM); 
+            }
             // 投放方式
             if ($arrPostParams['media_delivery_method'] === 'SDK') {
-                $arrPostParams['default_valid_style'] = '1,2,3,4,5,6';
+                $arrPostParams['default_valid_style'] = '1,2,3,4,6';
             } else {
                 $arrPostParams['media_delivery_method'] === 'API';
-                $arrPostParams['default_valid_style'] = '7,8';
+                $arrPostParams['default_valid_style'] = '7';
             }
             $arrPostParams['check_status'] = 0;
             if ($arrPostParams['media_platform'] === 'Android') {
@@ -66,8 +75,9 @@ class MediaRegister extends MY_Controller {
             $arrPostParams['default_valid_style'] = '9,10,11,12,13,14';
             $arrPostParams['check_status'] = 1;
             $arrPostParams['media_delivery_method'] = 'JS';
-        } else {
-            return $this->outJson('', ErrCode::ERR_INVALID_PARAMS, $arrPostParams['default_valid_style'] .' wrong');;
+        } 
+        if (empty($arrPostParams['default_valid_style'])){
+            return $this->outJson('', ErrCode::ERR_INVALID_PARAMS);
         }
 
         if (is_array($arrPostParams['industry'])) {

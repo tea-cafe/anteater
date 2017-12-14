@@ -43,7 +43,7 @@ class Account extends CI_Model {
         $this->load->library('DbUtil');
         $where = array(
             'select' => implode(',',self::ACCOUNT_ALL_INFO_KEY),
-            'where' => 'account_id = '.$accId,
+            'where' => 'account_id = "'.$accId.'"',
         );
         $arrInfo = $this->dbutil->getAccount($where);
         
@@ -83,7 +83,7 @@ class Account extends CI_Model {
 
         $where = array(
             'select' => implode(',',self::ACCOUNT_ALL_INFO_KEY),
-            'where' => 'account_id = '.$accId,
+            'where' => 'account_id = "'.$accId.'"',
         );
         $arrInfo = $this->dbutil->getAccount($where);
     
@@ -105,7 +105,7 @@ class Account extends CI_Model {
 
         $where = array(
             'select' => implode(',',self::ACCOUNT_ALL_INFO_KEY),
-            'where' => 'account_id = '.$accId,
+            'where' => 'account_id = "'.$accId.'"',
         );
         $arrInfo = $this->dbutil->getAccount($where);
     

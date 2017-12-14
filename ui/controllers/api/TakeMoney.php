@@ -41,6 +41,7 @@ class TakeMoney extends MY_Controller{
         
 		$this->load->model("Finance");
 		$result = $this->Finance->getTakeMoneyList($accId,$startDate,$endDate,$pageSize,$currentPage,$status);
+        
         if(empty($result)){
             return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'数据获取失败');
         }

@@ -2,7 +2,7 @@
 // 后台触发： 策略更新(更新所有记录)、上游增加(更新一条记录)
 // 前台触发： 广告位申请(更新一条记录)
 
-class syncSdkMediaInfo extends CI_Model {
+class SyncSdkMediaInfo extends CI_Model {
 
     public function __construct() {
         parent::__construct();
@@ -20,7 +20,7 @@ class syncSdkMediaInfo extends CI_Model {
         // 1 读表 adslot_style_info的display_strategy字段 查策略
         $arrSelect = [
             'select' => 'display_strategy',
-            'where' => "slot_style=" . $arrParams['slot_style'],
+            'where' => "slot_style=" . $slot_style,
         ];
         $arrRes = $this->dbutil->getAdslotstyle($arrSelect);
         if (empty($arrRes[0])

@@ -59,7 +59,7 @@ class Tools extends MY_Controller {
     /**
      * upload app
      */
-    public function uploadApp() {
+    public function upload() {
         if (empty($this->arrUser)) {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN, '会话已过期,请重新登录');
         } 
