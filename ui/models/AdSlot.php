@@ -14,6 +14,7 @@ class AdSlot extends CI_Model {
         $arrSelect = [
             'select' => 'count(*) as total',
             'where' => "account_id='" . $strAccountId . "'",
+            'order_by' => 'slot_style,update_time desc',
         ];
         $arrRes = $this->dbutil->getAdSlot($arrSelect);
         if (empty($arrRes)) {

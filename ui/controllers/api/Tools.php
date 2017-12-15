@@ -1,59 +1,23 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 /**
- * 账户信息 
+ * 账户信息
  */
 
 class Tools extends MY_Controller {
 
     const KEY_IMG_URL_SALT = 'Qspjv5$E@Vkj7fZb';
 
+    const VALID_UPLOAD_SUFFIX = [
+        'txt',
+        'csv',
+        'apk',
+        'ipa',
+    ];
+
     public function __construct() {
         parent::__construct();
         $this->load->library('UploadTools');
-    }
-
-    /**
-     *
-     */
-    public function uploadImg() {
-        $this->load->model('User');
-        $arrUser = $this->User->checkLogin();
-        if (empty($arrUser)) {
-            return $this->outJson('', ErrCode::ERR_NOT_LOGIN, '会话已过期,请重新登录');
-        } 
-
-        $arrUdpImgConf = $this->config->item('img');
-        $arrUdpImgConf['file_name'] = md5($arrUser['account_id'] . self::KEY_IMG_URL_SALT . $_FILES['id']);
-
-        $strUrl = $this->uploadtools->uploadImg($arrUdpImgConf);
-        if (empty($strUrl)) {
-            return $this->outJson('', ErrCode::ERR_UPLOAD, '上传csv文件失败，请重试');
-        }
-        return $this->outJson(
-            ['url' => $strUrl],
-            ErrCode::OK,
-            '图片上传成功');
-    }
-
-    /**
-     * upload csv
-     */
-    public function uploadCsv() {
-        $this->load->model('User');
-        $arrUser = $this->User->checkLogin();
-        if (empty($arrUser)) {
-            return $this->outJson('', ErrCode::ERR_NOT_LOGIN, '会话已过期,请重新登录');
-        } 
-        $arrUdpCsvConf = $this->config->item('csv');
-        $strUrl = $this->uploadtools->upload($arrUdpCsvConf);
-        if (empty($strUrl)) {
-            return $this->outJson('', ErrCode::ERR_UPLOAD, '上传csv文件失败，请重试');
-        }
-        return $this->outJson(
-            ['url' => $strUrl],
-            ErrCode::OK,
-            '文件上传成功');
     }
 
     /**
@@ -62,14 +26,19 @@ class Tools extends MY_Controller {
     public function upload() {
         if (empty($this->arrUser)) {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN, '会话已过期,请重新登录');
-        } 
+        }
 
         $strAppId = $this->input->post('app_id', true);
         if (empty($strAppId)) {
-            return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
+            return $this->outJson('', ErrCode::ERR_INVALID_PARAMS);
         }
         // 用户白名单过滤
 
+        $arrTmp = explode('.', $_FILES['file']['name']);
+        $suffix = $arrTmp[count($arrTmp)-1];
+        if (!in_array($suffix, self::VALID_UPLOAD_SUFFIX)) {
+            return $this->outJson('', ErrCode::ERR_UPLOAD, '文件类型非法,请重新选择');
+        }
         $arrUdpAppConf = $this->config->item('app');
         $arrUdpAppConf['file_name'] = md5($strAppId . $_FILES['file']['name']);
         $strUrl = $this->uploadtools->upload($arrUdpAppConf);
@@ -88,11 +57,11 @@ class Tools extends MY_Controller {
     public function uploadTxt() {
         if (empty($this->arrUser)) {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN, '会话已过期,请重新登录');
-        } 
+        }
 
         $strAppId = $this->input->post('app_id', true);
         if (empty($strAppId)) {
-            return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
+            return $this->outJson('', ErrCode::ERR_INVALID_PARAMS);
         }
         // 用户白名单过滤
 

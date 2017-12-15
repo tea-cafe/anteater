@@ -23,7 +23,7 @@ class InsertAdslot extends CI_Model {
         }
         $arrAppIdMap = json_decode($arrRes[0]['app_id_map'], true);
         if (empty($arrAppIdMap)) {
-            ErrCode::$msg = '媒体信息有误，请联系工作人员';
+            ErrCode::$msg = '媒体映射信息有误，请联系工作人员';
             return [];
         }
         return $arrAppIdMap;

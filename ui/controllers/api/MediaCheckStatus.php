@@ -28,7 +28,8 @@ class MediaCheckStatus extends MY_Controller {
             return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
         }
 
-        if ($arrPostParams['media_platform'] == 'Android') {
+        if ($arrPostParams['media_platform'] == 'Android'
+            || $arrPostParams['media_platform'] == 'iOS') {
             if (empty($arrPostParams['app_verify_url'])) {
                 return $this->outJson('', ErrCode::ERR_INVALID_PARAMS, '请先上传签名后的app');
             }
@@ -36,7 +37,7 @@ class MediaCheckStatus extends MY_Controller {
 
         $arrUpdate = [
             'check_status' => 2,
-            'app_verify_url' => $arrPostParams['app_verify_url'],
+            'app_verify_url' => isset($arrPostParams['app_verify_url']) ? $arrPostParams['app_verify_url'] : '',
             'where' => "app_id='" . $arrPostParams['app_id'] . "'",
         ];
 

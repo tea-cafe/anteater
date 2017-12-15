@@ -62,7 +62,7 @@ class AccountModify extends MY_Controller {
             return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
         }
 
-        $account_id = $this->arrUser['account_id'];
+        $accId = $this->arrUser['account_id'];
         // TODO 各种号码格式校验
         foreach ($arrPostParams as $key => &$val) {
             if(!in_array($key, self::VALID_ACCOUNT_BASE_KEY)) {
@@ -71,15 +71,15 @@ class AccountModify extends MY_Controller {
             $val = $this->security->xss_clean($val);
         }
 
-        $arrPostParams['where'] = "account_id=" . $account_id;
+        $arrPostParams['where'] = 'account_id="' . $accId . '"';
         
         // 入库
         $this->load->model('Account');
-        $Res = $this->Account->updateAccountBaseInfo($account_id,$arrPostParams);
+        $Res = $this->Account->updateAccountBaseInfo($accId,$arrPostParams);
         if ($Res) {
             return $this->outJson($Res, ErrCode::OK, '账户信息修改成功');
         }
-        return $this->outJson('', ErrCode::ERR_SYSTEM);
+        return $this->outJson('', ErrCode::ERR_SYSTEM,'账户信息修改失败');
     }//}}}//
 
     /**

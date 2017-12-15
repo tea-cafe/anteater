@@ -24,85 +24,85 @@
             /* 提现单查询 */
 			$listWhere = array(
 				'select' => 'id,time,account_id,number,money,status',
-				'where' => 'time > '.$startDate.' AND time < '.$endDate.' AND account_id = "'.$accId.'"'.$statusStr,
+				'where' => 'time > '.$startDate.' and time < '.$endDate.' and account_id = "'.$accId.'"'.$statusStr,
 				'order_by' => 'time',
-				'limit' => empty($pageSize) || empty($currentPage) ? '0,20' : $currentPage.','.$pageSize,
+				'limit' => empty($pagesize) || empty($currentpage) ? '0,20' : $currentpage.','.$pagesize,
             );
-			$this->load->library("DbUtil");
-			$tmrList = $this->dbutil->getTmr($listWhere);
+			$this->load->library("dbutil");
+			$tmrlist = $this->dbutil->gettmr($listwhere);
 
             /* end */
 
             /* 分页信息查询 */
-			$totalWhere = array(
+			$totalwhere = array(
 				'select' => 'count(*)',
-				'where' => 'time > '.$startDate.' AND time < '.$endDate.' AND account_id = "'.$accId.'"'.$statusStr,
+				'where' => 'time > '.$startdate.' and time < '.$enddate.' and account_id = "'.$accid.'"'.$statusstr,
 			);
 
-			$totalCount = $this->dbutil->getTmr($totalWhere);
+			$totalcount = $this->dbutil->gettmr($totalwhere);
             
-            $paginAtion = array(
-                'current' => empty($currentPage) ? '1':$currentPage,
-                'pageSize' => $pageSize,
-                'total' => $totalCount[0]['count(*)'],
+            $pagination = array(
+                'current' => empty($currentpage) ? '1':$currentpage,
+                'pagesize' => $pagesize,
+                'total' => $totalcount[0]['count(*)'],
             );
             /* end */
 
             /* 账户余额查询 */
-            $balanceWhere = array(
+            $balancewhere = array(
                 'select' => 'money',
-                'where' => 'account_id = "'.$accId.'" AND status = "1"',
+                'where' => 'account_id = "'.$accid.'" and status = "1"',
             );
             
-            $AccBalance = $this->dbutil->getAccBalance($balanceWhere);
+            $accbalance = $this->dbutil->getaccbalance($balancewhere);
             /* end */
-            if(empty($AccBalance)){
+            if(empty($accbalance)){
                 return [];
             }
 
             /* 财务认证状态 */
-            $financeWhere = array(
+            $financewhere = array(
                 'select' => 'check_status',
-                'where' => 'account_id = "'.$accId.'"',
+                'where' => 'account_id = "'.$accid.'"',
             );
-            $strFinance = $this->dbutil->getAccount($financeWhere);
+            $strfinance = $this->dbutil->getaccount($financewhere);
             /* end */
-			$result['list'] = $tmrList;
-            $result['balance'] = $AccBalance[0]['money'];
-            $result['finance_status'] = $strFinance[0]['check_status'];
-			$result['pagination'] = $paginAtion;
+			$result['list'] = $tmrlist;
+            $result['balance'] = $accbalance[0]['money'];
+            $result['finance_status'] = $strfinance[0]['check_status'];
+			$result['pagination'] = $pagination;
 			return $result;
 		}
 
         /**
          * 获取月账单列表
          */
-		public function getMonthlyBill($accId,$pageSize,$currentPage){
-            if($currentPage == 1){
-				$currentPage = 0;
+		public function getmonthlybill($accid,$pagesize,$currentpage){
+            if($currentpage == 1){
+				$currentpage = 0;
 			}else{
-				$currentPage = ($currentPage - 1) * $pageSize;
+				$currentpage = ($currentpage - 1) * $pagesize;
 			}
-			$listWhere = array(
+			$listwhere = array(
 				'select' => 'time,account_id,app_id,media_name,media_platform,money,status',
-				'where' => 'account_id = "'.$accId.'"',
+				'where' => 'account_id = "'.$accid.'"',
 				'order_by' => 'time',
-				'limit' => empty($pageSize) || empty($currentPage) ? '0,20' : $currentPage.','.$pageSize,
+				'limit' => empty($pagesize) || empty($currentpage) ? '0,20' : $currentpage.','.$pagesize,
             );
-			$this->load->library("DbUtil");
-			$data = $this->dbutil->getMonthly($listWhere);
+			$this->load->library("dbutil");
+			$data = $this->dbutil->getmonthly($listwhere);
 
             foreach($data as $k => $v){
-                $data[$k]['time'] = date('Y-m',$v['time']);
+                $data[$k]['time'] = date('y-m',$v['time']);
             }
 
 			if(empty($data)){
 				return $data;
 			}	
 
-			$totalWhere = array(
+			$totalwhere = array(
 				'select' => 'count(*)',
-				'where' => 'account_id = "'.$accId.'"',
+				'where' => 'account_id = "'.$accid.'"',
 			);
 
 			$totalCount = $this->dbutil->getMonthly($totalWhere);
@@ -294,9 +294,17 @@
 					),
 				),
 			);
-			
-			$result = $this->dbutil->sqlTrans($params);
-            
+
+            $TmrWhere = array(
+ 				'select' => 'id,time,account_id,number,money,status',
+				'where' => 'account_id = "'.$accid.'"',
+				'order_by' => 'time',
+				'limit' => '0,20',
+            );
+            $result['TmrList'] = $this->duutil->getTmr($TmrWhere);
+
+			$result['TmrStatus'] = $this->dbutil->sqlTrans($params);
+                       
             return $result;
 		}
 	}

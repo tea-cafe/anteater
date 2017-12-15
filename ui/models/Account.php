@@ -25,6 +25,7 @@ class Account extends CI_Model {
         'bank_branch',
         'bank_account',
         'remark',
+        'auth_finance_remark',
         'check_status',
         'account_holder',
         'identity_card_num',
