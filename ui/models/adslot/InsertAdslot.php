@@ -41,7 +41,7 @@ class InsertAdslot extends CI_Model {
         ];
         $arrRes = $this->dbutil->getPreadslot($arrSelect);
         if (empty($arrRes[0]['data'])) {
-            ErrCode::$msg = '广告位申请超出限制0，请联系工作人员';
+            ErrCode::$msg = '广告位申请已超限，请联系工作人员';
             return false;
         }
         return json_decode($arrRes[0]['data'], true);
@@ -61,16 +61,12 @@ class InsertAdslot extends CI_Model {
         $arrSlotIdsForApp = [];
         foreach($arrPreSlotIds as $upstream => &$arrType){
             if (!array_key_exists($upstream, $arrAppIdMap)) {
-                // TODO
-                echo  '预生成广告位上游' .  $upstream . '和app_id_map 对不上: '. json_encode($arrAppIdMap);exit; 
                 continue; 
             }
             if (empty($arrType)
                 || empty($arrType[$intSlotStyle])
                 || empty($arrType[$intSlotStyle][$intSlotSize])) {
-                // 数据错误
-                ErrCode::$msg = '广告位申请超出限制1，请联系工作人员';
-                return [];
+                continue;
             }
             $arrTmp = $arrType[$intSlotStyle][$intSlotSize];
             foreach ($arrTmp as $slotid => $used) {
@@ -88,7 +84,7 @@ class InsertAdslot extends CI_Model {
 
         if (empty($arrSlotIdsForApp)) {
             // pre_slotid 均已使用
-            ErrCode::$msg = '广告位申请超出限制2，请联系工作人员';
+            ErrCode::$msg = '广告位申请已超限，请联系工作人员';
             return [];
         }
 
@@ -101,7 +97,7 @@ class InsertAdslot extends CI_Model {
         if (!$arrRes
             || $arrRes['code'] !== 0) {
             // slot_id 分配后回写失败
-            ErrCode::$msg = '广告位申请超出限制3，请联系工作人员';
+            ErrCode::$msg = '广告位申请已超限，请联系工作人员';
             return [];
         }
         return $arrSlotIdsForApp;
@@ -126,7 +122,7 @@ class InsertAdslot extends CI_Model {
         $bolRes = $this->dbutil->query($sql);
         if (!$bolRes) {
             // slot_id 映射表更新失败
-            ErrCode::$msg = '广告位申请超出限制4，请联系工作人员';
+            ErrCode::$msg = '广告位申请已超限，请联系工作人员';
         }
         return $bolRes;
     }

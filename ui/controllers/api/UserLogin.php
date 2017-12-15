@@ -46,6 +46,7 @@ class UserLogin extends MY_Controller {
         
         $data['email'] = $this->arrUser['email'];
         $data['username'] = $this->arrUser['username'];
+        $data['account_id'] = $this->arrUser['account_id'];
             return $this->outJson($data,ErrCode::OK, '登录成功');
     }
 }

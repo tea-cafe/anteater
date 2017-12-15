@@ -46,7 +46,12 @@ class TakeMoney extends MY_Controller{
         if(empty($result)){
             return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'数据获取失败');
         }
-        return $this->outJson($result,ErrCode::OK,'数据获取成功');
+
+        if(empty($result['list'])){
+            return $this->outJson($result,ErrCode::OK,'暂无提现记录');
+        }else{
+            return $this->outJson($result,ErrCode::OK,'获取提现记录成功');
+        }    
     }
 
 	/**

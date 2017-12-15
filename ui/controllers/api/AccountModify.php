@@ -23,7 +23,7 @@ class AccountModify extends MY_Controller {
         'city',  
         'bank_branch',
         'bank_account',
-        //'remark',
+        'remark',
     ]; 
 
     const VALID_ACCOUNT_PERSIONAL_FINANCE_KEY = [
@@ -37,7 +37,7 @@ class AccountModify extends MY_Controller {
         'city',
         'bank_branch',
         'bank_account',  
-        //'remark', 
+        'remark', 
     ]; 
 
     public function __construct() {

@@ -1,7 +1,6 @@
 <?php
 /**
- * media注册接口
- * szishuo
+ * media修改接口
  */
 class MediaModify extends MY_Controller {
 
@@ -48,6 +47,7 @@ class MediaModify extends MY_Controller {
             return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
         }
 
+        // 检测用户状态，如果不是评审未通过(check_status=4) 拒绝修改
         $this->load->model('Media');
         $arrRes = $this->Media->getMediaInfo($arrPostParams['app_id']);
         if (empty($arrRes)
@@ -55,34 +55,27 @@ class MediaModify extends MY_Controller {
             return $this->outJson('', ErrCode::ERR_SYSTEM, '用户状态检查非法,禁止修改');
         }
 
-
         if ($arrPostParams['media_platform'] === 'iOS'
             || $arrPostParams['media_platform'] === 'Android') {
             $this->config->load('app_platform');
             $arrPlatformList = $this->config->item('app_platform');
             if (empty($arrPlatformList[$arrPostParams['app_platform']])) {
-                return $this->outJson('', ErrCode::ERR_SYSTEM); 
+                return $this->outJson('', ErrCode::ERR_SYSTEM, 'app platfrom 出错'); 
             }
             // 投放方式
             if ($arrPostParams['media_delivery_method'] === 'SDK') {
-                $arrPostParams['default_valid_style'] = '1,2,3,4,5,6';
+                $arrPostParams['default_valid_style'] = '1,2,3,4,6';
             } else {
                 $arrPostParams['media_delivery_method'] === 'API';
-                $arrPostParams['default_valid_style'] = '7,8';
+                $arrPostParams['default_valid_style'] = '7';
             }
-
-            $arrPostParams['check_status'] = 0;
-            if ($arrPostParams['media_platform'] === 'Android') {
-                $arrPostParams['check_status'] = 1;
-            }
-        } else if ($arrPostParams['media_platform'] === 'H5') {
+        }
+        if ($arrPostParams['media_platform'] === 'H5') {
             $arrPostParams['default_valid_style'] = '9,10,11,12,13,14';
-            $arrPostParams['check_status'] = 1;
             $arrPostParams['media_delivery_method'] = 'JS';
         } 
-        if (empty($arrPostParams['default_valid_style'])){
-            return $this->outJson('', ErrCode::ERR_INVALID_PARAMS);
-        }
+
+        $arrPostParams['check_status'] = 1;
 
         if (is_array($arrPostParams['industry'])) {
             $strIndustry = '';
@@ -93,13 +86,6 @@ class MediaModify extends MY_Controller {
         }
         $arrPostParams['industry'] = $strIndustry;
 
-
-        if ($arrRes['media_platform'] === 'Android'
-            || $arrRes['media_platform'] === 'H5') {
-            $arrPostParams['check_status'] = 1;
-        } else {
-            $arrPostParams['check_status'] = 0;
-        }
         $arrPostParams['where'] = "app_id='" . $arrPostParams['app_id'] . "'";
         unset($arrPostParams['app_id']);
         $bolRes = $this->Media->updateMediaInfo($arrPostParams);

@@ -65,6 +65,12 @@ class Account extends CI_Model {
         $arrParams['account_id'] = md5(self::ACCOUNT_MD5_SALT . $this->dbutil->getAutoincrementId('account'));
         $arrRes = $this->dbutil->setAccount($arrParams);
 
+        if($arrRes['code'] !== 0){
+            return false;
+        }
+
+        $where['account_id'] = $arrParams['account_id']; 
+        $accBalance = $this->dbutil->setAccBalance($where);
 
         return $arrRes;
     }

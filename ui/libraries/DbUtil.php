@@ -274,7 +274,6 @@ class DbUtil {
 			return [];
 		}
 
-		$this->CI->db->trans_strict(FALSE);
 		$this->CI->db->trans_begin();
 		foreach($arrParams as $key => $value){
 			$type = $value['type'];
