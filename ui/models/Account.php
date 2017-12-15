@@ -62,7 +62,7 @@ class Account extends CI_Model {
      */
     public function insertAccountBaseInfo($arrParams) {
         $this->load->library('DbUtil');
-        $arrParams['account_id'] = md5(self::ACCOUNT_MD5_SALT . $this->dbutil->getAutoincrementId('account'));
+        $arrParams['account_id'] = substr(md5(self::ACCOUNT_MD5_SALT . time()), 0, 9) . $this->dbutil->getAutoincrementId('account');
         $arrRes = $this->dbutil->setAccount($arrParams);
 
         if($arrRes['code'] !== 0){

@@ -10,8 +10,6 @@ class AccountResetPasswd extends MY_Controller{
 	}
 
 	public function index(){
-		header("Content-Type:application/json");
-		//$email = $this->input->post("email",true);
 		$email = $this->input->get('email',true);
 
 		if(empty($email) || !stristr($email,"@")){
@@ -32,7 +30,7 @@ class AccountResetPasswd extends MY_Controller{
 	}
 
 	public function CheckCode(){
-		//$VerifyCode = $this->input->post('verifycode',true);
+        //$VerifyCode = $this->input->post('verifycode',true);
 		//$email = $this->input->post('email',true);
 		$VerifyCode = $this->input->get('verifycode',true);
 		$email = $this->input->get('email',true);

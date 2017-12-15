@@ -297,16 +297,34 @@
 			);
 
 			$result['TmrStatus'] = $this->dbutil->sqlTrans($params);
-            if($result['TmrStatus']){
-                $TmrWhere = array(
-                    'select' => 'id,time,account_id,number,money,status',
-                    'where' => 'account_id = "'.$accId.'"',
-                    'order_by' => 'time desc',
-                    'limit' => '0,20',
-                );
+            
+            $TmrWhere = array(
+                'select' => 'id,time,account_id,number,money,status',
+                'where' => 'account_id = "'.$accId.'"',
+                'order_by' => 'time desc',
+                'limit' => '0,20',
+            );
 
-                $result['TmrList'] = $this->dbutil->getTmr($TmrWhere);
-            }
+
+            /* 分页信息查询 */
+			$totalWhere = array(
+				'select' => 'count(*)',
+                'where' => 'account_id = "'.$accId.'"',
+			);
+
+			$totalCount = $this->dbutil->getTmr($totalWhere);
+            
+            $paginAtion = array(
+                'current' => '1',
+                'pageSize' => '20',
+                'total' => $totalCount[0]['count(*)'],
+            );
+            /* end */
+
+            $result['data']['list'] = $this->dbutil->getTmr($TmrWhere);
+            $result['data']['balance'] = '0.00';
+            $result['data']['finance_status'] = '2';
+			$result['data']['pagination'] = $paginAtion;
 
             return $result;
 		}

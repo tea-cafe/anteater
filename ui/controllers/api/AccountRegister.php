@@ -48,7 +48,7 @@ class AccountRegister extends MY_Controller {
     }
 
     /**
-     * 基本信息修改
+     * 账号注册
      */
     public function index() {//{{{//
         $arrPostParams = json_decode(file_get_contents('php://input'), true);
