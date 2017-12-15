@@ -108,7 +108,7 @@ class InsertAdslot extends CI_Model {
      *
      */
     public function insertSlotMap($arrSlotIdsForApp, $strAccountId, $intSlotId, $strAppId) { 
-        $sql = 'INSERT INTO adslot_map(slot_id,account_id,app_id,ad_upstream,upstream_slot_id,create_time,update_time) VALUES';
+        $sql = 'INSERT INTO adslot_map(account_id,slot_id,app_id,ad_upstream,upstream_slot_id,create_time,update_time) VALUES';
         foreach($arrSlotIdsForApp as $val) {
             $sql .= "('" . $strAccountId . "'" 
                 . "," . $intSlotId 

@@ -16,6 +16,9 @@ class AdSlot extends CI_Model {
             'where' => "account_id='" . $strAccountId . "'",
             'order_by' => 'slot_style,update_time desc',
         ];
+        if (!empty($strSlotName)) {
+            $arrSelect['where'] .= " AND slot_name like '%" . $strSlotName . "%'"; 
+        }
         $arrRes = $this->dbutil->getAdSlot($arrSelect);
         if (empty($arrRes)) {
             $intCount = 0;
@@ -36,8 +39,8 @@ class AdSlot extends CI_Model {
             'order_by' => 'create_time DESC',
             'limit' => $rn*($pn-1) . ',' . $rn,
         ];
-        if (!empty($condition)) {
-            $arrSelect['where'] .= " AND media_name like '%" . $strSlotName . "%'"; 
+        if (!empty($strSlotName)) {
+            $arrSelect['where'] .= " AND slot_name like '%" . $strSlotName . "%'"; 
         }
         $arrRes = $this->dbutil->getAdSlot($arrSelect);
         if (!empty($arrRes[0])) {

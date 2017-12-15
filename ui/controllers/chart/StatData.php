@@ -27,7 +27,7 @@ class StatData extends MY_Controller {
         $arrParams['rn'] = empty($arrParams['rn']) ? 10 : $arrParams['rn'];
         $arrParams['method'] = 'getUsr'.$arrParams['type'].'Sum';
         $arrParams['lastday'] = '2017-12-31';//date("Y-m-d",strtotime("-1 day"));
-        $arrParams['account_id'] = $this->arrUser['account_id'];
+        $arrParams['account_id'] = 'c595943825a7ca8b4777d186befc49cb';//$this->arrUser['account_id'];
 
         $arrList = $this->StatDataModel->getSumDataList($arrParams);
         return $arrList?$this->outJson($arrList, ErrCode::OK) : $this->outJson([], ErrCode::OK);

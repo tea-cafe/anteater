@@ -32,18 +32,26 @@ class TestData extends MY_Controller{
             'd328b23' => '3G门户',
             'd428b23' => '嘻嘻哈哈',
         );
-        foreach($a as $k =>$v){
-            $data['time'] = 1509465600;
-            $data['account_id'] = "929777a8e8e647b702c800f2c40578d3";
-            $data['app_id'] = $k;
-            $data['media_name'] = $v;
-            $data['media_platform'] = 'H5';
-            $data['money'] = mt_rand(10000,99999).mt_rand(10,99);
 
-            //var_dump($data);
-            $this->dbutil->setMonthly($data);
-            unset($data);
-        
+        $accid = array(
+            0 => '0463451394dc5dfc634f9463d6b12791',
+            1 => '04fb2125927e6194f0628cd6ebf300b8',
+            2 => '8bfb5685eda20aa40c4c05047c0fd2e6',
+            3 => '929777a8e8e647b702c800f2c40578d3',
+            4 => 'c595943825a7ca8b4777d186befc49cb',
+        );
+
+        foreach($accid as $k1 => $v1){
+            foreach($a as $k =>$v){
+                $data['time'] = 1509465600;
+                $data['account_id'] = $v1;
+                $data['app_id'] = $k;
+                $data['media_name'] = $v;
+                $data['media_platform'] = 'H5';
+                $data['money'] = mt_rand(10000,99999).mt_rand(10,99);
+                $this->dbutil->setMonthly($data);
+                unset($data);
+            }   
         }
     }
 

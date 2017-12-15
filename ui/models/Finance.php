@@ -12,7 +12,7 @@
 			if(empty($status)){
 				$statusStr = '';
 			}else{
-				$statusStr = ' AND status = '.$status;
+				$statusStr = ' AND status = "'.$status.'"';
 			}
 
 			if($currentPage == 1){
@@ -222,7 +222,7 @@
             /* 获取可以提现的月账单 */
             $billWhere = array(
 				'select' => 'id,time,app_id,media_name,media_platform,money',
-				'where' => 'account_id = "'.$accId.'" AND status = 1',
+				'where' => 'account_id = "'.$accId.'" AND status = "0"',
             );
 			$this->load->library('DbUtil');
 			$tmpList = $this->dbutil->getMonthly($billWhere);
@@ -246,7 +246,6 @@
                 $tmpInfo[0]['account_company'] = $tmpInfo[0]['account_holder'];
                 unset($tmpInfo[0]['account_holder']);
             }
-            $tmpInfo[0]['media'] = $billList[0]['media_name'].'等';
 			$tmpInfo[0]['money'] = $money;
 			$info['channel_info'] = $tmpInfo[0];
             
@@ -272,7 +271,7 @@
 						'bill_list' => serialize($billList),
 						'info' => serialize($info),
 						'remark' => '',
-						'status' => '1',
+						'status' => '0',
 						'create_time' => time(),
 						'update_time' => time(),
 					),
@@ -289,9 +288,9 @@
 				2 => array(
 					'type' => 'update',
 					'tabName' => 'monthly',
-				    'where' => 'account_id = "'.$accId.'" AND status = 1',
+				    'where' => 'account_id = "'.$accId.'" AND status = "0"',
 					'data' => array(
-						'status' => '2',
+						'status' => '1',
 						'update_time' => time(),
 					),
 				),
