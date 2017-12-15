@@ -44,7 +44,7 @@
             $paginAtion = array(
                 'current' => empty($currentPage) ? '1':$currentPage,
                 'pageSize' => $pageSize,
-                'total' => $totalCount[0]['count(*)'],
+                'total' => empty($totalCount[0]['count(*)']) ? '0' : $totalCount[0]['count(*)'],
             );
             /* end */
 
@@ -108,7 +108,7 @@
             $paginAtion = array(
                 'current' => empty($currentPage) ? '1':$currentPage,
                 'pageSize' => $pageSize,
-                'total' => $totalCount[0]['count(*)'],
+                'total' => empty($totalCount[0]['count(*)']) ? '0' : $totalCount[0]['count(*)'],
             );
 			$result['list'] = $data;
 			$result['pagination'] = $paginAtion;
@@ -166,7 +166,7 @@
             $paginAtion = array(
                 'current' => empty($currentPage) ? '1':$currentPage,
                 'pageSize' => $limit,
-                'total' => $totalCount[0]['count(*)'],
+                'total' => empty($totalCount[0]['count(*)']) ? '0' : $totalCount[0]['count(*)'],
             );
 			$result['list'] = $data;
 			$result['pagination'] = $paginAtion;
@@ -317,7 +317,7 @@
             $paginAtion = array(
                 'current' => '1',
                 'pageSize' => '20',
-                'total' => $totalCount[0]['count(*)'],
+                'total' => empty($totalCount[0]['count(*)']) ? '0' : $totalCount[0]['count(*)'],
             );
             /* end */
 
