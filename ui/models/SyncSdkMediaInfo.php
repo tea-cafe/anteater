@@ -9,7 +9,9 @@ class SyncSdkMediaInfo extends CI_Model {
         $this->load->library('DbUtil');
     }
     
-
+    /**
+     * 用户有新注册slot id时触发
+     */
     public function syncWhenAdSlotIdRegist($app_id, $slot_id, $slot_style, $arrUpstreamSlotIdsForApp) {
         if (empty($app_id)
             || empty($slot_style)
@@ -34,7 +36,7 @@ class SyncSdkMediaInfo extends CI_Model {
             'select' => 'app_id_map',
             'where' => "app_id='" . $app_id . "'",
         ];
-        $arrRes = $this->dbutil->setMedia($arrSelect);
+        $arrRes = $this->dbutil->getMedia($arrSelect);
         if (empty($arrRes[0])
             || empty($arrRes[0]['app_id_map'])) {
             return [];
@@ -44,6 +46,7 @@ class SyncSdkMediaInfo extends CI_Model {
         // $arrUpstreamSlotIdsForApp 结构参见 model/adslot/InsertAdslot.php distributePreSlotId 方法 
         $arrTmp = [];
         foreach ($arrUpstreamSlotIdsForApp as $arrUpstreamSlotid) {
+            // 根据app_id_map 过滤display_strategy中未过审的上游
             if (in_array($arrUpstreamSlotid['upstream'], array_keys($arrSlotStrategy))) {
                 $arrTmp['strategy'][$arrUpstreamSlotid['upstream']] = $arrSlotStrategy[$arrUpstreamSlotid['upstream']];     
             }
@@ -53,6 +56,7 @@ class SyncSdkMediaInfo extends CI_Model {
 
         // 3 获取之前的 data_for_sdk表中此媒体的信息
         $arrSdkDataBefore = json_decode($this->dbutil->getSdkData($strAppId), true); 
+
         $arrSdkDataAfter[$slot_id] = $arrTmp;
         $arrUpdate = [
             'data' => json_encode($arrSdkDataAfter),

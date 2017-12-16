@@ -26,9 +26,14 @@ class StatDataModel extends CI_Model {
         }
 
         if($arrParams['type'] == 'Slot') {
-            $arrDailySelect['where'] = "date='". $arrParams['lastday']. "'
-                 AND app_id='". $arrParams['statId']."'
-                 AND account_id='". $arrParams['account_id']."'";
+            if($arrParams['statId'] == 'all') {
+                $arrDailySelect['where'] = "date='". $arrParams['lastday']. "'
+                    AND acct_id='". $arrParams['account_id']."'";
+            } else {
+                $arrDailySelect['where'] = "date='". $arrParams['lastday']. "'
+                    AND app_id='". $arrParams['statId']."'
+                    AND acct_id='". $arrParams['account_id']."'";
+            }
         }
 
         $method = $arrParams['method'];
@@ -97,7 +102,7 @@ class StatDataModel extends CI_Model {
         } else if($arrParams['type'] == 'Slot') {
             $arrSelect['where'] = "date>='" .$arrParams['startDate']. "'
                 AND date<='".$arrParams['endDate']."'
-                AND slot_id= '".$arrParams['statId']."'";
+                AND user_slot_id= '".$arrParams['statId']."'";
         }
         $method = $arrParams['method'];
         $arrRes = $this->dbutil->$method($arrSelect);
@@ -140,17 +145,31 @@ class StatDataModel extends CI_Model {
             }
 
             if($arrParams['type'] == 'Slot') {
-                $arrSelect['where'] = "date='". $arrParams['lastday']. "'
-                    AND app_id='". $arrParams['statId']."'
-                    AND account_id='". $arrParams['account_id']."'";
+                if($arrParams['statId'] == 'all') {
+                    $arrSelect['where'] = "date='". $arrParams['lastday']. "'
+                        AND acct_id='". $arrParams['account_id']."'";
+                } else {
+                    $arrSelect['where'] = "date='". $arrParams['lastday']. "'
+                        AND app_id='". $arrParams['statId']."'
+                        AND acct_id='". $arrParams['account_id']."'";
+                }
             }
         } else {
-            $arrSelect = [
-                'select' => 'count(*) as total',
-                'where' => "date>'" .$arrParams['startDate']. "'
-                     AND date< '".$arrParams['endDate']."'
-                     AND account_id='". $arrParams['account_id']."'",
-            ];
+            if($arrParams['type'] == 'Slot') {
+                $arrSelect = [
+                    'select' => 'count(*) as total',
+                    'where' => "date>'" .$arrParams['startDate']. "'
+                        AND date< '".$arrParams['endDate']."'
+                        AND acct_id='". $arrParams['account_id']."'",
+                 ];
+            } else {
+                $arrSelect = [
+                    'select' => 'count(*) as total',
+                    'where' => "date>'" .$arrParams['startDate']. "'
+                        AND date< '".$arrParams['endDate']."'
+                        AND account_id='". $arrParams['account_id']."'",
+                    ];
+            }
         }
         $method = $arrParams['method'];
         $arrRes = $this->dbutil->$method($arrSelect);

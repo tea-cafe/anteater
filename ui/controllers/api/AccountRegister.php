@@ -64,8 +64,8 @@ class AccountRegister extends MY_Controller {
             $val = $this->security->xss_clean($val);
         }
         $arrPostParams['passwd'] = md5($arrPostParams['passwd']);
-
         unset($arrPostParams['confirm']);
+        
         // 入库
         $this->load->model('Account');
         $arrRes = $this->Account->insertAccountBaseInfo($arrPostParams);

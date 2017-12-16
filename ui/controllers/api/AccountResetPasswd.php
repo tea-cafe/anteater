@@ -30,8 +30,9 @@ class AccountResetPasswd extends MY_Controller{
 	}
 
 	public function CheckCode(){
-        //$VerifyCode = $this->input->post('verifycode',true);
-		//$email = $this->input->post('email',true);
+        //$arrPostParams = json_decode(file_get_contents('php://input'), true);
+        //$VerifyCode = $arrPostParams['verifycode'];
+		//$email = $arrPostParams['email'];
 		$VerifyCode = $this->input->get('verifycode',true);
 		$email = $this->input->get('email',true);
 
@@ -53,7 +54,7 @@ class AccountResetPasswd extends MY_Controller{
 		    
 			$RdsValue['strToken'] = $strToken;
 			$this->redisutil->set($RdsKey,serialize($RdsValue));
-			$this->redisutil->expire($RdsKey,60*5);
+			$this->redisutil->expire($RdsKey,60*60);
 			return $this->outJson($data,ErrCode::OK,'验证成功');
         }else{
 			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'验证码错误');
@@ -61,9 +62,11 @@ class AccountResetPasswd extends MY_Controller{
 	}
 
 	public function ModifyPwd(){
-		//$email = $this->input->post('email',true);
-		//$newPwd = $this->input->post('newpwd',true);
-		//$confirmPwd = $this->input->post('confirmpwd',true);
+        //$arrPostParams = json_decode(file_get_contents('php://input'), true);
+		//$email = $arrPostParams['email'];
+		//$strToken = $arrPostParams['strToken'];
+		//$newPwd = $arrPostParams['newpwd'];
+		//$confirmPwd = $arrPostParams['confirmpwd'];
 		$email = $this->input->get('email',true);
 		$strToken = $this->input->get('strToken',true);
 		$newPwd = $this->input->get('password',true);
@@ -75,20 +78,24 @@ class AccountResetPasswd extends MY_Controller{
 		
 		if($newPwd !== $confirmPwd){
 			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'密码输入不一致');
-		}
+        }
+
 		$this->load->library("RedisUtil");
 		$RdsKey = 'ResetPwd_'.$email;
 		$RdsValue = $this->redisutil->get($RdsKey);
 		$RdsValue = unserialize($RdsValue);
-		if($RdsValue['strToken'] == $strToken){
+        
+        if($RdsValue['strToken'] == $strToken){
 			$this->load->model('Account');
 			$result = $this->Account->UpdatePwd($email,$newPwd,$confirmPwd);
 			if($result){
-			    return $this->outJson('',ErrCode::OK,'密码重置成功');
+                $this->redisutil->delete($RdsKey);
+                return $this->outJson('',ErrCode::OK,'密码重置成功');
 			}else{
 			    return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'密码重置失败');
 			}
 		}else{
+            $this->redisutil->delete($RdsKey);
 			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'请重新获取验证码');
 		}
 	}
