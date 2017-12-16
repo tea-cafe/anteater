@@ -55,18 +55,30 @@ class SyncSdkMediaInfo extends CI_Model {
         }
 
         // 3 获取之前的 data_for_sdk表中此媒体的信息
-        $arrSdkDataBefore = json_decode($this->dbutil->getSdkData($strAppId), true); 
-
-        $arrSdkDataAfter[$slot_id] = $arrTmp;
-        $arrUpdate = [
-            'data' => json_encode($arrSdkDataAfter),
+        $arrSelcet = [
+            'select' => 'app_id,data',
             'where' => "app_id='" . $app_id . "'",
         ];
-        $arrRes = $this->dbutil->udpSdkData($arrUpdate);
-        if ($arrRes['code'] !== 0) {
+        $arrDataForSdk = $this->dbutil->getSdkData($arrSelcet);
+        if ($arrDataForSdk === false) {
+            return false;
+        }
+        if (!empty($arrDataForSdk)
+            && !empty($arrDataForSdk[0]['data'])) {
+            $arrSdkDataBefore = json_decode($arrDataForSdk[0]['data'], true); 
+        }
+        if (empty($arrSdkDataBefore)) {
+            $arrSdkDataBefore = [];
+        }
+        $arrSdkDataAfter = $arrSdkDataBefore;
+    
+        $arrSdkDataAfter[$slot_id] = $arrTmp;
+
+        $sql = 'INSERT INTO data_for_sdk(app_id,data,update_time) VALUES(\'' . $app_id . "','" . json_encode($arrSdkDataAfter) . "'," . time() . ') ON DUPLICATE KEY UPDATE data=VALUES(data),update_time=VALUES(update_time)';
+        $bolRes = $this->dbutil->query($sql);
+        if ($bolRes['code'] !==  true) {
             log_message('error', 'update data_for_sdk failed');
         }
-
     }
 
     private function getSdkMediaInfo($strAppId) {
@@ -75,7 +87,6 @@ class SyncSdkMediaInfo extends CI_Model {
             'where' => "app_id='" . $strAppId . "'",
         ];
         $arrRes = $this->dbutil->getSdkData($arrSelect);
-        var_dump($arrRes);exit;
     } 
 
 }

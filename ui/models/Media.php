@@ -76,7 +76,7 @@ class Media extends CI_Model {
         $this->load->library('DbUtil');
         $arrSelect = [
             'select' => 'app_id,media_name,media_platform,default_valid_style',
-            'where' => 'check_status=3',
+            'where' => "account_id='" . $strAccountId . "' AND check_status=3",
         ];
         $arrRes = $this->dbutil->getMedia($arrSelect);
         $arrList = [];

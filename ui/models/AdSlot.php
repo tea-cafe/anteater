@@ -134,10 +134,8 @@ class AdSlot extends CI_Model {
         }
 
         // 格式化数据，插入data_for_sdk
-        // TODO
         $this->load->model('SyncSdkMediaInfo');
         $this->SyncSdkMediaInfo->syncWhenAdSlotIdRegist($arrParams['app_id'], $arrParams['slot_id'], $arrParams['slot_style'], $arrSlotIdsForApp);
-
         return true;
     }
 
