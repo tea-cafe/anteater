@@ -74,7 +74,7 @@ class AdSlot extends CI_Model {
      */
     public function getAllSlotTypeList($strSlotType) {
         $arrSelect = [
-            'select' => 'slot_style_id,slot_style,img,size',
+            'select' => 'slot_style,img,size',
             'where' => "slot_frozen_status=0 AND slot_type='" . $strSlotType . "'",
         ];
         $arrRes = $this->dbutil->getAdslotstyle($arrSelect);  
@@ -135,8 +135,8 @@ class AdSlot extends CI_Model {
 
         // 格式化数据，插入data_for_sdk
         // TODO
-        //$this->load->model('SyncSdkMediaInfo');
-        //$this->SyncSdkMediaInfo->syncWhenAdSlotIdRegist($arrParams['app_id'], $arrParams['slot_id'], $arrParams['slot_style'], $arrSlotIdsForApp);
+        $this->load->model('SyncSdkMediaInfo');
+        $this->SyncSdkMediaInfo->syncWhenAdSlotIdRegist($arrParams['app_id'], $arrParams['slot_id'], $arrParams['slot_style'], $arrSlotIdsForApp);
 
         return true;
     }

@@ -10,11 +10,9 @@ class StatData extends MY_Controller {
      * type 取值Acct, Media, Slot
      */
     public function getStatSumDataList() {//{{{//
-        /**
         if (empty($this->arrUser)) {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN);
         }
-        **/
         $arrParams = $this->input->get(NULL, TRUE);
         if(empty($arrParams['startDate'])
             || empty($arrParams['endDate'])
@@ -23,11 +21,11 @@ class StatData extends MY_Controller {
             || !in_array($arrParams['type'], ['Media', 'Slot'])) {
             return $this->outJson([], ErrCode::ERR_INVALID_PARAMS);
         }
-        $arrParams['pn'] = empty($arrParams['pn']) ? 1 : $arrParams['pn'];
-        $arrParams['rn'] = empty($arrParams['rn']) ? 10 : $arrParams['rn'];
+        $arrParams['pn'] = empty($arrParams['currentPage']) ? 1 : $arrParams['currentPage'];
+        $arrParams['rn'] = empty($arrParams['pageSize']) ? 10 : $arrParams['pageSize'];
         $arrParams['method'] = 'getUsr'.$arrParams['type'].'Sum';
-        $arrParams['lastday'] = '2017-12-31';//date("Y-m-d",strtotime("-1 day"));
-        $arrParams['account_id'] = 'c595943825a7ca8b4777d186befc49cb';//$this->arrUser['account_id'];
+        $arrParams['lastday'] = $arrParams['endDate'];//date("Y-m-d",strtotime("-1 day"));
+        $arrParams['account_id'] = $this->arrUser['account_id'];
 
         $arrList = $this->StatDataModel->getSumDataList($arrParams);
         return $arrList?$this->outJson($arrList, ErrCode::OK) : $this->outJson([], ErrCode::OK);
@@ -37,11 +35,9 @@ class StatData extends MY_Controller {
      * 获取daily数据列表
      */
     public function getStatDailyDataList() {//{{{//
-        /**
         if (empty($this->arrUser)) {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN);
         }
-        **/
         $arrParams = $this->input->get(NULL, TRUE);
         if(empty($arrParams['startDate'])
             || empty($arrParams['endDate'])
@@ -50,8 +46,8 @@ class StatData extends MY_Controller {
             || !in_array($arrParams['type'], ['Media', 'Slot'])) {
             return $this->outJson([], ErrCode::ERR_INVALID_PARAMS);
         }
-        $arrParams['pn'] = empty($arrParams['pn']) ? 1 : $arrParams['pn'];
-        $arrParams['rn'] = empty($arrParams['rn']) ? 10 : $arrParams['rn'];
+        $arrParams['pn'] = empty($arrParams['currentPage']) ? 1 : $arrParams['currentPage'];
+        $arrParams['rn'] = empty($arrParams['pageSize']) ? 10 : $arrParams['pageSize'];
         $arrParams['method'] = 'getUsr'.$arrParams['type'].'Sum';
         $arrParams['account_id'] = $this->arrUser['account_id'];
 

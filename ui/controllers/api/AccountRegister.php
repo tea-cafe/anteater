@@ -48,7 +48,7 @@ class AccountRegister extends MY_Controller {
     }
 
     /**
-     * 基本信息修改
+     * 账号注册
      */
     public function index() {//{{{//
         $arrPostParams = json_decode(file_get_contents('php://input'), true);
@@ -64,8 +64,8 @@ class AccountRegister extends MY_Controller {
             $val = $this->security->xss_clean($val);
         }
         $arrPostParams['passwd'] = md5($arrPostParams['passwd']);
-
         unset($arrPostParams['confirm']);
+        
         // 入库
         $this->load->model('Account');
         $arrRes = $this->Account->insertAccountBaseInfo($arrPostParams);

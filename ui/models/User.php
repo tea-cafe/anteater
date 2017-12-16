@@ -74,7 +74,7 @@ class User extends CI_Model {
      *
 	 */
     public function clearLoginInfo() {
-        setcookie('SZSHUO', '', time()-1, '/');
+        setcookie('XDL_SSP', '', time()-1, '/');
         $_SESSION = [];
         return true;
     }

@@ -2,13 +2,13 @@
 	class Finance extends CI_Model{
 		public function __construct(){
 			parent::__construct();
+            $this->load->library("DbUtil");
 		}
-
 
         /**
          * 获取提现列表
          */
-		public function getTakeMoneyList($accId,$startDate,$endDate,$pageSize,$currentPage,$status){
+		public function getTakeMoneyList($accId,$startDate,$endDate,$pageSize,$currentPage){
 			if(empty($status)){
 				$statusStr = '';
 			}else{
@@ -20,15 +20,14 @@
 			}else{
 				$currentPage = ($currentPage - 1) * $pageSize;
             }
-
+            
             /* 提现单查询 */
 			$listWhere = array(
 				'select' => 'id,time,account_id,number,money,status',
 				'where' => 'time > '.$startDate.' AND time < '.$endDate.' AND account_id = "'.$accId.'"'.$statusStr,
 				'order_by' => 'time desc',
-				'limit' => empty($pageSize) || empty($currentPage) ? '0,20' : $currentPage.','.$pageSize,
+				'limit' => $currentPage.','.$pageSize,
             );
-			$this->load->library("DbUtil");
 			$tmrList = $this->dbutil->getTmr($listWhere);
 
             /* end */
@@ -44,7 +43,7 @@
             $paginAtion = array(
                 'current' => empty($currentPage) ? '1':$currentPage,
                 'pageSize' => $pageSize,
-                'total' => $totalCount[0]['count(*)'],
+                'total' => empty($totalCount[0]['count(*)']) ? '0' : $totalCount[0]['count(*)'],
             );
             /* end */
 
@@ -84,10 +83,9 @@
 			$listWhere = array(
 				'select' => 'time,account_id,app_id,media_name,media_platform,money,status',
 				'where' => 'account_id = "'.$accId.'"',
-				'order_by' => 'time',
-				'limit' => empty($pageSize) || empty($currentPage) ? '0,20' : $currentPage.','.$pageSize,
+				'order_by' => 'time desc',
+				'limit' => $currentPage.','.$pageSize,
             );
-			$this->load->library("DbUtil");
 			$data = $this->dbutil->getMonthly($listWhere);
 
             foreach($data as $k => $v){
@@ -108,7 +106,7 @@
             $paginAtion = array(
                 'current' => empty($currentPage) ? '1':$currentPage,
                 'pageSize' => $pageSize,
-                'total' => $totalCount[0]['count(*)'],
+                'total' => empty($totalCount[0]['count(*)']) ? '0' : $totalCount[0]['count(*)'],
             );
 			$result['list'] = $data;
 			$result['pagination'] = $paginAtion;
@@ -123,7 +121,6 @@
 				'where' => 'account_id = "'.$accId.'" AND number = '.$number,
 			);
 
-			$this->load->library("DbUtil");
 			$data = $this->dbutil->getTmr($where);
 			
 			if(empty($data)){
@@ -145,7 +142,6 @@
 				'limit' => '0,'.$limit,
 			);
             
-            $this->load->library("DbUtil");
 			$data = $this->dbutil->getDaily($listWhere);
 
 			if(empty($data)){
@@ -166,7 +162,7 @@
             $paginAtion = array(
                 'current' => empty($currentPage) ? '1':$currentPage,
                 'pageSize' => $limit,
-                'total' => $totalCount[0]['count(*)'],
+                'total' => empty($totalCount[0]['count(*)']) ? '0' : $totalCount[0]['count(*)'],
             );
 			$result['list'] = $data;
 			$result['pagination'] = $paginAtion;
@@ -182,8 +178,8 @@
 				'select' => 'check_status',
 				'where' => 'account_id = "'.$accId.'"',
 			);
-			$this->load->library('DbUtil');
-			$status = $this->dbutil->getAccount($where);
+            
+            $status = $this->dbutil->getAccount($where);
 			$status = $status[0]['check_status'];
 			
 			if($status === '2'){
@@ -202,7 +198,6 @@
 				'where' => 'account_id = "'.$accId.'"',
 			);
 
-			$this->load->library('DbUtil');
 			$result = $this->dbutil->getAccBalance($where);
 			
 			if(empty($result)){
@@ -224,7 +219,6 @@
 				'select' => 'id,time,app_id,media_name,media_platform,money',
 				'where' => 'account_id = "'.$accId.'" AND status = "0"',
             );
-			$this->load->library('DbUtil');
 			$tmpList = $this->dbutil->getMonthly($billWhere);
 			
 			foreach($tmpList as $key => $value){
@@ -297,16 +291,34 @@
 			);
 
 			$result['TmrStatus'] = $this->dbutil->sqlTrans($params);
-            if($result['TmrStatus']){
-                $TmrWhere = array(
-                    'select' => 'id,time,account_id,number,money,status',
-                    'where' => 'account_id = "'.$accId.'"',
-                    'order_by' => 'time desc',
-                    'limit' => '0,20',
-                );
+            
+            $TmrWhere = array(
+                'select' => 'id,time,account_id,number,money,status',
+                'where' => 'account_id = "'.$accId.'"',
+                'order_by' => 'time desc',
+                'limit' => '0,20',
+            );
 
-                $result['TmrList'] = $this->dbutil->getTmr($TmrWhere);
-            }
+
+            /* 分页信息查询 */
+			$totalWhere = array(
+				'select' => 'count(*)',
+                'where' => 'account_id = "'.$accId.'"',
+			);
+
+			$totalCount = $this->dbutil->getTmr($totalWhere);
+            
+            $paginAtion = array(
+                'current' => '1',
+                'pageSize' => '20',
+                'total' => empty($totalCount[0]['count(*)']) ? '0' : $totalCount[0]['count(*)'],
+            );
+            /* end */
+
+            $result['data']['list'] = $this->dbutil->getTmr($TmrWhere);
+            $result['data']['balance'] = '0.00';
+            $result['data']['finance_status'] = '2';
+			$result['data']['pagination'] = $paginAtion;
 
             return $result;
 		}

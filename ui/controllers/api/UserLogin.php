@@ -1,8 +1,8 @@
 <?php
 /**
  * 用户登录接口
- * szishuo
  */
+
 class UserLogin extends MY_Controller {
 
     public function __construct() {
@@ -16,10 +16,11 @@ class UserLogin extends MY_Controller {
         $arrPostParams = json_decode(file_get_contents('php://input'), true);
         $strUserName = $arrPostParams['username'];
         $strPasswd = $arrPostParams['passwd'];
-        if (empty($strUserName)
-            || empty($strPasswd)) {
+        
+        if (empty($strUserName) || empty($strPasswd)) {
             return $this->outJson('', ErrCode::ERR_LOGIN_FAILED);
         }
+
         $this->load->model('User');
         $bolRes = $this->User->doLogin($strUserName, $strPasswd);
         if ($bolRes) {
@@ -28,17 +29,21 @@ class UserLogin extends MY_Controller {
         return $this->outJson('', ErrCode::ERR_LOGIN_FAILED);
     }
 
-    /* 退出登陆 */
+    /**
+     * 退出登陆
+     */
     public function logout(){
         $res = $this->User->clearLoginInfo();
         if($res){
-            return $this->outJson('',ErrCode::OK,'退出登陆');
+            return $this->outJson('',ErrCode::OK,'退出登录');
         }else{
             return $this->outJson('', ErrCode::ERR_INVALID_PARAMS,'退出失败'); 
         }
     }
 
-    /* 检测登陆状态*/
+    /**
+     * 检测登陆状态
+     */
     public function checkStatus(){
         if(empty($this->arrUser)){
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN);

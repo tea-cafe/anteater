@@ -8,9 +8,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class InCome extends MY_Controller{
 	public function __construct(){
 		parent::__construct();
+		$this->load->model("Finance");
 	}
 
-    /* 月账单 */
+    /**
+     *月账单
+     */
 	public function monthlyBill(){
         if(empty($this->arrUser)){
             return $this->outJson('',ErrCode::ERR_NOT_LOGIN);
@@ -23,18 +26,18 @@ class InCome extends MY_Controller{
         $currentPage = empty($currentSize) ? 1 : $currentPage;
         
         $accId = $this->arrUser['account_id'];
-        $email = $this->arrUser['email'];
-		$this->load->model("Finance");
 		$result = $this->Finance->getMonthlyBill($accId,$pageSize,$currentPage);
         
         if(empty($result) || count($result) == 0){
-			return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'暂无月账单');
+			return $this->outJson('',ErrCode::OK,'暂无月账单');
 		}
 
 		return $this->outJson($result,ErrCode::OK,'月账单列表获取成功');
     }
 
-    /* 日账单 */
+    /**
+     *日账单
+     */
 	public function dailyBill(){
         if(empty($this->arrUser)){
             return $this->outJson('',ErrCode::ERR_NOT_LOGIN);
@@ -48,8 +51,8 @@ class InCome extends MY_Controller{
 		if(empty($appid) || empty($startDate) || $startDate == -1){
             return $this->outJson('',ErrCode::ERR_INVALID_PARAMS);
 		}
-		$this->load->model("Finance");
-		$result = $this->Finance->getDailyBillList($appid,$startDate,$endDate,$dayNumber);
+        
+        $result = $this->Finance->getDailyBillList($appid,$startDate,$endDate,$dayNumber);
 		if(empty($result) || count($result) == 0){
             return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'获取日账单失败');
 		}

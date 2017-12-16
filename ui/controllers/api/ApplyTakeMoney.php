@@ -42,7 +42,7 @@ class ApplyTakeMoney extends MY_Controller{
         $result = $this->Finance->confirmTakeMoney($accId,$email,$accMoney['money']);
         
         if($result['TmrStatus']){
-            return $this->outJson($result['TmrList'],ErrCode::OK,'提现成功,待审核');
+            return $this->outJson($result['data'],ErrCode::OK,'提现成功,待审核');
         }else{
             return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'提现失败,请重新申请提现');
         }
