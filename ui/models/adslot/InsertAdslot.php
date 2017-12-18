@@ -57,7 +57,7 @@ class InsertAdslot extends CI_Model {
      * @param array $arrAppIdMap check分配的slotid是否跟上游对的上
      * @return array 分配的上游slot_id列表
      */
-    public function distributePreSlotId($arrPreSlotIds, $intSlotStyle, $intSlotSize, $strAppId, $arrAppIdMap) {
+    public function distributePreSlotId($arrPreSlotIds, $intSlotStyle, $intSlotSize, $strAppId, $strAccountId, $intSlotId, $arrAppIdMap, $arrParams) {
         $arrSlotIdsForApp = [];
         foreach($arrPreSlotIds as $upstream => &$arrType){
             if (!array_key_exists($upstream, $arrAppIdMap)) {
@@ -88,26 +88,54 @@ class InsertAdslot extends CI_Model {
             return [];
         }
 
-        // 回写 pre_slotid
-        $arrUpdate = [
-            'data' => json_encode($arrPreSlotIds, JSON_UNESCAPED_UNICODE),
-            'where' => "app_id='" . $strAppId . "'",
+        $sqlInsertSlotIdMap = $this->InsertAdslot->getInsertSlotIdMapSql(
+            $arrSlotIdsForApp, 
+            $strAccountId, 
+            $intSlotId, 
+            $strAppId
+        );
+        $arrParams['upstream_adslots'] = json_encode($arrSlotIdsForApp);
+        $arrParams['create_time'] = time();
+        $arrParams['update_time'] = time();
+
+        $arrTrans = [
+            0 => [
+                'type' => 'update',
+                'tabName' => 'preadslot',
+                'where' => "app_id='" . $strAppId . "'",
+                'data' => [
+                    'data' => json_encode($arrPreSlotIds, JSON_UNESCAPED_UNICODE),
+                    'update_time' => time(),
+                ],
+            ], 
+            1 => [
+                'type' => 'query',
+                'tabName' => 'adslotmap',
+                'sql' => $sqlInsertSlotIdMap,
+            ],
+            2 => [
+                'type' => 'insert',
+                'tabName' => 'adslot',
+                'data' => $arrParams, 
+            ],
         ];
-        $arrRes = $this->dbutil->udpPreadslot($arrUpdate);
-        if (!$arrRes
-            || $arrRes['code'] !== 0) {
-            // slot_id 分配后回写失败
-            ErrCode::$msg = '广告位申请已超限，请联系工作人员';
-            return [];
+
+		$bolRes = $this->dbutil->sqlTrans($arrTrans);
+        if ($bolRes === false) {
+            ErrCode::$msg = '广告位申请失败，请重试或联系工作人员';
         }
-        return $arrSlotIdsForApp;
+
+        // 格式化数据，插入data_for_sdk
+        $this->load->model('SyncSdkMediaInfo');
+        $this->SyncSdkMediaInfo->syncWhenAdSlotIdRegist($strAppId, $intSlotId, $intSlotStyle, $arrSlotIdsForApp);
+        return true;
     }
 
     /**
-     * step 4: 插入 slot_map记录
+     * 生成插入 slot_map记录 sql
      *
      */
-    public function insertSlotMap($arrSlotIdsForApp, $strAccountId, $intSlotId, $strAppId) { 
+    private function getInsertSlotIdMapSql($arrSlotIdsForApp, $strAccountId, $intSlotId, $strAppId) { 
         $sql = 'INSERT INTO adslot_map(account_id,slot_id,app_id,ad_upstream,upstream_slot_id,create_time,update_time) VALUES';
         foreach($arrSlotIdsForApp as $val) {
             $sql .= "('" . $strAccountId . "'" 
@@ -119,12 +147,7 @@ class InsertAdslot extends CI_Model {
                 . "," . time() . "),";
         }
         $sql = substr($sql, 0, -1);
-        $bolRes = $this->dbutil->query($sql);
-        if (!$bolRes) {
-            // slot_id 映射表更新失败
-            ErrCode::$msg = '广告位申请已超限，请联系工作人员';
-        }
-        return $bolRes;
+        return $sql;
     }
 
 

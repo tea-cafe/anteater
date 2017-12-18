@@ -43,7 +43,6 @@ class SyncSdkMediaInfo extends CI_Model {
         }
         $arrAppIdMap = json_decode($arrRes[0]['app_id_map'], true);
 
-        // $arrUpstreamSlotIdsForApp 结构参见 model/adslot/InsertAdslot.php distributePreSlotId 方法 
         $arrTmp = [];
         foreach ($arrUpstreamSlotIdsForApp as $arrUpstreamSlotid) {
             // 根据app_id_map 过滤display_strategy中未过审的上游
@@ -76,9 +75,10 @@ class SyncSdkMediaInfo extends CI_Model {
 
         $sql = 'INSERT INTO data_for_sdk(app_id,data,update_time) VALUES(\'' . $app_id . "','" . json_encode($arrSdkDataAfter) . "'," . time() . ') ON DUPLICATE KEY UPDATE data=VALUES(data),update_time=VALUES(update_time)';
         $bolRes = $this->dbutil->query($sql);
-        if ($bolRes['code'] !==  true) {
-            log_message('error', 'update data_for_sdk failed');
+        if ($bolRes ===  false) {
+            log_message('error', 'update data_for_sdk app_id=[' . $app_id . '] failed');
         }
+        return $bolRes;
     }
 
     private function getSdkMediaInfo($strAppId) {

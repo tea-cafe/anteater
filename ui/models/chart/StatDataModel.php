@@ -21,11 +21,13 @@ class StatDataModel extends CI_Model {
             'limit' => $rn*($pn-1) . ',' . $rn,
         ];
         if($arrParams['type'] == 'Media') {
+            $arrDailySelect['select'] = 'app_id,media_name,post_exposure_num,post_click_num,post_profit,click_rate,ecpm,date,create_time';
             $arrDailySelect['where'] = "date='" .$arrParams['lastday']. "'
                 AND account_id='". $arrParams['account_id']."'";
         }
 
         if($arrParams['type'] == 'Slot') {
+            $arrDailySelect['select'] = 'user_slot_id,app_id,media_name,post_exposure_num,post_click_num,post_profit,click_rate,ecpm,date,create_time';
             if($arrParams['statId'] == 'all') {
                 $arrDailySelect['where'] = "date='". $arrParams['lastday']. "'
                     AND acct_id='". $arrParams['account_id']."'";

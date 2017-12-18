@@ -303,6 +303,13 @@ class DbUtil {
                         return false;
 					}
 					break;
+				case 'query':
+					$this->CI->db->query($value['sql']);
+                    if ($this->CI->db->affected_rows() === 0) {
+						$this->CI->db->trans_rollback();
+                        return false;
+					}
+					break;
 			}
 		}
 

@@ -102,41 +102,17 @@ class AdSlot extends CI_Model {
             return false;
         }
 
-        $arrSlotIdsForApp = $this->InsertAdslot->distributePreSlotId(
+        $bolRes = $this->InsertAdslot->distributePreSlotId(
             $arrPreSlotIds,
             intval($arrParams['slot_style']),
             intval($arrParams['slot_size']), 
             $arrParams['app_id'],
-            $arrAppIdMap
-        );
-        if (empty($arrSlotIdsForApp)) {
-            return false; 
-        }
-        
-        // 更新slot_id map
-        $bolRes = $this->InsertAdslot->insertSlotMap(
-            $arrSlotIdsForApp, 
             $arrParams['account_id'], 
             $arrParams['slot_id'],
-            $arrParams['app_id']
+            $arrAppIdMap,
+            $arrParams
         );
-        if (!$bolRes) {
-            return false;
-        }
-
-        $arrParams['upstream_adslots']= json_encode($arrSlotIdsForApp);
-        // 插入adslot_info
-        $arrRes = $this->dbutil->setAdslot($arrParams);
-        if (!$arrRes
-            || $arrRes['code'] !== 0) {
-            ErrCode::$msg = '广告位申请失败，请重试或联系工作人员';
-            return false;
-        }
-
-        // 格式化数据，插入data_for_sdk
-        $this->load->model('SyncSdkMediaInfo');
-        $this->SyncSdkMediaInfo->syncWhenAdSlotIdRegist($arrParams['app_id'], $arrParams['slot_id'], $arrParams['slot_style'], $arrSlotIdsForApp);
-        return true;
+        return $bolRes;
     }
 
 }
