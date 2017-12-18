@@ -143,6 +143,9 @@ class DbUtil {
         }
         $objRes = $this->CI->db->get($strTabName);
         //echo $this->CI->db->last_query();
+        if ($objRes === false) {
+            return false;
+        }
         if (empty($objRes)) {
             return [];
         }
