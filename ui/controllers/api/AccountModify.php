@@ -51,7 +51,10 @@ class AccountModify extends MY_Controller {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN);
         }
 
-        $arrPostParams = json_decode(file_get_contents('php://input'), true);
+        //$arrPostParams = json_decode(file_get_contents('php://input'), true);
+        $arrPostParams['email'] = $this->input->get('email', true);
+        $arrPostParams['phone'] = $this->input->get('phone', true);
+        $arrPostParams['contact_person'] = $this->input->get('contact_person', true);
         unset($arrPostParams['company']);
         if (empty($arrPostParams) || count($arrPostParams) !== count(self::VALID_ACCOUNT_BASE_KEY)) {
             return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 

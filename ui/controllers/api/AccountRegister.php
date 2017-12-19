@@ -1,7 +1,6 @@
 <?php
 /**
  * 用户注册接口
- * szishuo
  */
 class AccountRegister extends MY_Controller {
 
