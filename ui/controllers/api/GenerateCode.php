@@ -19,7 +19,7 @@ class GenerateCode extends MY_Controller {
         $app_id = $this->input->get('app_id', true);
         $slot_id = $this->input->get('slot_id', true);
         $this->load->model('Media');
-        $arrRes = $this->Media->getAppSecretAndAppIdMap($app_id);
+        $arrRes = $this->Media->getAppSecretAndAppIdMap($this->arrUser['account_id'],$app_id);
         if (!empty($arrRes['app_secret'])
             && !empty($arrRes['app_id_map'])) {
             $arrAppIdMap = json_decode($arrRes['app_id_map'], true);

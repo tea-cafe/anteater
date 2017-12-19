@@ -9,10 +9,10 @@ class Media extends CI_Model {
     /**
      *
      */
-    public function getAppSecretAndAppIdMap($strAppId) {
+    public function getAppSecretAndAppIdMap($strAccountId,$strAppId) {
         $arrSelect = [
             'select' => 'app_id_map,app_secret',
-            'where' => "app_id='" . $strAppId . "'",
+            'where' => "account_id='" . $strAccountId . "' AND app_id='" . $strAppId . "'",
         ]; 
         $arrRes = $this->dbutil->getMedia($arrSelect);
         if (!empty($arrRes[0])) {
@@ -25,10 +25,10 @@ class Media extends CI_Model {
      * @param string $app_id
      * @return array
      */
-    public function getMediaInfo($app_id) {
+    public function getMediaInfo($strAccountId, $strAppId) {
         $arrSelect = [
             'select' => 'app_id,media_name,media_platform,app_detail_url,app_package_name,app_verify_url,app_secret,bg_verify_url,check_status,media_keywords,media_desc,url,app_platform,industry,media_delivery_method',
-            'where' => "app_id='" . $app_id . "'",
+            'where' => "account_id='" . $strAccountId . "' AND app_id='" . $strAppId . "'",
         ]; 
         $arrRes = $this->dbutil->getMedia($arrSelect);
         if (!empty($arrRes[0])) {

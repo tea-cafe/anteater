@@ -18,7 +18,7 @@ class MediaInfo extends MY_Controller {
 
         $app_id = $this->input->get('app_id', true);
         $this->load->model('Media');
-        $arrRes = $this->Media->getMediaInfo($app_id);
+        $arrRes = $this->Media->getMediaInfo($this->arrUser['account_id'], $app_id);
         if ($arrRes) {
             return $this->outJson($arrRes, ErrCode::OK, '');
         }
