@@ -59,9 +59,22 @@ class AdSlot extends CI_Model {
         }
         $arrRes = $this->dbutil->getAdSlot($arrSelect);
         if (!empty($arrRes[0])) {
+
+            // 获取media_info的app_delivery_method
+            $arrSelect = [
+                'select' => 'app_id,media_delivery_method',
+                'where' => "account_id='" . $strAccountId . "'",
+            ];
+            $arrMediaInfo = $this->dbutil->getMedia($arrSelect);
+            $arrMediaAppId2DeliverMethod = [];
+            foreach ($arrMediaInfo as $val) {
+                $arrMediaAppId2DeliverMethod[$val['app_id']] = $val['media_delivery_method']; 
+            }
+
             $this->config->load('style2platform_map');
             $arrStyleMap = $this->config->item('style2platform_map');
             foreach ($arrRes as &$arrSlot) {
+                $arrSlot['media_delivery_method'] = $arrMediaAppId2DeliverMethod[$arrSlot['app_id']];
                 foreach ($arrStyleMap[$arrSlot['slot_style']] as $key => $val) {
                     if ($key === 'des') {
                         continue;
