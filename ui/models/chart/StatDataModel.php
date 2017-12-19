@@ -27,7 +27,7 @@ class StatDataModel extends CI_Model {
         }
 
         if($arrParams['type'] == 'Slot') {
-            $arrDailySelect['select'] = 'user_slot_id,app_id,media_name,post_exposure_num,post_click_num,post_profit,click_rate,ecpm,date,create_time';
+            $arrDailySelect['select'] = 'user_slot_id,slot_name,app_id,post_exposure_num,post_click_num,post_profit,click_rate,ecpm,date,create_time';
             if($arrParams['statId'] == 'all') {
                 $arrDailySelect['where'] = "date='". $arrParams['lastday']. "'
                     AND acct_id='". $arrParams['account_id']."'";
@@ -50,6 +50,11 @@ class StatDataModel extends CI_Model {
             'where' => "date>='" .$arrParams['startDate']. "' AND date<='".$arrParams['endDate']."'",
             'order_by' => 'date ASC',
         ];
+        if($arrParams['type'] == 'Media') {
+            $arrSelect['where'] .= " AND account_id='".$arrParams['account_id']."'";
+        } elseif ($arrParams['type'] == 'Slot') {
+            $arrSelect['where'] .= " AND acct_id='".$arrParams['account_id']."'";
+        }
         $method = $arrParams['method'];
         $arrRes = $this->dbutil->$method($arrSelect);
         if(empty($arrRes[0])) {
@@ -97,10 +102,12 @@ class StatDataModel extends CI_Model {
                 AND date<='".$arrParams['endDate']."'
                 AND account_id= '".$arrParams['statId']."'";
         } else if($arrParams['type'] == 'Media') {
+            $arrDailySelect['select'] = 'app_id,media_name,post_exposure_num,post_click_num,post_profit,click_rate,ecpm,date,create_time';
             $arrSelect['where'] = "date>='" .$arrParams['startDate']. "'
                 AND date<='".$arrParams['endDate']."'
                 AND app_id= '".$arrParams['statId']."'";
         } else if($arrParams['type'] == 'Slot') {
+            $arrDailySelect['select'] = 'user_slot_id,slot_name,app_id,post_exposure_num,post_click_num,post_profit,click_rate,ecpm,date,create_time';
             $arrSelect['where'] = "date>='" .$arrParams['startDate']. "'
                 AND date<='".$arrParams['endDate']."'
                 AND user_slot_id= '".$arrParams['statId']."'";

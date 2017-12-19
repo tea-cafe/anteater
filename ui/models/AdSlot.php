@@ -7,17 +7,32 @@ class AdSlot extends CI_Model {
     }
 
     /**
-     * 
+     *
+     */
+    public function getUpstreamSlotId($intSlotId) {
+        $arrSelect = [
+            'select' => 'upstream_slot_id',
+            'where' => 'slot_id=' . $intSlotId,
+        ];
+        $arrRes = $this->dbutil->getAdslotmap($arrSelect);
+        if (empty($arrRes)) {
+            return '';
+        }
+        return $arrRes[0]['upstream_slot_id'];
+
+    }
+
+    /**
+     *
      */
     public function getAdSlotList($strAccountId, $pn = 1, $rn = 10, $strSlotName = '') {
-        $this->load->library('DbUtil');
         $arrSelect = [
             'select' => 'count(*) as total',
             'where' => "account_id='" . $strAccountId . "'",
             'order_by' => 'slot_style,update_time desc',
         ];
         if (!empty($strSlotName)) {
-            $arrSelect['where'] .= " AND slot_name like '%" . $strSlotName . "%'"; 
+            $arrSelect['where'] .= " AND slot_name like '%" . $strSlotName . "%'";
         }
         $arrRes = $this->dbutil->getAdSlot($arrSelect);
         if (empty($arrRes)) {
@@ -40,7 +55,7 @@ class AdSlot extends CI_Model {
             'limit' => $rn*($pn-1) . ',' . $rn,
         ];
         if (!empty($strSlotName)) {
-            $arrSelect['where'] .= " AND slot_name like '%" . $strSlotName . "%'"; 
+            $arrSelect['where'] .= " AND slot_name like '%" . $strSlotName . "%'";
         }
         $arrRes = $this->dbutil->getAdSlot($arrSelect);
         if (!empty($arrRes[0])) {
@@ -77,7 +92,7 @@ class AdSlot extends CI_Model {
             'select' => 'slot_style,img,size',
             'where' => "slot_frozen_status=0 AND slot_type='" . $strSlotType . "'",
         ];
-        $arrRes = $this->dbutil->getAdslotstyle($arrSelect);  
+        $arrRes = $this->dbutil->getAdslotstyle($arrSelect);
         return $arrRes;
     }
 
@@ -97,7 +112,7 @@ class AdSlot extends CI_Model {
         $arrParams['slot_id'] = $this->dbutil->getAutoincrementId('adslot');
 
         // 有多少个slot_style的上游，就从从预生成的slotid中分配几个和本站的slot_id对应，并插如映射记录到映射表
-        $arrPreSlotIds = $this->InsertAdslot->getPreSlotid($arrParams['app_id']); 
+        $arrPreSlotIds = $this->InsertAdslot->getPreSlotid($arrParams['app_id']);
         if (empty($arrPreSlotIds)) {
             return false;
         }
@@ -105,9 +120,9 @@ class AdSlot extends CI_Model {
         $bolRes = $this->InsertAdslot->distributePreSlotId(
             $arrPreSlotIds,
             intval($arrParams['slot_style']),
-            intval($arrParams['slot_size']), 
+            intval($arrParams['slot_size']),
             $arrParams['app_id'],
-            $arrParams['account_id'], 
+            $arrParams['account_id'],
             $arrParams['slot_id'],
             $arrAppIdMap,
             $arrParams

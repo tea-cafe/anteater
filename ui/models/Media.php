@@ -7,6 +7,21 @@ class Media extends CI_Model {
     }
 
     /**
+     *
+     */
+    public function getAppSecretAndAppIdMap($strAppId) {
+        $arrSelect = [
+            'select' => 'app_id_map,app_secret',
+            'where' => "app_id='" . $strAppId . "'",
+        ]; 
+        $arrRes = $this->dbutil->getMedia($arrSelect);
+        if (!empty($arrRes[0])) {
+            return $arrRes[0];
+        }
+        return [];
+    }
+
+    /**
      * @param string $app_id
      * @return array
      */
