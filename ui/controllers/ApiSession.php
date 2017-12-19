@@ -5,7 +5,7 @@ class ApiSession extends MY_Controller {
         parent::__construct();
     }
 
-    public function gen_session() {
+    public function genSession() {
 		$url = 'https://engine.lvehaisen.com/index/activity?appKey=%s&adslotId=%s&md=%s&timestamp=%s&nonce=%s&signature=%s';
         $arrParams = $this->input->get(NULL, true);
         if(count($arrParams) != 4 

@@ -9,17 +9,16 @@ class AdSlot extends CI_Model {
     /**
      *
      */
-    public function getUpstreamSlotId($intSlotId) {
+    public function getUpstreamSlotId($strAccountId, $intSlotId) {
         $arrSelect = [
             'select' => 'upstream_slot_id',
-            'where' => 'slot_id=' . $intSlotId,
+            'where' => 'slot_id=' . $intSlotId . " AND ad_upstream='" . "TUIA' AND account_id='" . $strAccountId . "'" ,
         ];
         $arrRes = $this->dbutil->getAdslotmap($arrSelect);
         if (empty($arrRes)) {
             return '';
         }
         return $arrRes[0]['upstream_slot_id'];
-
     }
 
     /**
@@ -62,19 +61,28 @@ class AdSlot extends CI_Model {
 
             // 获取media_info的app_delivery_method
             $arrSelect = [
-                'select' => 'app_id,media_delivery_method',
+                'select' => 'app_id,app_secret,app_id_map,media_delivery_method',
                 'where' => "account_id='" . $strAccountId . "'",
             ];
             $arrMediaInfo = $this->dbutil->getMedia($arrSelect);
             $arrMediaAppId2DeliverMethod = [];
             foreach ($arrMediaInfo as $val) {
-                $arrMediaAppId2DeliverMethod[$val['app_id']] = $val['media_delivery_method']; 
+                if (empty($val)
+                    || empty($val['media_delivery_method'])
+                    || empty($val['app_id_map'])) {
+                    continue;
+                }
+                $arrMediaAppId2DeliverMethod[$val['app_id']]['delivery_method'] = $val['media_delivery_method']; 
+                $arrMediaAppId2DeliverMethod[$val['app_id']]['app_secret'] = $val['app_secret'];
+                $arrMediaAppId2DeliverMethod[$val['app_id']]['app_id_map'] = @json_decode($val['app_id_map'], true);
             }
-
             $this->config->load('style2platform_map');
             $arrStyleMap = $this->config->item('style2platform_map');
             foreach ($arrRes as &$arrSlot) {
-                $arrSlot['media_delivery_method'] = $arrMediaAppId2DeliverMethod[$arrSlot['app_id']];
+                $arrSlot['media_delivery_method'] = $arrMediaAppId2DeliverMethod[$arrSlot['app_id']]['delivery_method'];
+                $arrSlot['app_secret'] = $arrMediaAppId2DeliverMethod[$arrSlot['app_id']]['app_secret'];
+                //TODO  目前只返回tuia 的 app id, 后续会根据类型来判断
+                $arrSlot['upid'] = isset($arrMediaAppId2DeliverMethod[$arrSlot['app_id']]['app_id_map']['TUIA']) ? $arrMediaAppId2DeliverMethod[$arrSlot['app_id']]['app_id_map']['TUIA'] : ''; 
                 foreach ($arrStyleMap[$arrSlot['slot_style']] as $key => $val) {
                     if ($key === 'des') {
                         continue;
@@ -89,7 +97,7 @@ class AdSlot extends CI_Model {
         return [
             'list' => $arrRes,
             'pagination' => [
-                'total' => $intCount,
+                'total' => intval($intCount),
                 'pageSize' => $rn,
                 'current' => $pn,
             ],

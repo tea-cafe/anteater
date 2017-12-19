@@ -1,7 +1,6 @@
 <?php
 /**
  * 用户注册接口
- * szishuo
  */
 class AccountModify extends MY_Controller {
 
@@ -42,8 +41,6 @@ class AccountModify extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('User');
-        $this->arrUser = $this->User->checkLogin();
     }
 
     /**
@@ -54,16 +51,13 @@ class AccountModify extends MY_Controller {
             return $this->outJson('', ErrCode::ERR_NOT_LOGIN);
         }
 
-        //$arrPostParams = json_decode(file_get_contents('php://input'), true);
-        //$arrPostParams = $this->input->post();
-        $arrPostParams = $this->input->get();
+        $arrPostParams = json_decode(file_get_contents('php://input'), true);
         unset($arrPostParams['company']);
         if (empty($arrPostParams) || count($arrPostParams) !== count(self::VALID_ACCOUNT_BASE_KEY)) {
             return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
         }
 
         $accId = $this->arrUser['account_id'];
-        // TODO 各种号码格式校验
         foreach ($arrPostParams as $key => &$val) {
             if(!in_array($key, self::VALID_ACCOUNT_BASE_KEY)) {
                 return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 

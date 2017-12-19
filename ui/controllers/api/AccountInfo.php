@@ -11,8 +11,6 @@ class AccountInfo extends MY_Controller {
      */
     public function __construct() {
         parent::__construct();
-        $this->load->model('User');
-        $this->arrUser = $this->User->checkLogin();
     }
 
 	/**

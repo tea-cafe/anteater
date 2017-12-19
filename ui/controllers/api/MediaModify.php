@@ -31,7 +31,6 @@ class MediaModify extends MY_Controller {
         }
 
         $arrPostParams = json_decode(file_get_contents('php://input'), true);
-        // TODO 各种号码格式校验
         foreach ($arrPostParams as $key => &$val) {
             if(!in_array($key, self::VALID_MEDIA_KEY)) {
                 return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
@@ -49,7 +48,7 @@ class MediaModify extends MY_Controller {
 
         // 检测用户状态，如果不是评审未通过(check_status=4) 拒绝修改
         $this->load->model('Media');
-        $arrRes = $this->Media->getMediaInfo($arrPostParams['app_id']);
+        $arrRes = $this->Media->getMediaInfo($this->arrUser['account_id'], $arrPostParams['app_id']);
         if (empty($arrRes)
             || $arrRes['check_status'] != 4) {
             return $this->outJson('', ErrCode::ERR_SYSTEM, '用户状态检查非法,禁止修改');
