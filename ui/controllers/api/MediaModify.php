@@ -70,7 +70,7 @@ class MediaModify extends MY_Controller {
             }
         }
         if ($arrPostParams['media_platform'] === 'H5') {
-            $arrPostParams['default_valid_style'] = '9,10,11,12,13,14';
+            $arrPostParams['default_valid_style'] = '9,10,12,13';
             $arrPostParams['media_delivery_method'] = 'JS';
         } 
 
