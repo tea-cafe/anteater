@@ -180,7 +180,7 @@
 		margin: 100px auto 0;
 		padding: 15px;
 	}
-	#section1 .begin span {
+	#section1 .begin a {
 		display: block;
 		color: #fff;
 		background-color: rgba(241, 82, 82, 0.75);
@@ -424,10 +424,10 @@
 			</ul>
 			<ul class="menu-right">
 				<li>
-					<a href="/#/user/login">登录</a>
+					<a href="/index.html#/user/login">登录</a>
 				</li>
 				<li>
-					<a href="/#/user/register">注册</a>
+					<a href="/index.html#/user/register">注册</a>
 				</li>
 			</ul>
 		</div>
@@ -437,7 +437,7 @@
 			<div class="content">
 				<h1>提供广告+内容一站式流量变现智慧方案</h1>
 				<p>通过大数据及智能算法+机器不断自我学习赋能，帮助开发者在高效变现的同时，不断提升自有产品的用户黏性。</p>
-				<div class="begin"><span>马上变现</span></div>
+				<div class="begin"><a href="/index.html#/user/login">马上变现</a></div>
 			</div>
 		</div>
 		<div class="section" id="section2">
@@ -516,7 +516,7 @@
 					<ul><li>爆款特卖</li></ul>
 					<h3>爆款特卖</h3>
 					<p>汇集所有淘宝、天猫优惠券，通过智能推荐让用户省时、省力获取想要买的宝贝优惠券，体验真正物美价廉。</p>
-					<h3>广告变现产品</h3>
+					<h3>特点：</h3>
 					<p>1、商品丰富、物美价廉<br>2、数据智能匹配，快速增加用户下单量<br>3、提升用户黏性</p>
 					<h3>接入方式：SDK/API/H5</h3>
 				</div>
@@ -547,6 +547,9 @@
 			navigationPosition: 'right',
 			slidesNavPosition: 'bottom',
 		});
+		$.get('/x_api/userLogin/checkStatus', {}, function(ret){
+			(ret.code == 0) && (location.href = '/index.html');
+		}, 'json');
 	});
 </script>
 </body>
