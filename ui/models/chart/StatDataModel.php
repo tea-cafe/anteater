@@ -3,6 +3,7 @@ class StatDataModel extends CI_Model {
     public function __construct() {
         parent::__construct();
         $this->load->library('DbUtil');
+        $this->load->model('chart/BtnState');
     }
 
     public function getSumDataList($arrParams) {//{{{//
@@ -38,9 +39,14 @@ class StatDataModel extends CI_Model {
             }
         }
 
-        $method = $arrParams['method'];
-        $arrDaily = $this->dbutil->$method($arrDailySelect);
-        if(empty($arrDaily[0])) {
+        // 还没汇总就不展示
+        if($this->getBtnState($arrParams)) {
+            $method = $arrParams['method'];
+            $arrDaily = $this->dbutil->$method($arrDailySelect);
+            if(empty($arrDaily[0])) {
+                $arrDaily = [];
+            }
+        } else {
             $arrDaily = [];
         }
 
@@ -215,7 +221,8 @@ class StatDataModel extends CI_Model {
                     'select' => 'count(*) as total',
                     'where' => "date>'" .$arrParams['startDate']. "'
                         AND date< '".$arrParams['endDate']."'
-                        AND acct_id='". $arrParams['account_id']."'",
+                        AND acct_id='". $arrParams['account_id']."'
+                        AND user_slot_id= '".$arrParams['statId']."'",
                  ];
             } else {
                 $arrSelect = [
@@ -310,4 +317,17 @@ class StatDataModel extends CI_Model {
          $arrRet['curDate'] = array_values($arrRet['curDate']);
         return $arrRet;
     }//}}}//
+
+    private function getBtnState($arrParams) {
+        $arrSelect = [
+            'select' => '*',
+            'where' => "btn_sum_cancel=1 
+                     AND date='" .$arrParams['endDate']. "'",
+                 ];
+        $ret = $this->BtnState->getBtnState($arrSelect);
+        if(count($ret) !== 0) {
+            return true;
+        }
+        return false;
+    }
 }
