@@ -84,6 +84,53 @@ class StatDataModel extends CI_Model {
         ];
     }//}}}//
 
+    public function getCsvSumData($arrParams) {//{{{//
+        $arrDailySelect = [
+            'select' => '*',
+            'where' => "account_id='". $arrParams['account_id']."'",
+        ];
+        if($arrParams['type'] == 'Media') {
+            $arrDailySelect['select'] = 'app_id,media_name,post_exposure_num,post_click_num,post_profit,click_rate,ecpm,date,create_time';
+            $arrDailySelect['where'] = "date>='" .$arrParams['startDate']. "'
+                AND date<='". $arrParams['endDate']."'
+                AND account_id='". $arrParams['account_id']."'";
+        }
+
+        if($arrParams['type'] == 'Slot') {
+            $arrDailySelect['select'] = 'user_slot_id,slot_name,app_id,post_exposure_num,post_click_num,post_profit,click_rate,ecpm,date,create_time';
+            if($arrParams['statId'] == 'all') {
+                $arrDailySelect['where'] = "date='". $arrParams['lastday']. "'
+                    AND acct_id='". $arrParams['account_id']."'";
+            } else {
+                $arrDailySelect['where'] = "date='". $arrParams['lastday']. "'
+                    AND app_id='". $arrParams['statId']."'
+                    AND acct_id='". $arrParams['account_id']."'";
+            }
+        }
+
+        $method = $arrParams['method'];
+        $arrSum = $this->dbutil->$method($arrDailySelect);
+        if(empty($arrSum[0])) {
+            $arrSum = [];
+        }
+
+        $strData = $this->formatCsvData($arrSum);
+
+        return $strData;
+    }//}}}//
+
+    public function formatCsvData($arrSum) {
+        $strCsv = "姓名,性别,年龄\n";
+        $strCsv = iconv('utf-8','gb2312',$strCsv);
+        foreach($arrSum as $row) {
+            $name = iconv('utf-8','gb2312',$row['media_name']);
+            $sex = iconv('utf-8','gb2312',$row['app_id']);
+            $strCsv .= $name.",".$sex.",".$row['post_exposure_num']."\n";
+        }
+
+        return $strCsv;
+    }
+
     public function getDailyDataList($arrParams) {//{{{//
         $intCount = 0;
         if(!isset($arrParams['count']) || $arrParams['count'] == 0) {
