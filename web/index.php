@@ -53,6 +53,7 @@
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
+    ini_set('session.cookie_domain', 'www.zhiweihl.com');
 	define('ENVIRONMENT', 'development');
     define('WEBROOT', '/home/work/anteater/web');
 
