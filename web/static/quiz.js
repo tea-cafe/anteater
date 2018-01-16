@@ -19,9 +19,9 @@
         '.quiz-answer .b{line-height:37px;font-size:13px;color:#fff;text-align:center;position:absolute;top:215px;left:45px;width:35px;height:37px}'+
         '.quiz-answer .atc-close{position:absolute;width:30px;height:30px;top:6px;right:6px}'+
         '.quiz-peek{display:none;width:100%;height:667px;z-index:20;position:fixed;top:0;left:0;background:#fff}'+
-        '.quiz-peek .quiz-peek-box{width:100%;height:667px;-webkit-overflow-scrolling:touch;overflow-y:scroll;background:#fff}'+
+        '.quiz-peek .quiz-peek-box{width:100%;height:667px;-webkit-overflow-scrolling:touch;overflow:auto;overflow-y:scroll;background:#fff}'+
         '.quiz-peek .quiz-peek-back{width:302px;height:54px;position:absolute;left:50%;bottom:40px;margin-left:-151px;background:url(https://gss0.bdstatic.com/5eR1cXSg2QdV5wybn9fN2DJv/assets/wise-vue/img/haoda/peek_back_6e807bd.png) no-repeat;background-size:302px 54px;z-index:13}'+
-        '.quiz-peek .quiz-peek-box .quiz-dasou{width:100%;height:667px}'+
+        '.quiz-peek .quiz-peek-box .quiz-dasou{width:100%;height:667px;margin:0;padding:0;border:0}'+
         '.atc-result,.atc-result2{display:none;width:210px;margin:35px 0 0 41px;line-height:18px;font-size:14px;color:orange}'+
         '.atc-result2{margin-left:0;margin-top:0}'+
         '.atc-vsicon{display:none;background-image:url(https://api.zhiweihl.com/static/quiz_vs.png);background-size:50px;background-repeat:no-repeat;background-position:center;height:80px}').appendTo('head');
@@ -71,6 +71,7 @@
             $('.answer,.a,.b,.submit').show();
             $('.atc-result,.atc-result2,.atc-vsicon,.goto').hide();
             $('.submit').html('提交夺宝').data('index','o');
+            $('.atc-result2').css({'font-size':'14px','line-height':'18px','margin-top':'0','text-align':'left'});
             init();
         });
         redirect = 'https://engine.lvehaisen.com/index/activity?appKey='+obj.appKey+'&adslotId='+obj.adslotId;
@@ -113,6 +114,7 @@
             $('.answer,.a,.b,.submit').show();
             $('.atc-result,.atc-result2,.atc-vsicon,.goto').hide();
             $('.submit').html('提交夺宝').data('index','o');
+            $('.atc-result2').css({'font-size':'14px','line-height':'18px','margin-top':'0','text-align':'left'});
             init();
         } else {
             alert('还没选择哦');
