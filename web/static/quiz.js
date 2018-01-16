@@ -88,11 +88,12 @@
                 $('.atc-result2').show().html('宝贝马上呈现... 2s').css({'font-size':'22px','line-height':'26px','margin-top':'60px','text-align':'center'});
                 setTimeout(function(){
                     $('.atc-result2').html('宝贝马上呈现... 1s');
+                    setTimeout(function(){
+                        $('.atc-result2').html('宝贝马上呈现... 0s');
+                        $('.answer-tc').hide();
+                        location.href = redirect;
+                    },1000);
                 },1000);
-                setTimeout(function(){
-                    $('.atc-result2').html('宝贝马上呈现... 0s');
-                    location.href = redirect;
-                },2000);
             } else {
                 $('.atc-title').html('答案错误');
                 $('.atc-question').html('');
