@@ -5,29 +5,29 @@
     var r, search_url, select;
     var redirect = 'https://engine.lvehaisen.com/index/activity?appKey=&adslotId=';
 
-    $('<style></style>').html('.answer-tc{display:none;width:290px;height:450px;background:url(https://api.zhiweihl.com/static/quiz_bg.png) no-repeat;background-size:290px 450px;z-index:11;position:fixed;top:40px;left:50%;margin-left:-145px}'+
-        '.answer-tc .atc-top{font-size:15px;color:#fff;display:block;line-height:12.5px;padding:12px 0 0 25px}'+
-        '.answer-tc .atc-title{display:block;width:82px;height:26px;color:#006756;font-size:20px;font-weight:700;position:absolute;top:36px;left:108px;text-align:center}'+
-        '.answer-tc .atc-question{display:block;width:210px;margin:54px 0 0 41px;line-height:18px;font-size:14px;color:#005345}'+
-        '.answer-tc .answer-content{position:absolute;left:40px;top:136px;list-style:none;margin:0;padding:0}'+
-        '.answer-tc .answer-content li{width:150px;height:37px;padding-left:30px;padding-right:30px;background:#009c82;border-radius:5px;line-height:15px;font-size:14px;color:#fff;text-align:center;margin-top:21px;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;align-items:center}'+
-        '.answer-tc .answer-content li.atc-b{margin-bottom:65px}'+
-        '.answer-tc .answer-content li.submit{background-color:orange}'+
-        '.answer-tc .answer-content li.goto{display:none;line-height:37px;background-color:orange}'+
-        '.answer-tc .peek{width:90px;height:67px;position:absolute;right:5px;bottom:5px}'+
-        '.answer-tc .a{line-height:37px;font-size:13px;color:#fff;text-align:center;position:absolute;top:157px;left:45px;width:35px;height:37px}'+
-        '.answer-tc .b{line-height:37px;font-size:13px;color:#fff;text-align:center;position:absolute;top:215px;left:45px;width:35px;height:37px}'+
-        '.answer-tc .atc-close{position:absolute;width:30px;height:30px;top:6px;right:6px}'+
-        '.peek-tc{display:none;width:100%;height:667px;z-index:20;display:none;position:fixed;top:0;left:0;background:#fff}'+
-        '.peek-tc .peek-box{width:100%;height:667px;-webkit-overflow-scrolling:touch;overflow-y:scroll;background:#fff}'+
-        '.peek-tc .peek-back{width:302px;height:54px;position:absolute;left:50%;bottom:40px;margin-left:-151px;background:url(https://gss0.bdstatic.com/5eR1cXSg2QdV5wybn9fN2DJv/assets/wise-vue/img/haoda/peek_back_6e807bd.png) no-repeat;background-size:302px 54px;z-index:13}'+
-        '.peek-tc .peek-box .dasou{width:100%;height:667px;margin:0;padding:0;border:0}'+
+    $('<style></style>').html('.quiz-answer{display:none;width:290px;height:450px;background:url(https://api.zhiweihl.com/static/quiz_bg.png) no-repeat;background-size:290px 450px;z-index:11;position:fixed;top:40px;left:50%;margin-left:-145px}'+
+        '.quiz-answer .atc-top{font-size:15px;color:#fff;display:block;line-height:12.5px;padding:12px 0 0 25px}'+
+        '.quiz-answer .atc-title{display:block;width:82px;height:26px;color:#006756;font-size:20px;font-weight:700;position:absolute;top:36px;left:108px;text-align:center}'+
+        '.quiz-answer .atc-question{display:block;width:210px;margin:54px 0 0 41px;line-height:18px;font-size:14px;color:#005345}'+
+        '.quiz-answer .answer-content{position:absolute;left:40px;top:136px;list-style:none;margin:0;padding:0}'+
+        '.quiz-answer .answer-content li{width:150px;height:37px;padding-left:30px;padding-right:30px;background:#009c82;border-radius:5px;line-height:15px;font-size:14px;color:#fff;text-align:center;margin-top:21px;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;align-items:center}'+
+        '.quiz-answer .answer-content li.atc-b{margin-bottom:65px}'+
+        '.quiz-answer .answer-content li.submit{background-color:orange}'+
+        '.quiz-answer .answer-content li.goto{display:none;line-height:37px;background-color:orange}'+
+        '.quiz-answer .peek{width:90px;height:67px;position:absolute;right:5px;bottom:5px}'+
+        '.quiz-answer .a{line-height:37px;font-size:13px;color:#fff;text-align:center;position:absolute;top:157px;left:45px;width:35px;height:37px}'+
+        '.quiz-answer .b{line-height:37px;font-size:13px;color:#fff;text-align:center;position:absolute;top:215px;left:45px;width:35px;height:37px}'+
+        '.quiz-answer .atc-close{position:absolute;width:30px;height:30px;top:6px;right:6px}'+
+        '.quiz-peek{display:none;width:100%;height:667px;z-index:20;position:fixed;top:0;left:0;background:#fff}'+
+        '.quiz-peek .quiz-peek-box{width:100%;height:667px;-webkit-overflow-scrolling:touch;overflow-y:scroll;background:#fff}'+
+        '.quiz-peek .quiz-peek-back{width:302px;height:54px;position:absolute;left:50%;bottom:40px;margin-left:-151px;background:url(https://gss0.bdstatic.com/5eR1cXSg2QdV5wybn9fN2DJv/assets/wise-vue/img/haoda/peek_back_6e807bd.png) no-repeat;background-size:302px 54px;z-index:13}'+
+        '.quiz-peek .quiz-peek-box .quiz-dasou{width:100%;height:667px;margin:0;padding:0;border:0}'+
         '.atc-result,.atc-result2{display:none;width:210px;margin:35px 0 0 41px;line-height:18px;font-size:14px;color:orange}'+
         '.atc-result2{margin-left:0;margin-top:0}'+
         '.atc-vsicon{display:none;background-image:url(https://api.zhiweihl.com/static/quiz_vs.png);background-size:50px;background-repeat:no-repeat;background-position:center;height:80px}').appendTo('head');
 
-    $('<div></div>').html('<div class="answer-tc">'+
-            '<span class="atc-top">夺宝英雄</span>'+
+    $('<div></div>').html('<div class="quiz-answer">'+
+            '<span class="atc-top">有奖答题</span>'+
             '<span class="atc-title">...</span>'+
             '<span class="atc-question">问题加载中</span>'+
             '<div class="atc-result"></div>'+
@@ -42,19 +42,19 @@
             '<div class="peek"></div>'+
             '<div class="a">A.</div>'+
             '<div class="b">B.</div>'+
-            '<img src="https://api.zhiweihl.com/static/quiz_close.png" class="atc-close">'+
+            '<img class="atc-close" src="https://api.zhiweihl.com/static/quiz_close.png">'+
         '</div>'+
-        '<div class="peek-tc">'+
-            '<div class="peek-box">'+
-                '<iframe src="" class="dasou"></iframe>'+
+        '<div class="quiz-peek">'+
+            '<div class="quiz-peek-box">'+
+                '<iframe src="" class="quiz-dasou"></iframe>'+
             '</div>'+
-            '<div class="peek-back"></div>'+
-        '</div>').addClass('container').appendTo('body');
+            '<div class="quiz-peek-back"></div>'+
+        '</div>').addClass('quiz-container').appendTo('body');
 
     function init() {
         $.getJSON('https://api.zhiweihl.com/activity/ApiGetQuestion?callback=?', function(ret){
             if (ret.r) {
-                $('.answer-tc').show();
+                $('.quiz-answer').show();
                 $('.atc-title').html(ret.type);
                 $('.atc-question').html(ret.question);
                 $('.atc-a').html(ret.A);
@@ -67,6 +67,10 @@
 
     window.DuodeMedia = function (obj) {
         $(obj.container).click(function(){
+            $('.answer').css('background-color', '#009c82');
+            $('.answer,.a,.b,.submit').show();
+            $('.atc-result,.atc-result2,.atc-vsicon,.goto').hide();
+            $('.submit').html('提交夺宝').data('index','o');
             init();
         });
         redirect = 'https://engine.lvehaisen.com/index/activity?appKey='+obj.appKey+'&adslotId='+obj.adslotId;
@@ -85,12 +89,12 @@
                 $('.atc-title').html('答案正确');
                 $('.atc-question').html('太棒了，为你出众的智商疯狂打CALL！');
                 $('.answer,.a,.b,.submit').hide();
-                $('.atc-result2').show().html('宝贝马上呈现... 2s').css({'font-size':'22px','line-height':'26px','margin-top':'60px','text-align':'center'});
+                $('.atc-result2').show().html('马上开奖... 2s').css({'font-size':'24px','line-height':'28px','margin-top':'60px','text-align':'center'});
                 setTimeout(function(){
-                    $('.atc-result2').html('宝贝马上呈现... 1s');
+                    $('.atc-result2').html('马上开奖... 1s');
                     setTimeout(function(){
-                        $('.atc-result2').html('宝贝马上呈现... 0s');
-                        $('.answer-tc').hide();
+                        $('.atc-result2').html('马上开奖... 0s');
+                        $('.quiz-answer').hide();
                         location.href = redirect;
                     },1000);
                 },1000);
@@ -118,15 +122,15 @@
         location.href = redirect;
     });
     $('.atc-close').click(function(){
-        $('.answer-tc').hide();
+        $('.quiz-answer').hide();
     });
     $('.peek').click(function(){
-        $('.peek-tc').show();
-        $('.dasou').attr('src', search_url);
+        $('.quiz-peek').show();
+        $('.quiz-dasou').attr('src', search_url);
     });
-    $('.peek-back').click(function(){
-        $('.peek-tc').hide();
-        $('.dasou').attr('src', '');
+    $('.quiz-peek-back').click(function(){
+        $('.quiz-peek').hide();
+        $('.quiz-dasou').attr('src', '');
     });
 
 })();
