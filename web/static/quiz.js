@@ -88,7 +88,7 @@
                 $('.atc-title').html('答案正确');
                 $('.atc-question').html('');//回答正确，赢得一次夺宝机会
                 $('.answer,.a,.b,.submit').hide();
-                $('.atc-result').show().html('太棒了，为你出众的智商疯狂打CALL！宝贝大奖玩命加载中，马上呈现...');
+                $('.atc-result2').show().html('太棒了，为你出众的智商疯狂打CALL！宝贝大奖玩命加载中，马上呈现...').css({'font-size':'16px','line-height':'20px'});
                 setTimeout(function(){
                     location.href = redirect;
                 },2000);
