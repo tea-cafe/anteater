@@ -17,26 +17,26 @@
         '.answer-tc .peek{width:90px;height:67px;position:absolute;right:5px;bottom:5px}'+
         '.answer-tc .a{line-height:37px;font-size:13px;color:#fff;text-align:center;position:absolute;top:157px;left:45px;width:35px;height:37px}'+
         '.answer-tc .b{line-height:37px;font-size:13px;color:#fff;text-align:center;position:absolute;top:215px;left:45px;width:35px;height:37px}'+
-        '.answer-tc .atc-close{position:absolute;width:48px;height:48px;bottom:-60px;left:118px}'+
+        '.answer-tc .atc-close{position:absolute;width:30px;height:30px;top:6px;right:6px}'+
         '.peek-tc{display:none;width:100%;height:667px;z-index:20;display:none;position:fixed;top:0;left:0;background:#fff}'+
         '.peek-tc .peek-box{width:100%;height:667px;-webkit-overflow-scrolling:touch;overflow-y:scroll;background:#fff}'+
         '.peek-tc .peek-back{width:302px;height:54px;position:absolute;left:50%;bottom:40px;margin-left:-151px;background:url(https://gss0.bdstatic.com/5eR1cXSg2QdV5wybn9fN2DJv/assets/wise-vue/img/haoda/peek_back_6e807bd.png) no-repeat;background-size:302px 54px;z-index:13}'+
         '.peek-tc .peek-box .dasou{width:100%;height:667px;margin:0;padding:0;border:0}'+
         '.atc-result,.atc-result2{display:none;width:210px;margin:35px 0 0 41px;line-height:18px;font-size:14px;color:orange}'+
-        '.atc-result2{display:none;margin-left:0;margin-top:0}'+
+        '.atc-result2{margin-left:0;margin-top:0}'+
         '.atc-vsicon{display:none;background-image:url(https://api.zhiweihl.com/static/quiz_vs.png);background-size:50px;background-repeat:no-repeat;background-position:center;height:80px}').appendTo('head');
 
     $('<div></div>').html('<div class="answer-tc">'+
             '<span class="atc-top">夺宝英雄</span>'+
             '<span class="atc-title">...</span>'+
             '<span class="atc-question">问题加载中</span>'+
-            '<span class="atc-result"></span>'+
+            '<div class="atc-result"></div>'+
             '<ul class="answer-content">'+
                 '<li class="change-que answer atc-a" data-index="A">...</li>'+
                 '<li class="change-que answer atc-b" data-index="B">...</li>'+
                 '<li class="change-que submit atc-x" data-index="o">提交夺宝</li>'+
                 '<div class="atc-vsicon"></div>'+
-                '<span class="atc-result2"></span>'+
+                '<div class="atc-result2"></div>'+
                 '<li class="change-que goto ans-y" data-index="o">拼拼运气</li>'+
             '</ul>'+
             '<div class="peek"></div>'+
