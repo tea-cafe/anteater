@@ -5,44 +5,44 @@
     var r, search_url, select;
     var redirect = 'https://engine.lvehaisen.com/index/activity?appKey=&adslotId=';
 
-    $('<style></style>').html('.quiz-answer{display:none;width:290px;height:450px;background:url(https://api.zhiweihl.com/static/quiz_bg.png) no-repeat;background-size:290px 450px;z-index:9998;position:fixed;top:40px;left:50%;margin-left:-145px}'+
-        '.quiz-answer .atc-top{font-size:15px;color:#fff;display:block;line-height:12.5px;padding:12px 0 0 25px}'+
-        '.quiz-answer .atc-title{display:block;width:82px;height:26px;color:#006756;font-size:20px;font-weight:700;position:absolute;top:36px;left:108px;text-align:center}'+
-        '.quiz-answer .atc-question{display:block;width:210px;margin:54px 0 0 41px;line-height:18px;font-size:14px;color:#005345}'+
-        '.quiz-answer .answer-content{position:absolute;left:40px;top:136px;list-style:none;margin:0;padding:0}'+
-        '.quiz-answer .answer-content li{width:150px;height:37px;padding-left:30px;padding-right:30px;background:#009c82;border-radius:5px;line-height:15px;font-size:14px;color:#fff;text-align:center;margin-top:21px;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;align-items:center}'+
-        '.quiz-answer .answer-content li.atc-b{margin-bottom:65px}'+
-        '.quiz-answer .answer-content li.submit{background-color:orange}'+
-        '.quiz-answer .answer-content li.goto{display:none;line-height:37px;background-color:orange}'+
-        '.quiz-answer .peek{width:90px;height:67px;position:absolute;right:5px;bottom:5px}'+
-        '.quiz-answer .a{line-height:37px;font-size:13px;color:#fff;text-align:center;position:absolute;top:157px;left:45px;width:35px;height:37px}'+
-        '.quiz-answer .b{line-height:37px;font-size:13px;color:#fff;text-align:center;position:absolute;top:215px;left:45px;width:35px;height:37px}'+
-        '.quiz-answer .atc-close{position:absolute;width:30px;height:30px;top:6px;right:6px}'+
+    $('<style></style>').html('.quiz-modal{display:none;width:290px;height:450px;background:url(https://api.zhiweihl.com/static/quiz_bg.png) no-repeat;background-size:290px 450px;z-index:9998;position:fixed;top:40px;left:50%;margin-left:-145px}'+
+        '.quiz-modal .quiz-modal-top{font-size:15px;color:#fff;display:block;line-height:12.5px;padding:12px 0 0 25px}'+
+        '.quiz-modal .quiz-modal-title{display:block;width:82px;height:26px;color:#006756;font-size:20px;font-weight:700;position:absolute;top:36px;left:108px;text-align:center}'+
+        '.quiz-modal .quiz-modal-question{display:block;width:210px;margin:54px 0 0 41px;line-height:18px;font-size:14px;color:#005345}'+
+        '.quiz-modal .quiz-modal-answer{position:absolute;left:40px;top:136px;list-style:none;margin:0;padding:0}'+
+        '.quiz-modal .quiz-modal-answer li{width:150px;height:37px;padding-left:30px;padding-right:30px;background:#009c82;border-radius:5px;line-height:15px;font-size:14px;color:#fff;text-align:center;margin-top:21px;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;align-items:center}'+
+        '.quiz-modal .quiz-modal-answer li.quiz-modal-answer-b{margin-bottom:65px}'+
+        '.quiz-modal .quiz-modal-answer li.quiz-button-submit{background-color:orange}'+
+        '.quiz-modal .quiz-modal-answer li.quiz-button-goto{display:none;line-height:37px;background-color:orange}'+
+        '.quiz-modal .quiz-button-peek{width:90px;height:67px;position:absolute;right:5px;bottom:5px}'+
+        '.quiz-modal .quiz-modal-a{line-height:37px;font-size:13px;color:#fff;text-align:center;position:absolute;top:157px;left:45px;width:35px;height:37px}'+
+        '.quiz-modal .quiz-modal-b{line-height:37px;font-size:13px;color:#fff;text-align:center;position:absolute;top:215px;left:45px;width:35px;height:37px}'+
+        '.quiz-modal .quiz-button-close{position:absolute;width:30px;height:30px;top:6px;right:6px}'+
         '.quiz-peek{display:none;width:100%;height:667px;z-index:9999;position:fixed;top:0;left:0;background:#fff}'+
         '.quiz-peek .quiz-peek-box{width:100%;height:667px;-webkit-overflow-scrolling:touch;overflow:auto;overflow-y:scroll;background:#fff}'+
         '.quiz-peek .quiz-peek-back{width:302px;height:54px;position:absolute;left:50%;bottom:40px;margin-left:-151px;background:url(https://gss0.bdstatic.com/5eR1cXSg2QdV5wybn9fN2DJv/assets/wise-vue/img/haoda/peek_back_6e807bd.png) no-repeat;background-size:302px 54px;z-index:1}'+
         '.quiz-peek .quiz-dasou{width:100%;height:667px;margin:0;padding:0;border:0}'+
-        '.atc-result,.atc-result2{display:none;width:210px;margin:35px 0 0 41px;line-height:18px;font-size:14px;color:orange}'+
-        '.atc-result2{margin-left:0;margin-top:0}'+
-        '.atc-vsicon{display:none;background-image:url(https://api.zhiweihl.com/static/quiz_vs.png);background-size:50px;background-repeat:no-repeat;background-position:center;height:80px}').appendTo('head');
+        '.quiz-modal-result1,.quiz-modal-result2{display:none;width:210px;margin:35px 0 0 41px;line-height:18px;font-size:14px;color:orange}'+
+        '.quiz-modal-result2{margin-left:0;margin-top:0}'+
+        '.quiz-modal-vsicon{display:none;background-image:url(https://api.zhiweihl.com/static/quiz_vs.png);background-size:50px;background-repeat:no-repeat;background-position:center;height:80px}').appendTo('head');
 
-    $('<div></div>').html('<div class="quiz-answer">'+
-            '<span class="atc-top">有奖答题</span>'+
-            '<span class="atc-title">...</span>'+
-            '<span class="atc-question">问题加载中</span>'+
-            '<div class="atc-result"></div>'+
-            '<ul class="answer-content">'+
-                '<li class="change-que answer atc-a" data-index="A">...</li>'+
-                '<li class="change-que answer atc-b" data-index="B">...</li>'+
-                '<li class="change-que submit atc-x" data-index="o">提交夺宝</li>'+
-                '<div class="atc-vsicon"></div>'+
-                '<div class="atc-result2"></div>'+
-                '<li class="change-que goto ans-y" data-index="o">拼拼运气</li>'+
+    $('<div></div>').html('<div class="quiz-modal">'+
+            '<span class="quiz-modal-top">有奖答题</span>'+
+            '<span class="quiz-modal-title">...</span>'+
+            '<span class="quiz-modal-question">问题加载中</span>'+
+            '<div class="quiz-modal-result1"></div>'+
+            '<ul class="quiz-modal-answer">'+
+                '<li class="quiz-button-answer quiz-modal-answer-a" data-index="A">...</li>'+
+                '<li class="quiz-button-answer quiz-modal-answer-b" data-index="B">...</li>'+
+                '<li class="quiz-button-submit" data-index="o">提交夺宝</li>'+
+                '<div class="quiz-modal-vsicon"></div>'+
+                '<div class="quiz-modal-result2"></div>'+
+                '<li class="quiz-button-goto" data-index="o">拼拼运气</li>'+
             '</ul>'+
-            '<div class="peek"></div>'+
-            '<div class="a">A.</div>'+
-            '<div class="b">B.</div>'+
-            '<img class="atc-close" src="https://api.zhiweihl.com/static/quiz_close.png">'+
+            '<div class="quiz-button-peek"></div>'+
+            '<div class="quiz-modal-a">A.</div>'+
+            '<div class="quiz-modal-b">B.</div>'+
+            '<img class="quiz-button-close" src="https://api.zhiweihl.com/static/quiz_close.png">'+
         '</div>'+
         '<div class="quiz-peek">'+
             '<div class="quiz-peek-box">'+
@@ -54,79 +54,67 @@
     function init() {
         $.getJSON('https://api.zhiweihl.com/activity/ApiGetQuestion?callback=?', function(ret){
             if (ret.r) {
-                $('.quiz-answer').show();
-                $('.atc-title').html(ret.type);
-                $('.atc-question').html(ret.question);
-                $('.atc-a').html(ret.A);
-                $('.atc-b').html(ret.B);
+                $('.quiz-modal').show();
+                $('.quiz-modal-title').html(ret.type);
+                $('.quiz-modal-question').html(ret.question);
+                $('.quiz-modal-answer-a').html(ret.A);
+                $('.quiz-modal-answer-b').html(ret.B);
                 search_url = ret.search_url;
                 r = ret.r;
             }
         });
     }
 
-    window.DuodeMedia = function (obj) {
-        $(obj.container).click(function(){
-            $('.answer').css('background-color', '#009c82');
-            $('.answer,.a,.b,.submit').show();
-            $('.atc-result,.atc-result2,.atc-vsicon,.goto').hide();
-            $('.submit').html('提交夺宝').data('index','o');
-            $('.atc-result2').css({'font-size':'14px','line-height':'18px','margin-top':'0','text-align':'left'});
-            init();
-        });
-        redirect = 'https://engine.lvehaisen.com/index/activity?appKey='+obj.appKey+'&adslotId='+obj.adslotId;
-    };
-
-    $('.answer').click(function(){
-        $('.answer').css('background-color', '#009c82');
-        $(this).css('background-color', 'orange');
-        select = $(this).data('index');
-        $('.submit').data('index','x');
-    });
-    $('.submit').click(function(){
+    $('.quiz-button-submit').click(function(){
         var type = $(this).data('index');
         if (type == 'x') {
             if (select == r) {
-                $('.atc-title').html('答案正确');
-                $('.atc-question').html('太棒了，为你出众的智商疯狂打CALL！');
-                $('.answer,.a,.b,.submit').hide();
-                $('.atc-result2').show().html('马上开奖... 2s').css({'font-size':'24px','line-height':'28px','margin-top':'60px','text-align':'center'});
+                $('.quiz-modal-title').html('答案正确');
+                $('.quiz-modal-question').html('太棒了，为你出众的智商疯狂打CALL！');
+                $('.quiz-button-answer,.quiz-modal-a,.quiz-modal-b,.quiz-button-submit').hide();
+                $('.quiz-modal-result2').show().html('马上开奖... 2s').css({'font-size':'24px','line-height':'28px','margin-top':'60px','text-align':'center'});
                 setTimeout(function(){
-                    $('.atc-result2').html('马上开奖... 1s');
+                    $('.quiz-modal-result2').html('马上开奖... 1s');
                     setTimeout(function(){
-                        $('.atc-result2').html('马上开奖... 0s');
-                        $('.quiz-answer').hide();
+                        $('.quiz-modal-result2').html('马上开奖... 0s');
+                        $('.quiz-modal').hide();
                         location.href = redirect;
                     },1000);
                 },1000);
             } else {
-                $('.atc-title').html('答案错误');
-                $('.atc-question').html('');
-                $('.answer,.a,.b').hide();
-                $('.atc-result').show().html('您的智商不应该这个水平！是时候展现真正的实力了，速度再来一次吧！');
-                $('.submit').html('再来一次').data('index','y');
-                $('.atc-result2').show().html('智商不够运气凑，拼RP的机会来了，大量福运奖品等着你');
-                $('.atc-vsicon').show();
-                $('.goto').show().data('index','y');
+                $('.quiz-modal-title').html('答案错误');
+                $('.quiz-modal-question').html('');
+                $('.quiz-button-answer,.quiz-modal-a,.quiz-modal-b').hide();
+                $('.quiz-modal-result1').show().html('您的智商不应该这个水平！是时候展现真正的实力了，速度再来一次吧！');
+                $('.quiz-button-submit').html('再来一次').data('index','y');
+                $('.quiz-modal-result2').show().html('智商不够运气凑，拼RP的机会来了，大量福运奖品等着你');
+                $('.quiz-modal-vsicon').show();
+                $('.quiz-button-goto').show().data('index','y');
             }
         } else if (type == 'y') {
-            $('.answer').css('background-color', '#009c82');
-            $('.answer,.a,.b,.submit').show();
-            $('.atc-result,.atc-result2,.atc-vsicon,.goto').hide();
-            $('.submit').html('提交夺宝').data('index','o');
-            $('.atc-result2').css({'font-size':'14px','line-height':'18px','margin-top':'0','text-align':'left'});
+            $('.quiz-button-answer').css('background-color', '#009c82');
+            $('.quiz-button-answer,.quiz-modal-a,.quiz-modal-b,.quiz-button-submit').show();
+            $('.quiz-modal-result1,.quiz-modal-result2,.quiz-modal-vsicon,.quiz-button-goto').hide();
+            $('.quiz-button-submit').html('提交夺宝').data('index','o');
+            $('.quiz-modal-result2').css({'font-size':'14px','line-height':'18px','margin-top':'0','text-align':'left'});
             init();
         } else {
             alert('还没选择哦');
         }
     });
-    $('.goto').click(function(){
+    $('.quiz-button-answer').click(function(){
+        $('.quiz-button-answer').css('background-color', '#009c82');
+        $(this).css('background-color', 'orange');
+        select = $(this).data('index');
+        $('.quiz-button-submit').data('index','x');
+    });
+    $('.quiz-button-goto').click(function(){
         location.href = redirect;
     });
-    $('.atc-close').click(function(){
-        $('.quiz-answer').hide();
+    $('.quiz-button-close').click(function(){
+        $('.quiz-modal').hide();
     });
-    $('.peek').click(function(){
+    $('.quiz-button-peek').click(function(){
         $('.quiz-peek').show();
         $('.quiz-dasou').attr('src', search_url);
     });
@@ -135,4 +123,16 @@
         $('.quiz-dasou').attr('src', '');
     });
 
+    window.DuodeMedia = function (obj) {
+        $(obj.container).click(function(){
+            $('.quiz-button-answer').css('background-color', '#009c82');
+            $('.quiz-button-answer,.quiz-modal-a,.quiz-modal-b,.quiz-button-submit').show();
+            $('.quiz-modal-result1,.quiz-modal-result2,.quiz-modal-vsicon,.quiz-button-goto').hide();
+            $('.quiz-button-submit').html('提交夺宝').data('index','o');
+            $('.quiz-modal-result2').css({'font-size':'14px','line-height':'18px','margin-top':'0','text-align':'left'});
+            init();
+        });
+        redirect = 'https://engine.lvehaisen.com/index/activity?appKey='+obj.appKey+'&adslotId='+obj.adslotId;
+    };
+    
 })();
