@@ -6,7 +6,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 
 class TakeMoney extends MY_Controller{
-	public function __construct(){
+    
+    const VALID_INVOICE_INFO_KEY = [
+        'orderid',
+        'number',
+        'money',
+    ];
+    
+    public function __construct(){
 		parent::__construct();
 		$this->load->model("Finance");
     }
@@ -83,5 +90,71 @@ class TakeMoney extends MY_Controller{
 		}
 		
 		return $this->outJson($result,ErrCode::OK,'提现单信息获取成功');
-	}
+    }
+
+    /**
+     * 发票信息提交.
+     */
+    public function addInvoice(){
+        if(empty($this->arrUser)){
+            return $this->outJson('',ErrCode::ERR_NOT_LOGIN);
+        }
+        $arrPostParams = json_decode(file_get_contents('php://input'), true);
+        $arrPostParams['orderid'] = intval($arrPostParams['money']);
+        $arrPostParams['number'] = intval($arrPostParams['number']);
+        $arrPostParams['money'] = floatval($arrPostParams['money']);
+
+        if(count($arrPostParams) != count(self::VALID_INVOICE_INFO_KEY)){
+            return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'参数错误');
+        }
+        foreach($arrPostParams as $key => $value){
+            if(empty($value)){
+                return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'参数错误');
+            }
+        }
+
+        //$accId = $this->arrUser['account_id'];
+        $accId = '0463451394dc5dfc634f9463d6b12791';
+        $result = $this->Finance->addInvoiceInfo($accId,$arrPostParams);
+        
+        switch($result){
+            case '0':
+                return $this->outJson('',ErrCode::OK,'发票添加成功');
+                break;
+            case '1':
+                return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'参数错误');
+                break;
+            case '2':
+                return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'该发票已存在');
+                break;
+        }
+    }
+
+    /**
+     * 删除发票
+     */
+    public function delInvoice(){
+        if(empty($this->arrUser)){
+            return $this->outJson('',ErrCode::ERR_NOT_LOGIN);
+        }
+        $arrPostParams = json_decode(file_get_contents('php://input'), true);
+        $arrPostParams['orderid'] = intval($arrPostParams['money']);
+        $arrPostParams['number'] = intval($arrPostParams['number']);
+        
+        foreach($arrPostParams as $key => $value){
+            if(empty($value)){
+                return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'参数错误');
+            }
+        }
+
+        //$accId = $this->arrUser['account_id'];
+        $accId = '0463451394dc5dfc634f9463d6b12791';
+        $result = $this->Finance->delInvoiceInfo($accId,$arrPostParams);
+        
+        if($result){
+                return $this->outJson('',ErrCode::OK,'发票删除成功');
+        }else{
+                return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'参数错误');
+        }
+    }
 }
