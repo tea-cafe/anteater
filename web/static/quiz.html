@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="keywords"  content="">
+<title>答题型广告投放示例页</title>
+<style>
+body {
+	background-color: #eee;
+}
+</style>
+</head>
+<body>
+<div>这是一个测试页面 这里是页面的内容</div>
+<div>这是一个测试页面 这里是页面的内容</div>
+<div>这是一个测试页面 这里是页面的内容</div>
+<div>这是一个测试页面 这里是页面的内容</div>
+<div>这是一个测试页面 这里是页面的内容</div>
+<div style="background-color:#999">
+	点击这里 这里是一个banner或者浮标
+	<script>
+	(function(){
+		var o = document.getElementsByTagName("script");
+		var c = o[o.length-1].parentNode;
+		var duode = document.createElement("script");
+		duode.type = "text/javascript";
+		duode.async = true;
+		duode.onload = function() {
+			window.DuodeMedia({
+				container: c,
+				appKey: "3xCmkrL8ZdjerZnFYZWy8ViE6e8Y",
+				adslotId: "5487"
+			});
+		};
+		duode.src = "https://api.zhiweihl.com/quiz.js?t=2018011601";
+		document.querySelector("head").appendChild(duode);
+	})();
+	</script>
+</div>
+<div>这是一个测试页面 这里是页面的内容</div>
+<div>这是一个测试页面 这里是页面的内容</div>
+<div>这是一个测试页面 这里是页面的内容</div>
+<div>这是一个测试页面 这里是页面的内容</div>
+<div>这是一个测试页面 这里是页面的内容</div>
+</body>
+</html>
