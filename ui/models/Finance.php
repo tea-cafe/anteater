@@ -117,7 +117,7 @@
 		/* 获取提现单详情 */
 		public function getTakeMoneyInfo($accId,$number){
 			$where = array(
-				'select' => '',
+				'select' => 'bill_list,info,money,number,remark,status,time',
 				'where' => 'account_id = "'.$accId.'" AND number = '.$number,
 			);
 
@@ -129,6 +129,19 @@
 
 			$data[0]['bill_list'] = unserialize($data[0]['bill_list']);
 			$data[0]['info'] = unserialize($data[0]['info']);
+
+            $data[0]['info']['invoice_total_money'] = array_sum($data[0]['info']['invoice_info']);
+            $data[0]['info']['invoice_total_page'] = count($data[0]['info']['invoice_info']);
+            if(empty($data[0]['info']['invoice_info'])){
+                return $data[0];
+            }
+            $i = 0;
+            foreach($data[0]['info']['invoice_info'] as $k => $v){
+                $tmpInvoiceArr[$i]['number'] = strval($k);
+                $tmpInvoiceArr[$i]['money'] = strval($v);
+                $i++; 
+            }
+            $data[0]['info']['invoice_info'] = $tmpInvoiceArr;
 
 			return $data[0];
 		}
@@ -322,5 +335,61 @@
 
             return $result;
 		}
-	}
+
+        /**
+         * 添加发票信息
+         */
+        public function addInvoiceInfo($accId,$arrParams){
+            $orderWhere = array(
+                'select' => 'info',
+                'where' => 'account_id = "'.$accId.'" AND number = '.$arrParams['orderid'],
+            );
+            $orderInfo = $this->dbutil->getTmr($orderWhere);
+            $orderInfo = unserialize($orderInfo[0]['info']);
+
+            if(array_key_exists($arrParams['number'],$orderInfo['invoice_info'])){
+                return '2';
+            }
+            
+            $orderInfo['invoice_info'][$arrParams['number']]= $arrParams['money'];
+            
+            $udpWhere = array(
+                'info' => serialize($orderInfo),
+                'where' => 'account_id = "'.$accId.'" AND number = '.$arrParams['orderid'],
+            );
+            $udpRes = $this->dbutil->udpTmr($udpWhere);
+
+            if($udpRes['code'] == 0){
+			    return '0';
+            }
+
+            return '1';
+        }
+
+        /**
+         * 删除发票信息
+         */
+        public function delInvoiceInfo($accId,$arrParams){
+            $orderWhere = array(
+                'select' => 'info',
+                'where' => 'account_id = "'.$accId.'" AND number = '.$arrParams['orderid'],
+            );
+            $orderInfo = $this->dbutil->getTmr($orderWhere);
+            $orderInfo = unserialize($orderInfo[0]['info']);
+
+            unset($orderInfo['invoice_info'][$arrParams['number']]);
+            
+            $udpWhere = array(
+                'info' => serialize($orderInfo),
+                'where' => 'account_id = "'.$accId.'" AND number = '.$arrParams['orderid'],
+            );
+            $udpRes = $this->dbutil->udpTmr($udpWhere);
+
+            if($udpRes['code'] == 0){
+			    return true;
+            }
+
+            return false;
+        }
+    }
 ?>	
