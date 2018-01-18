@@ -138,7 +138,7 @@ class TakeMoney extends MY_Controller{
             return $this->outJson('',ErrCode::ERR_NOT_LOGIN);
         }
         $arrPostParams = json_decode(file_get_contents('php://input'), true);
-        $arrPostParams['orderid'] = intval($arrPostParams['money']);
+        $arrPostParams['orderid'] = intval($arrPostParams['orderid']);
         $arrPostParams['number'] = intval($arrPostParams['number']);
         
         foreach($arrPostParams as $key => $value){
@@ -147,8 +147,7 @@ class TakeMoney extends MY_Controller{
             }
         }
 
-        //$accId = $this->arrUser['account_id'];
-        $accId = '0463451394dc5dfc634f9463d6b12791';
+        $accId = $this->arrUser['account_id'];
         $result = $this->Finance->delInvoiceInfo($accId,$arrPostParams);
         
         if($result){
