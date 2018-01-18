@@ -129,19 +129,29 @@
 
 			$data[0]['bill_list'] = unserialize($data[0]['bill_list']);
 			$data[0]['info'] = unserialize($data[0]['info']);
+            
+            unset($data[0]['info']['invoice_info']['code']);
+            unset($data[0]['info']['invoice_info']['number']);
+            unset($data[0]['info']['invoice_info']['money']);
 
-            $data[0]['info']['invoice_total_money'] = array_sum($data[0]['info']['invoice_info']);
             $data[0]['info']['invoice_total_page'] = count($data[0]['info']['invoice_info']);
+            $data[0]['info']['invoice_total_money'] = '0.00';
             if(empty($data[0]['info']['invoice_info'])){
                 return $data[0];
             }
             $i = 0;
+            $invoice_total_money = 0;
             foreach($data[0]['info']['invoice_info'] as $k => $v){
-                $tmpInvoiceArr[$i]['number'] = strval($k);
-                $tmpInvoiceArr[$i]['money'] = strval($v);
-                $i++; 
+                $tmpInvoiceArr[$i]['number'] = $k;
+                $tmpInvoiceArr[$i]['money'] = $v['money'];
+                $tmpInvoiceArr[$i]['tax'] = floatval($v['tax']);
+                $tmpInvoiceArr[$i]['total_amount'] = $v['total_amount'];
+                $i++;
+
+                $invoice_total_money = $invoice_total_money + $v['total_amount'];
             }
             $data[0]['info']['invoice_info'] = $tmpInvoiceArr;
+            $data[0]['info']['invoice_total_money'] = $invoice_total_money;
 
 			return $data[0];
 		}
@@ -347,8 +357,14 @@
                 return '2';
             }
             
-            $orderInfo['invoice_info'][$arrParams['number']]= $arrParams['money'];
+            $this->config->load('company_invoice_info');
+            $info['tax_rate'] = $this->config->item('invoice')['tax_rate'];
             
+            $orderInfo['invoice_info'][$arrParams['number']]['money']= $arrParams['money'];
+            $tax_money = sprintf("%.2f",$arrParams['money'] * ($info['tax_rate'] / 100));
+            $total_amount = $tax_money + $arrParams['money'];
+            $orderInfo['invoice_info'][$arrParams['number']]['tax']= floatval($tax_money);
+            $orderInfo['invoice_info'][$arrParams['number']]['total_amount']= $total_amount;
             $udpWhere = array(
                 'info' => serialize($orderInfo),
                 'where' => 'account_id = "'.$accId.'" AND number = '.$arrParams['orderid'],

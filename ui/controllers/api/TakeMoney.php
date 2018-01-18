@@ -99,11 +99,12 @@ class TakeMoney extends MY_Controller{
         if(empty($this->arrUser)){
             return $this->outJson('',ErrCode::ERR_NOT_LOGIN);
         }
+
         $arrPostParams = json_decode(file_get_contents('php://input'), true);
         $arrPostParams['orderid'] = intval($arrPostParams['orderid']);
-        $arrPostParams['number'] = intval($arrPostParams['number']);
+        $arrPostParams['number'] = $arrPostParams['number'];
         $arrPostParams['money'] = floatval($arrPostParams['money']);
-
+        
         if(count($arrPostParams) != count(self::VALID_INVOICE_INFO_KEY)){
             return $this->outJson('',ErrCode::ERR_INVALID_PARAMS,'参数错误');
         }
@@ -136,6 +137,7 @@ class TakeMoney extends MY_Controller{
         if(empty($this->arrUser)){
             return $this->outJson('',ErrCode::ERR_NOT_LOGIN);
         }
+
         $arrPostParams = json_decode(file_get_contents('php://input'), true);
         $arrPostParams['orderid'] = intval($arrPostParams['orderid']);
         $arrPostParams['number'] = intval($arrPostParams['number']);
