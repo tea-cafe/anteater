@@ -260,11 +260,7 @@
             $this->config->load('company_invoice_info');
             $info['company_info'] = $this->config->item('invoice')['info'];
             $info['mail'] = $this->config->item('invoice')['mail'];
-            $info['invoice_info'] = array(
-                'money' => '',
-                'code' => '',
-                'number' => '',
-            );
+            $info['invoice_info'] = array();
 
 			$params = array(
 				0 => array(
