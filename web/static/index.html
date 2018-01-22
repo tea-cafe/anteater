@@ -56,7 +56,7 @@
 	body{
 		font-family: arial,helvetica;
 		color: #f2f2f2;
-		background-color: #f0f2f5;
+		background-color: #fff;
 	}
 	h1{
 		font-size: 2em;
@@ -66,7 +66,7 @@
 	}
 
 	.container {
-		background: #f0f2f5;
+		background: #fff;
 		width: 100%;
 		min-height: 100%;
 		background-repeat: no-repeat;
@@ -80,7 +80,7 @@
 		width: 100%;
 		position: fixed;
 		top: 0;
-		background-color: #f2f2f2;
+		background-color: #fff;
 		text-align: center;
 		z-index: 10;
 	}
@@ -92,13 +92,15 @@
 	}
 	.header a {
 		text-decoration: none;
-		color: #666;
+		color: #000;
+		font-size: 16px;
+		display: block;
 	}
 	.header ul.menu-left {
 		list-style: none;
 		margin: 0 0 0 15px;
 		height: 50px;
-		width: 685px;
+		width: 500px;
 		float: left;
 	}
 	.header ul.menu-left li {
@@ -107,17 +109,34 @@
 	}
 	.header ul.menu-right {
 		list-style: none;
-		margin: 0;
+		margin: 0 0 0 60px;
 		height: 50px;
-		width: 100px;
+		width: 200px;
 		float: left;
 	}
 	.header ul.menu-right li {
-		width: 50px;
+		width: 75px;
 		float: right;
 	}
-	.header ul.menu-right li a {
-		color: #f15252;
+	.header ul.menu-right li:first-child a {
+		display: block;
+		width: 60px;
+		height: 26px;
+		color: #fff;
+		background-color: #F05352;
+	    margin: 12px 0 0 0;
+	    line-height: 26px;
+	    font-size: 15px;
+	}
+	.header ul.menu-right li:last-child a {
+		display: block;
+		width: 58px;
+		height: 24px;
+		color: #000;
+		border: 1px solid #E4E4E4;
+	    margin: 12px 0 0 0;
+	    line-height: 26px;
+	    font-size: 15px;
 	}
 	.logo {
 		width: 100px;
@@ -147,26 +166,26 @@
 	.content .screen {
 		position: absolute;
 		left: 50%;
-		top: 100px;
-		margin-left: -350px;
-		width: 197px;
-		height: 401px;
+		top: 10px;
+		margin-left: -380px;
+		width: 223px;
+		height: 455px;
 		background-image: url(/static/images/mobile.png);
 		background-repeat: no-repeat;
 		background-position: center;
-		background-size: 197px;
+		background-size: 223px;
 	}
 	.content .screen .shot {
-		width: 197px;
-		height: 401px;
-		background-repeat: no-repeat;
-		background-position: center 23px;
-		background-size: 175px;
+	    width: 221px;
+	    height: 455px;
+	    background-repeat: no-repeat;
+	    background-position: center 30px;
+	    background-size: 195px;
 	}
 	.content .desc {
 		position: absolute;
 		left: 50%;
-		top: 100px;
+		top: 80px;
 		margin-left: -100px;
 	}
 
@@ -174,7 +193,7 @@
 		width: 100%;
 		height: 450px;
 		margin: 0 auto;
-		background: #f0f2f5;
+		background: #eee;
 		min-height: 100%;
 		background-image: url(/static/images/bg01.jpg);
 		background-repeat: no-repeat;
@@ -183,46 +202,51 @@
 		position: relative;
 	}
 	#section1 h1{
-		color: #f2f2f2;
-		background-color: rgba(241, 82, 82, 0.75);
-		width: 600px;
+		color: #fff;
+		background-color: rgba(240, 83, 82, 0.5);
+		width: 725px;
+		height: 60px;
 		margin: 350px auto 0;
 		padding: 10px;
+		font-size: 40px;
+		line-height: 60px;
 	}
 	#section1 p{
-		color: #f2f2f2;
-		background-color: rgba(166, 166, 166, 0.5);
-		width: 420px;
-		margin: 15px auto;
-		padding: 10px;
-		font-size: 0.8em;
+		color: #fff;
+		background-color: rgba(0, 0, 0, 0.15);
+		width: 545px;
+		height: 56px;
+		margin: 20px auto;
+		padding: 12px;
+		font-size: 18px;
+		line-height: 28px;
 	}
 	#section1 .begin {
-		color: #f2f2f2;
-		background-color: rgba(237, 197, 197, 0.75);
-		width: 80px;
-		height: 80px;
-		border-radius: 80px;
+		color: #fff;
+		background-color: rgba(240, 83, 82, 0.2);
+		width: 100px;
+		height: 100px;
+		border-radius: 100px;
 		margin: 100px auto 0;
 		padding: 15px;
 	}
 	#section1 .begin a {
 		display: block;
-		color: #f2f2f2;
-		background-color: rgba(241, 82, 82, 0.75);
-		width: 80px;
-		height: 80px;
-		border-radius: 80px;
+		color: #fff;
+		background-color: rgba(240, 83, 82, 0.7);
+		width: 100px;
+		height: 100px;
+		border-radius: 100px;
 		margin: 0 auto;
 		text-align: center;
-		line-height: 80px;
+		line-height: 100px;
 	}
 
 	#section2{
 		width: 100%;
 		height: 450px;
 		margin: 0 auto;
-		background: #f0f2f5;
+		background: #eee;
 		min-height: 100%;
 		background-image: url(/static/images/bg02.jpg);
 		background-repeat: no-repeat;
@@ -231,24 +255,26 @@
 		position: relative;
 	}
 	#section2 h1{
-		color: #f2f2f2;
-		width: 300px;
+		color: #fff;
+		width: 320px;
+		height: 56px;
 		margin: 320px auto 0;
-		padding: 10px;
+		font-size: 40px;
+		line-height: 56px;
 	}
 	#section2 ul{
-		width: 660px;
-		height: 190px;
-		margin: 30px auto;
+		width: 960px;
+		height: 290px;
+		margin: 60px auto;
 	}
 	#section2 ul li {
-		width: 110px;
-		height: 190px;
+		width: 160px;
+		height: 290px;
 		float: left;
-		font-size: 0.8em;
+		font-size: 20px;
 		background-repeat: no-repeat;
 		background-position: center bottom;
-		background-size: 100px;
+		background-size: 150px;
 	}
 	#section2 ul li:nth-child(1) {
 		background-image: url(/static/images/icon_banner.png);
@@ -273,7 +299,7 @@
 		width: 100%;
 		height: 450px;
 		margin: 0 auto;
-		background: #f0f2f5;
+		background: #eee;
 		min-height: 100%;
 		background-image: url(/static/images/bg03.jpg);
 		background-repeat: no-repeat;
@@ -282,33 +308,37 @@
 		position: relative;
 	}
 	#section3 h1{
-		color: #f15252;
-		width: 300px;
-		margin: 300px auto 0;
-		padding: 10px;
+		color: #F05352;
+		width: 320px;
+		height: 56px;
+		margin: 320px auto 0;
+		font-size: 40px;
+		line-height: 56px;
 	}
 	#section3 ul{
-		width: 800px;
+		width: 1000px;
 		height: 200px;
 		margin: 50px auto;
 	}
 	#section3 ul li {
-		width: 200px;
-		height: 200px;
+		width: 250px;
+		height: 250px;
 		float: left;
 		font-size: 16px;
 		background-repeat: no-repeat;
 		background-position: center top;
-		background-size: 100px;
+		background-size: 150px;
 	}
 	#section3 ul li h3 {
-		margin-top: 100px;
-		color: #f15252;
+		margin-top: 150px;
+		color: #F05352;
+		font-size: 18px;
 	}
 	#section3 ul li p {
-		color: #666;
-		font-size: 0.8em;
-		padding: 10px 20px;
+		color: #000;
+		font-size: 16px;
+		line-height: 24px;
+		padding: 10px 45px;
 		text-align: left;
 	}
 	#section3 ul li:nth-child(1) {
@@ -328,7 +358,7 @@
 		width: 100%;
 		height: 450px;
 		margin: 0 auto;
-		background: #f0f2f5;
+		background: #eee;
 		min-height: 100%;
 		background-image: url(/static/images/bg04.jpg);
 		background-repeat: no-repeat;
@@ -337,38 +367,57 @@
 		position: relative;
 	}
 	#section4 h1{
-		color: #f2f2f2;
-		width: 300px;
-		margin: 280px auto 20px;
-		padding: 10px;
+		color: #fff;
+		width: 320px;
+		height: 56px;
+		margin: 320px auto 0;
+		font-size: 40px;
+		line-height: 56px;
+	    position: relative;
+		left: 18px;
 	}
 	#section4 ul{
 		width: 600px;
-		height: 48px;
+		height: 60px;
 		margin: 0 auto;
 	}
 	#section4 ul li {
-		width: 73px;
-		height: 30px;
-		line-height: 30px;
+		width: 128px;
+		height: 38px;
 		float: left;
-		font-size: 16px;
-		padding: 4px 6px;
+		font-size: 20px;
+		line-height: 38px;
+		margin: 14px 12px 4px 0;
+		border: solid 1px #666;
+	}
+	#section4 ul li.active {
+		width: 128px;
+		height: 48px;
+		float: left;
+		font-size: 20px;
+		line-height: 48px;
 		margin: 4px 12px 4px 0;
-		border: solid 1px #f2f2f2;
+		border: solid 1px #fff;
+		background-color: rgba(255, 255, 255, 0.08);
+	}
+	#section4 ul li a {
+		color: #fff;
+		display: block;
 	}
 	#section4 h3 {
 		width: 600px;
 		margin: 20px auto 0;
 		clear: both;
-		color: #f2f2f2;
+		color: #fff;
+		font-size: 25px;
 		text-align: left;
 	}
 	#section4 p{
 		width: 600px;
 		margin: 10px auto;
-		color: #f2f2f2;
-		font-size: 0.8em;
+		color: #fff;
+		font-size: 16px;
+		line-height: 28px;
 		text-align: left;
 	}
 	#slide1 .screen .shot {
@@ -388,7 +437,7 @@
 		width: 100%;
 		height: 450px;
 		margin: 0 auto;
-		background: #f0f2f5;
+		background: #eee;
 		min-height: 100%;
 		background-image: url(/static/images/bg05.jpg);
 		background-repeat: no-repeat;
@@ -397,39 +446,89 @@
 		position: relative;
 	}
 	#section5 h1{
-		color: #f15252;
-		width: 300px;
-		margin: 275px auto 20px;
-		padding: 10px;
+		color: #F05352;
+		width: 320px;
+		height: 56px;
+		margin: 320px auto 0;
+		font-size: 40px;
+		line-height: 56px;
 	}
 	#section5 p{
-		width: 800px;
-		margin: 15px auto;
-		color: #666;
+		width: 834px;
+		margin: 30px auto;
+		color: #000;
+		font-size: 16px;
+		line-height: 28px;
 		text-align: left;
+	}
+	#section5 ul.footbar {
+		width: 834px;
+		margin: 40px auto 0;
+	}
+	#section5 ul.footbar li {
+		width: 200px;
+		float: left;
+		text-align: left;
+	}
+	#section5 ul.footbar li:nth-child(1) {
+		width: 150px;
+	}
+	#section5 ul.footbar li:nth-child(2) {
+		width: 150px;
+	}
+	#section5 ul.footbar li:nth-child(3) {
+		width: 346px;
+	}
+	#section5 ul.footbar li:nth-child(4) {
+		width: 186px;
+		height: 146px;
+		margin: 10px 0 0;
+		border-left: 1px solid #EBEBEB;
+		border-right: 1px solid #EBEBEB;
+		text-align: center;
 	}
 	#section5 h3{
-		width: 800px;
-		margin: 20px auto 0;
-		padding: 10px 10px 0 10px;
+		margin: 0 auto;
+		padding: 10px 10px 10px 0;
 		color: #333;
+		font-size: 18px;
 		text-align: left;
+		font-weight: 700;
+	}
+	#section5 p.telephone{
+		width: 100%;
+		font-size: 24px;
+		color: #F05352;
+		margin: 12px auto;
 	}
 	#section5 p.contact{
-		font-size: 0.8em;
+		width: 100%;
+		font-size: 18px;
+		color: #666;
+		margin: 12px auto;
 	}
-	#section5 ul {
+	#section5 ul.footbar li:nth-child(4) img {
+		display: block;
+	    margin: 30px auto 0;
+	}
+	#section5 span {
+		display: inline-block;
+		font-size: 18px;
+		color: #E2E2E2;
+		line-height: 50px;
+	}
+	#section5 ul.link {
 		width: 800px;
 		margin: 20px auto 0;
 	}
-	#section5 ul li {
+	#section5 ul.link li {
 		float: left;
 		width: 100px;
 		height: 60px;
 		border: solid 1px #eee;
 		margin: 0 10px 0 0; 
 	}
-	#section5 ul li img {
+	#section5 ul.link li img {
 		width: 100%;
 		height: 100%;
 	}
@@ -439,6 +538,7 @@
 	}
 	.fp-controlArrow {
 		top: 80%;
+		display: none;
 	}
 	.fp-controlArrow.fp-prev {
 		border-color: transparent rgba(255, 255, 255, 0.5) transparent transparent !important;
@@ -477,10 +577,10 @@
 			</ul>
 			<ul class="menu-right">
 				<li>
-					<a href="/index.html#/user/login">登录</a>
+					<a href="/index.html#/user/register">注册</a>
 				</li>
 				<li>
-					<a href="/index.html#/user/register">注册</a>
+					<a href="/index.html#/user/login">登录</a>
 				</li>
 			</ul>
 		</div>
@@ -489,7 +589,7 @@
 		<div class="section" id="section1">
 			<div class="content">
 				<h1>提供广告+内容一站式流量变现智慧方案</h1>
-				<p>通过大数据及智能算法+机器不断自我学习赋能，帮助开发者在高效变现的同时，不断提升自有产品的用户黏性。</p>
+				<p>通过大数据及智能算法+机器不断自我学习赋能，<br/>帮助开发者在高效变现的同时，不断提升自有产品的用户黏性。</p>
 				<div class="begin"><a href="/index.html#/user/login">马上变现</a></div>
 			</div>
 		</div>
@@ -537,7 +637,12 @@
 						<div class="shot"></div>
 					</div>
 					<div class="desc">
-						<ul><li>通用广告</li><!--li>互动广告</li><li>头条资讯</li><li>爆款特卖</li--></ul>
+						<ul>
+							<li class="active"><a href="#fourth/0">通用广告</a></li>
+							<li><a href="#fourth/1">互动广告</a></li>
+							<li><a href="#fourth/2">头条资讯</a></li>
+							<li><a href="#fourth/3">爆款特卖</a></li>
+						</ul>
 						<h3>通用广告</h3>
 						<p>基础且成熟的广告形式，聚合国内外最优质广告平台资源，并通过平台大数据智能算法及机器不断自我学习，给用户智能推荐最符合其需求的广告，适用APP及WAP媒体所有广告样式。</p>
 						<h3>特点：</h3>
@@ -553,7 +658,12 @@
 						<div class="shot"></div>
 					</div>
 					<div class="desc">
-						<ul><li>互动广告</li></ul>
+						<ul>
+							<li><a href="#fourth/0">通用广告</a></li>
+							<li class="active"><a href="#fourth/1">互动广告</a></li>
+							<li><a href="#fourth/2">头条资讯</a></li>
+							<li><a href="#fourth/3">爆款特卖</a></li>
+						</ul>
 						<h3>互动广告</h3>
 						<p>通过原生互动式广告场景和专业的精细化活动运营，同时汇集了海量优质广告主提供的各种优惠福利，为开发者提供高效变现的同时，给用户带来极好的用户体验，提升用户黏性。</p>
 						<h3>特点：</h3>
@@ -569,7 +679,12 @@
 						<div class="shot"></div>
 					</div>
 					<div class="desc">
-						<ul><li>头条资讯</li></ul>
+						<ul>
+							<li><a href="#fourth/0">通用广告</a></li>
+							<li><a href="#fourth/1">互动广告</a></li>
+							<li class="active"><a href="#fourth/2">头条资讯</a></li>
+							<li><a href="#fourth/3">爆款特卖</a></li>
+						</ul>
 						<h3>头条资讯</h3>
 						<p>基于数据挖掘及推荐技术，将定制化信息流和精准广告快速对接到开发者的产品中，向终端用户提供个性化内容分发服务。</p>
 						<h3>特点：</h3>
@@ -585,7 +700,12 @@
 						<div class="shot"></div>
 					</div>
 					<div class="desc">
-						<ul><li>爆款特卖</li></ul>
+						<ul>
+							<li><a href="#fourth/0">通用广告</a></li>
+							<li><a href="#fourth/1">互动广告</a></li>
+							<li><a href="#fourth/2">头条资讯</a></li>
+							<li class="active"><a href="#fourth/3">爆款特卖</a></li>
+						</ul>
 						<h3>爆款特卖</h3>
 						<p>汇集所有淘宝、天猫优惠券，通过智能推荐让用户省时、省力获取想要买的宝贝优惠券，体验真正物美价廉。</p>
 						<h3>特点：</h3>
@@ -601,10 +721,28 @@
 				<p>多得是一个专注于移动流量变现的综合服务平台。广告+内容的变现产品矩阵可以让开发者快速地搭建适合自有产品的一些列变现场景，并通过大数据智能算法+机器不断自我学习赋能，给用户智能推荐最符合其需求的广告及内容。从而帮助开发者在高效变现的同时，不断提升自有产品的用户黏性。</p>
 				<p>多得核心团队来自百度及腾讯，拥有丰富的变现运营、商业产品经验及强大的智能算法+推荐技术积累，接入多得，开发者可以一站式完成高效的流量变现同时，提升产品活跃。</p>
 				<p>多得，让流量变现更高效~</p>
-				<h3>联系方式</h3>
-				<p class="contact">北京尚左网络科技有限公司<br>地址: 北京市海淀区宜品上层9号1幢1层1单元107<br>电话: 01060608663<br>客服QQ: 3496911254<br>技术QQ: 3300246112</p>
-				<h3>友情链接</h3>
-				<ul>
+				<ul class="footbar">
+					<li>
+						<h3>微信公众号</h3>
+						<img src="/static/images/service.jpg" width="125" height="125">
+					</li>
+					<li>
+						<h3>商务客服</h3>
+						<img src="/static/images/custom.jpg" width="125" height="125">
+					</li>
+					<li>
+						<h3>联系方式</h3>
+						<p class="telephone">010-60608663</p>
+						<p class="contact">北京尚左网络科技有限公司</p>
+						<p class="contact">地址: 北京市海淀区宜品上层1幢1-107号</p>
+					</li>
+					<li>
+						<img src="/static/images/logo_148_50.png" width="148" height="50">
+						<span>让流量变现更高效</span>
+					</li>
+				</ul>
+				<!--h3>友情链接</h3>
+				<ul class="link">
 					<li><a href="https://www.hao123.com/" target="_blank"><img src="/static/images/link1.png"/></a></li>
 					<li><a href="http://www.anzhi.com/" target="_blank"><img src="/static/images/link2.png"/></a></li>
 					<li><a href="http://www.getui.com/cn/index.html" target="_blank"><img src="/static/images/link3.png"/></a></li>
@@ -612,7 +750,7 @@
 					<li><a href="https://passport.36kr.com/" target="_blank"><img src="/static/images/link5.png"/></a></li>
 					<li><a href="http://v.baidu.com/" target="_blank"><img src="/static/images/link6.png"/></a></li>
 					<li><a href="http://www.niaogebiji.com/" target="_blank"><img src="/static/images/link7.png"/></a></li>
-				</ul>
+				</ul-->
 			</div>
 		</div>
 	</div>
