@@ -162,11 +162,12 @@
 		text-align: center;
 		width: 100%;
     	height: 100%;
+    	overflow: hidden;
 	}
 	.content .screen {
 		position: absolute;
 		left: 50%;
-		top: 10px;
+		top: 170px;
 		margin-left: -380px;
 		width: 223px;
 		height: 455px;
@@ -185,7 +186,7 @@
 	.content .desc {
 		position: absolute;
 		left: 50%;
-		top: 80px;
+		top: 240px;
 		margin-left: -100px;
 	}
 
@@ -206,7 +207,7 @@
 		background-color: rgba(240, 83, 82, 0.5);
 		width: 725px;
 		height: 60px;
-		margin: 350px auto 0;
+		margin: 175px auto 0;
 		padding: 10px;
 		font-size: 40px;
 		line-height: 60px;
@@ -228,7 +229,15 @@
 		height: 100px;
 		border-radius: 100px;
 		margin: 100px auto 0;
-		padding: 15px;
+		padding: 0px;
+		-webkit-animation-timing-function: ease-in-out;
+		-webkit-animation-name: breathe;
+		-webkit-animation-duration: 1500ms;
+		-webkit-animation-iteration-count: infinite;
+		animation-timing-function: ease-in-out;
+		animation-name: breathe;
+		animation-duration: 2000ms;
+		animation-iteration-count: infinite;
 	}
 	#section1 .begin a {
 		display: block;
@@ -240,6 +249,23 @@
 		margin: 0 auto;
 		text-align: center;
 		line-height: 100px;
+	}
+	@-webkit-keyframes breathe {
+		0% {
+			background-color: rgba(240, 83, 82, 0.2);
+			margin: 120px auto 20px;
+			padding: 0px;
+		}
+		60% {
+			background-color: rgba(240, 83, 82, 0.2);
+			margin: 100px auto 0;
+			padding: 20px;
+		}
+		100% {
+			background-color: rgba(240, 83, 82, 0);
+			margin: 100px auto 0;
+			padding: 20px;
+		}
 	}
 
 	#section2{
@@ -258,7 +284,7 @@
 		color: #fff;
 		width: 320px;
 		height: 56px;
-		margin: 320px auto 0;
+		margin: 160px auto 0;
 		font-size: 40px;
 		line-height: 56px;
 	}
@@ -311,7 +337,7 @@
 		color: #F05352;
 		width: 320px;
 		height: 56px;
-		margin: 320px auto 0;
+		margin: 160px auto 0;
 		font-size: 40px;
 		line-height: 56px;
 	}
@@ -370,7 +396,7 @@
 		color: #fff;
 		width: 320px;
 		height: 56px;
-		margin: 320px auto 0;
+		margin: 160px auto 0;
 		font-size: 40px;
 		line-height: 56px;
 	    position: relative;
@@ -449,7 +475,7 @@
 		color: #F05352;
 		width: 320px;
 		height: 56px;
-		margin: 240px auto 0;
+		margin: 120px auto 0;
 		font-size: 40px;
 		line-height: 56px;
 	}
