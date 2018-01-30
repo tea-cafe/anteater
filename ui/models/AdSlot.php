@@ -9,6 +9,97 @@ class AdSlot extends CI_Model {
     /**
      *
      */
+    public function delSlot($strAccountId, $strAppId, $strSlotId) {
+        $mark = 0;
+        $arrSelect = [
+            'select' => 'account_id,app_id',
+            'where' => "slot_id='" . $strSlotId . "'",  
+        ];
+        $arrRes = $this->dbutil->getAdSlot($arrSelect);
+        if (empty($arrRes)) {
+            return -1;
+        }
+        foreach ($arrRes as $val) {
+            if ($val['app_id'] == $strAppId
+                && $val['account_id'] == $strAccountId) {
+                $mark = 1;
+                break;
+            }
+        }
+        if ($mark === 0) {
+            retrun -1;
+        }
+
+        $arrSelect = [
+            'select' => 'data',
+            'where' => "app_id='" . $strAppId . "'",  
+        ];
+        $arrRes = $this->dbutil->getSdkData($arrSelect);
+        if (empty($arrRes)) {
+            return -1;
+        }
+        $jsonData = $arrRes[0]['data'];
+        $arrData = json_decode($jsonData, true);
+        if (empty($arrData)) {
+            return -2;
+        }
+        if (isset($arrData[$strSlotId])) {
+            unset($arrData[$strSlotId]);
+        }
+        $jsonData = json_encode($arrData);
+        $arrUpdate = [
+            'data' => $jsonData,
+            'where' => "app_id='" . $strAppId . "'",
+        ];
+        $res = $this->dbutil->udpSdkData($arrUpdate);
+        if ($res['code'] == 0) {
+            $arrDelete = [
+                'where' => "app_id='" . $strAppId . "' AND slot_id='" . $strSlotId . "'",
+            ];
+            $this->dbutil->delAdSlot($arrDelete);
+            return 0;
+        }
+        return -2;
+    }
+
+    /**
+     *
+     */
+    public function modifySlotName($strAccountId, $strAppId, $strSlotId, $strSlotName) {
+        $mark = 0;
+        $arrSelect = [
+            'select' => 'app_id',
+            'where' => "account_id='" . $strAccountId . "'",  
+        ];
+        $arrRes = $this->dbutil->getMedia($arrSelect);
+        if (empty($arrRes)) {
+            return '';
+        }
+        foreach ($arrRes as $val) {
+            if ($val['app_id'] == $strAppId) {
+                $mark = 1;
+                break;
+            }
+        }
+
+        if ($mark === 0) {
+            retrun -1;
+        }
+
+        $arrUpdate = [
+            'slot_name' => $strSlotName,
+            'where' => "app_id='" . $strAppId . "' AND slot_id='" . $strSlotId . "'",  
+        ];
+        $res = $this->dbutil->udpAdslot($arrUpdate);
+        if ($res['code'] == 0) {
+            return 0;
+        }
+        return -2;
+    }
+
+    /**
+     *
+     */
     public function getUpstreamSlotId($strAccountId, $intSlotId) {
         $arrSelect = [
             'select' => 'upstream_slot_id',
