@@ -55,4 +55,32 @@ class StatData extends MY_Controller {
         return $arrList?$this->outJson($arrList, ErrCode::OK) : $this->outJson([], ErrCode::OK);
     }//}}}//
 
+    public function exportStatSum() {
+        if (empty($this->arrUser)) {
+            return $this->outJson('', ErrCode::ERR_NOT_LOGIN);
+        }
+        $arrParams = $this->input->get(NULL, TRUE);
+        if(empty($arrParams['startDate'])
+            || empty($arrParams['endDate'])
+            || empty($arrParams['type'])
+            || empty($arrParams['statId'])
+            || !in_array($arrParams['type'], ['Media', 'Slot'])) {
+            return $this->outJson([], ErrCode::ERR_INVALID_PARAMS);
+        }
+        $arrParams['method'] = 'getUsr'.$arrParams['type'].'Sum';
+        $arrParams['account_id'] = $this->arrUser['account_id'];
+        $strFileName = $arrParams['type'].$arrParams['startDate'].'_'.$arrParams['endDate'].'.csv';
+
+        $strCsv = $this->StatDataModel->getCsvSumData($arrParams);
+        $this->export_csv($strFileName, $strCsv);
+    }
+
+    public function export_csv($filename,$data) { 
+		header("Content-type:text/csv"); 
+		header("Content-Disposition:attachment;filename=".$filename); 
+		header('Cache-Control:must-revalidate,post-check=0,pre-check=0'); 
+		header('Expires:0'); 
+		header('Pragma:public'); 
+		echo $data; 
+	}
 }

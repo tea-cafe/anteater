@@ -100,18 +100,16 @@ class StatDataModel extends CI_Model {
             $arrDailySelect['where'] = "date>='" .$arrParams['startDate']. "'
                 AND date<='". $arrParams['endDate']."'
                 AND account_id='". $arrParams['account_id']."'";
+            $arrDailySelect['order_by'] = 'date';
         }
 
         if($arrParams['type'] == 'Slot') {
             $arrDailySelect['select'] = 'user_slot_id,slot_name,app_id,post_exposure_num,post_click_num,post_profit,click_rate,ecpm,date,create_time';
-            if($arrParams['statId'] == 'all') {
-                $arrDailySelect['where'] = "date='". $arrParams['lastday']. "'
-                    AND acct_id='". $arrParams['account_id']."'";
-            } else {
-                $arrDailySelect['where'] = "date='". $arrParams['lastday']. "'
-                    AND app_id='". $arrParams['statId']."'
-                    AND acct_id='". $arrParams['account_id']."'";
-            }
+
+            $arrDailySelect['where'] = "date>='" .$arrParams['startDate']. "'
+                AND date<='". $arrParams['endDate']."'
+                AND acct_id='". $arrParams['account_id']."'";
+            $arrDailySelect['order_by'] = 'date';
         }
 
         $method = $arrParams['method'];
@@ -120,22 +118,49 @@ class StatDataModel extends CI_Model {
             $arrSum = [];
         }
 
-        $strData = $this->formatCsvData($arrSum);
+        if($arrParams['type'] == 'Media') {
+            $strData = $this->formatMediaCsvData($arrSum);
+        } else if($arrParams['type'] == 'Slot') {
+            $strData = $this->formatSlotCsvData($arrSum);
+        }
+
 
         return $strData;
     }//}}}//
 
-    public function formatCsvData($arrSum) {
-        $strCsv = "姓名,性别,年龄\n";
+    public function formatMediaCsvData($arrSum) {//{{{//
+        $strCsv = "媒体名称,appID,曝光量,点击量,点击率(%),eCPM,收益(元),日期\n";
         $strCsv = iconv('utf-8','gb2312',$strCsv);
         foreach($arrSum as $row) {
-            $name = iconv('utf-8','gb2312',$row['media_name']);
-            $sex = iconv('utf-8','gb2312',$row['app_id']);
-            $strCsv .= $name.",".$sex.",".$row['post_exposure_num']."\n";
+            $media_name = iconv('utf-8','gb2312',$row['media_name']);
+            $app_id = iconv('utf-8','gb2312',$row['app_id']);
+            $exposure_num = $row['post_exposure_num'];
+            $click_num = $row['post_click_num'];
+            $click_rate = $row['click_rate'];
+            $ecpm = $row['ecpm'];
+            $profit = $row['post_profit'];
+            $strCsv .= $media_name.",".$app_id.",".$exposure_num.",".$click_num.",".$click_rate.",".$ecpm.",".$profit.",".$row['date']."\n";
         }
 
         return $strCsv;
-    }
+    }//}}}//
+
+    public function formatSlotCsvData($arrSum) {//{{{//
+        $strCsv = "广告位名称,广告位ID,曝光量,点击量,点击率(%),eCPM,收益(元),日期\n";
+        $strCsv = iconv('utf-8','gb2312',$strCsv);
+        foreach($arrSum as $row) {
+            $slot_name = iconv('utf-8','gb2312',$row['slot_name']);
+            $slot_id = iconv('utf-8','gb2312',$row['user_slot_id']);
+            $exposure_num = $row['post_exposure_num'];
+            $click_num = $row['post_click_num'];
+            $click_rate = $row['click_rate'];
+            $ecpm = $row['ecpm'];
+            $profit = $row['post_profit'];
+            $strCsv .= $slot_name.",".$slot_id.",".$exposure_num.",".$click_num.",".$click_rate.",".$ecpm.",".$profit.",".$row['date']."\n";
+        }
+
+        return $strCsv;
+    }//}}}//
 
     public function getDailyDataList($arrParams) {//{{{//
         $intCount = 0;
@@ -318,7 +343,7 @@ class StatDataModel extends CI_Model {
         return $arrRet;
     }//}}}//
 
-    private function getBtnState($arrParams) {
+    private function getBtnState($arrParams) {//{{{//
         $arrSelect = [
             'select' => '*',
             'where' => "btn_sum_cancel=1 
@@ -329,5 +354,5 @@ class StatDataModel extends CI_Model {
             return true;
         }
         return false;
-    }
+    }//}}}//
 }
