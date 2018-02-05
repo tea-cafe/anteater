@@ -326,11 +326,11 @@ class StatDataModel extends CI_Model {
         $arrRet['eCpm'] = [];
         $arrRet['profit'] = [];
         foreach($arrRes as $key => $val) {
-            array_push($arrRet['exposureCount'], $val['pre_exposure_num']);  
-            array_push($arrRet['clickCount'], $val['pre_click_num']);  
+            array_push($arrRet['exposureCount'], $val['post_exposure_num']);  
+            array_push($arrRet['clickCount'], $val['post_click_num']);  
             array_push($arrRet['clickRate'], $val['click_rate']);  
             array_push($arrRet['eCpm'], $val['ecpm']);  
-            array_push($arrRet['profit'], $val['pre_profit']);  
+            array_push($arrRet['profit'], $val['post_profit']);  
             array_push($arrRet['curDate'], $val['date']);  
         }
 
