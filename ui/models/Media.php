@@ -144,7 +144,7 @@ class Media extends CI_Model {
         if (!empty($strMediaName)) {
             $arrSelect['where'] .= " AND media_name like '%" . $strMediaName . "%'"; 
         }
-        if (!empty($strStatus)) {
+        if ($strStatus !== '') {
             $arrStatus = explode(',', $strStatus);
              $arrSelect['where'] .= " AND (";
             foreach ($arrStatus as $state) {
