@@ -52,7 +52,7 @@ class AdSlotModify extends MY_Controller {
         if (empty($strAppId)
             || empty($strSlotId)
             || empty($strNewName)
-            || preg_match('#[^0-9_a-zA-Z\x{4e00}-\x{9fa5}]#u', $strNewName)) {
+            || preg_match('#[^0-9_a-zA-Z\x{4e00}-\x{9fa5}-]#u', $strNewName)) {
             return $this->outJson('', ErrCode::ERR_INVALID_PARAMS); 
         }
         $this->load->model('AdSlot');
