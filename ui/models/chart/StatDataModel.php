@@ -149,8 +149,8 @@ class StatDataModel extends CI_Model {
         $strCsv = "广告位名称,广告位ID,曝光量,点击量,点击率(%),eCPM,收益(元),日期\n";
         $strCsv = iconv('utf-8','gb2312',$strCsv);
         foreach($arrSum as $row) {
-            $slot_name = iconv('utf-8','gb2312',$row['slot_name']);
-            $slot_id = iconv('utf-8','gb2312',$row['user_slot_id']);
+            $slot_name = iconv('utf-8','gb2312//IGNORE',$row['slot_name']);
+            $slot_id = iconv('utf-8','gb2312//IGNORE',$row['user_slot_id']);
             $exposure_num = $row['post_exposure_num'];
             $click_num = $row['post_click_num'];
             $click_rate = $row['click_rate'];
