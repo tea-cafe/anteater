@@ -132,8 +132,8 @@ class StatDataModel extends CI_Model {
         $strCsv = "媒体名称,appID,曝光量,点击量,点击率(%),eCPM,收益(元),日期\n";
         $strCsv = iconv('utf-8','gb2312',$strCsv);
         foreach($arrSum as $row) {
-            $media_name = iconv('utf-8','gb2312',$row['media_name']);
-            $app_id = iconv('utf-8','gb2312',$row['app_id']);
+            $media_name = iconv('utf-8','gb2312//IGNORE',$row['media_name']);
+            $app_id = iconv('utf-8','gb2312//IGNORE',$row['app_id']);
             $exposure_num = $row['post_exposure_num'];
             $click_num = $row['post_click_num'];
             $click_rate = $row['click_rate'];
