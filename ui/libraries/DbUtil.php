@@ -67,6 +67,8 @@ class DbUtil {
 	const TAB_BG_USER				= 'bg_user';
 
     const TAB_DATA_FOR_SDK = 'data_for_sdk';
+	const TAB_CHARGING = 'charging';
+	const TAB_CHARGING_DATA_DAILY = 'charging_data_daily';
 
     const TAB_MAP = [
         'account'   => self::TAB_ACCOUNT,
@@ -92,6 +94,8 @@ class DbUtil {
 		'accbalance' => self::TAB_ACCOUNT_BALANCE,
 		'bguser' => self::TAB_BG_USER,
         'sdkdata' => self::TAB_DATA_FOR_SDK,
+		'charging' => self::TAB_CHARGING,
+		'chargingdatadaily' => self::TAB_CHARGING_DATA_DAILY,
 	];
 
     public static $instance;
