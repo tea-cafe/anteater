@@ -66,7 +66,7 @@ class ChargingModel extends CI_Model {
 
 		$where = array(
 			'select' => '*',
-			'where' => $queryWhere."account_id='".$arrParams['account_id']."' AND DATE_FORMAT(date,'%Y-%m-%d') >= DATE_FORMAT('".$arrParams['startDate']."','%Y-%m-%d') AND DATE_FORMAT(date,'%Y-%m-%d') <= DATE_FORMAT('".$arrParams['endDate']."','%Y-%m-%d') AND mark='1'",
+			'where' => $queryWhere."account_id='".$arrParams['account_id']."' AND DATE_FORMAT(date,'%Y-%m-%d') >= DATE_FORMAT('".$arrParams['startDate']."','%Y-%m-%d') AND DATE_FORMAT(date,'%Y-%m-%d') <= DATE_FORMAT('".$arrParams['endDate']."','%Y-%m-%d') AND mark='2'",
 		);
 
 		$res = $this->dbutil->getChargingDataDaily($where);
